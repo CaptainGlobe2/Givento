@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-4">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-4)">
+        <path d="M 50 40 L 150 40 L 155 110 L 115 185 L 85 185 L 45 110 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12" stroke-linejoin="round"/>
+        <!-- Brown Kraft cone -->
+        <path d="M 55 90 L 100 185 L 145 90 Q 100 100 55 90 Z" fill="#E2BA86" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 85 135 L 115 135 L 100 150 Z" fill="#7A1C30" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+        <!-- KitKat Sticks -->
+        <!-- Center stick -->
+        <rect x="88" y="25" width="24" height="60" rx="3" fill="#D71920" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-3 100 55)"/>
+        <text x="91" y="55" font-family="sans-serif" font-weight="900" font-size="8" fill="#FFFFFF" transform="rotate(-90 91 55)">KitKat</text>
+        
+        <!-- Left stick -->
+        <rect x="62" y="35" width="22" height="55" rx="3" fill="#D71920" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-18 73 62)"/>
+        <text x="65" y="65" font-family="sans-serif" font-weight="900" font-size="7" fill="#FFFFFF" transform="rotate(-108 65 65)">KitKat</text>
+
+        <!-- Right stick -->
+        <rect x="116" y="35" width="22" height="55" rx="3" fill="#D71920" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="rotate(15 127 62)"/>
+        <text x="119" y="65" font-family="sans-serif" font-weight="900" font-size="7" fill="#FFFFFF" transform="rotate(-75 119 65)">KitKat</text>
+
+        <!-- Red flower accents -->
+        <circle cx="75" cy="85" r="9" fill="#A92642" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="125" cy="85" r="9" fill="#A92642" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="100" cy="90" r="10" fill="#E88299" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+    </svg>

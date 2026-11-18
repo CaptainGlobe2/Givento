@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-17">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-17)">
+        <!-- Clip 1: Daisy (Left) -->
+        <g transform="rotate(-10 65 90)">
+          <!-- Metal alligator clip base -->
+          <rect x="35" y="86" width="60" height="12" rx="6" fill="#C0C0C0" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Knitted Daisy -->
+          <g fill="#FFFFFF" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="50" cy="74" r="8"/>
+            <circle cx="62" cy="74" r="8"/>
+            <circle cx="70" cy="84" r="8"/>
+            <circle cx="66" cy="96" r="8"/>
+            <circle cx="54" cy="98" r="8"/>
+            <circle cx="44" cy="90" r="8"/>
+            <circle cx="44" cy="78" r="8"/>
+          </g>
+          <circle cx="56" cy="86" r="9" fill="#F5B731" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+
+        <!-- Clip 2: Strawberry (Right) -->
+        <g transform="rotate(12 135 110)">
+          <rect x="105" y="106" width="60" height="12" rx="6" fill="#C0C0C0" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Knitted Strawberry body -->
+          <path d="M 125 90 C 145 90 150 115 135 130 C 120 115 125 90 125 90 Z" fill="#E84855" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Green leafy top -->
+          <ellipse cx="128" cy="88" rx="6" ry="3" fill="#7BBFA6" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse cx="136" cy="86" rx="5" ry="3" fill="#7BBFA6" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse cx="144" cy="88" rx="6" ry="3" fill="#7BBFA6" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Yellow seeds -->
+          <circle cx="132" cy="102" r="1.5" fill="#FEF08A"/>
+          <circle cx="138" cy="110" r="1.5" fill="#FEF08A"/>
+          <circle cx="134" cy="118" r="1.5" fill="#FEF08A"/>
+        </g>
+      </g>
+    </svg>

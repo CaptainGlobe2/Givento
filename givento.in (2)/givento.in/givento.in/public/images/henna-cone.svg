@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-16">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-16)" transform="rotate(-20 100 100)">
+        <polygon points="90,20 120,20 105,175" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-linejoin="round"/>
+        <!-- Henna cone foil body -->
+        <polygon points="90,25 120,25 105,170" fill="#7BBFA6" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Paisley foil wrap pattern -->
+        <path d="M 93 45 Q 105 40 117 45" stroke="#2D1527" stroke-width="2"/>
+        <path d="M 96 70 Q 105 65 114 70" stroke="#2D1527" stroke-width="2"/>
+        <path d="M 98 100 Q 105 95 112 100" stroke="#2D1527" stroke-width="2"/>
+        <circle cx="105" cy="55" r="3" fill="#C59B27"/>
+        <circle cx="105" cy="85" r="3" fill="#C59B27"/>
+
+        <!-- Gold seal tape on top -->
+        <rect x="86" y="20" width="38" height="10" rx="2" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Fine nozzle pin -->
+        <circle cx="105" cy="172" r="2" fill="#7A1C30"/>
+      </g>
+    </svg>

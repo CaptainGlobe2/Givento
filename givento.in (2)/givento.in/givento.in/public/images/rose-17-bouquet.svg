@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-3">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-3)">
+        <path d="M 45 40 Q 100 15 155 40 Q 180 80 160 125 L 115 185 Q 100 195 85 185 L 40 125 Q 20 80 45 40 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12" stroke-linejoin="round"/>
+        <!-- Double paper wrap -->
+        <path d="M 48 95 L 100 188 L 152 95 Q 100 110 48 95 Z" fill="#2D1527" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 58 92 L 100 185 L 142 92 Q 100 104 58 92 Z" fill="#FFF2EC" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        
+        <!-- Gold ribbon -->
+        <path d="M 90 138 C 75 130 75 150 95 142 L 105 142 C 125 150 125 130 110 138 Z" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="100" cy="140" r="5" fill="#7A1C30" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 96 145 L 86 172" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/>
+        <path d="M 104 145 L 114 172" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Rose blooms array -->
+        <g fill="#8B1E3F" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="100" cy="35" r="12" fill="#7A1C30"/>
+          <circle cx="80" cy="38" r="11" fill="#A92642"/>
+          <circle cx="120" cy="38" r="11" fill="#A92642"/>
+          <circle cx="62" cy="48" r="11" fill="#7A1C30"/>
+          <circle cx="138" cy="48" r="11" fill="#7A1C30"/>
+          <circle cx="100" cy="55" r="13" fill="#C93257"/>
+          <circle cx="78" cy="60" r="12" fill="#A92642"/>
+          <circle cx="122" cy="60" r="12" fill="#A92642"/>
+          <circle cx="55" cy="68" r="10" fill="#7A1C30"/>
+          <circle cx="145" cy="68" r="10" fill="#7A1C30"/>
+          <circle cx="100" cy="78" r="13" fill="#8B1E3F"/>
+          <circle cx="75" cy="80" r="11" fill="#A92642"/>
+          <circle cx="125" cy="80" r="11" fill="#A92642"/>
+          <!-- Gold foil sparkles -->
+          <circle cx="100" cy="55" r="3" fill="#D4AF37" stroke="none"/>
+          <circle cx="80" cy="38" r="2.5" fill="#D4AF37" stroke="none"/>
+          <circle cx="120" cy="38" r="2.5" fill="#D4AF37" stroke="none"/>
+        </g>
+      </g>
+    </svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-9">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-9)">
+        <!-- Heart box contour -->
+        <path d="M 100 165 C 50 135 30 100 35 65 C 40 40 70 35 100 60 C 130 35 160 40 165 65 C 170 100 150 135 100 165 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12" stroke-linejoin="round"/>
+        <path d="M 100 160 C 52 132 35 98 40 68 C 44 45 70 40 100 63 C 130 40 156 45 160 68 C 165 98 148 132 100 160 Z" fill="#7A1C30" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 100 152 C 58 126 44 96 48 72 C 52 52 74 48 100 68 C 126 48 148 52 152 72 C 156 96 142 126 100 152 Z" fill="#581020"/>
+        
+        <!-- Chocolates in wrappers -->
+        <circle cx="75" cy="85" r="11" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="125" cy="85" r="11" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="100" cy="120" r="12" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Forever Roses inside -->
+        <circle cx="100" cy="88" r="12" fill="#E88299" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="75" cy="115" r="11" fill="#C93257" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="125" cy="115" r="11" fill="#C93257" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>

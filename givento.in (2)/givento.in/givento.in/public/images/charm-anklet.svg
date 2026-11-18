@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-14">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-14)">
+        <path d="M 30 75 Q 100 160 170 75" stroke="#FFFFFF" stroke-width="14" fill="none"/>
+        <!-- Beaded chain -->
+        <path d="M 30 75 Q 100 160 170 75" stroke="#D4AF37" stroke-width="3" stroke-linecap="round" fill="none"/>
+        
+        <!-- Dangling charms -->
+        <!-- Charm 1: Pearl droplet -->
+        <circle cx="65" cy="100" r="5" fill="#FFF8F5" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="65" y1="92" x2="65" y2="95" stroke="#D4AF37" stroke-width="2"/>
+        
+        <!-- Charm 2: Crescent moon -->
+        <path d="M 100 120 C 95 125 95 135 102 138 C 96 138 92 130 96 124 Z" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="99" y1="114" x2="99" y2="120" stroke="#D4AF37" stroke-width="2"/>
+
+        <!-- Charm 3: Dewdrop -->
+        <circle cx="135" cy="100" r="5" fill="#76BBE3" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="135" y1="92" x2="135" y2="95" stroke="#D4AF37" stroke-width="2"/>
+      </g>
+    </svg>

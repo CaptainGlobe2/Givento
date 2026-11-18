@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-12">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-12)" transform="rotate(-5 100 100)">
+        <!-- Keyring hardware -->
+        <circle cx="70" cy="40" r="16" fill="none" stroke="#D4AF37" stroke-width="4.5"/>
+        <path d="M 70 56 L 70 70 L 80 80" stroke="#D4AF37" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="80" cy="80" r="3" fill="#D4AF37"/>
+
+        <!-- White sticker background for letter M -->
+        <path d="M 68 85 L 85 85 L 102 118 L 118 85 L 135 85 L 135 155 L 118 155 L 118 115 L 105 140 L 98 140 L 85 115 L 85 155 L 68 155 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-linejoin="round"/>
+        
+        <!-- Resin Letter M body (translucent gloss look) -->
+        <path d="M 70 90 L 85 90 L 102 120 L 118 90 L 133 90 L 133 150 L 118 150 L 118 112 L 105 136 L 98 136 L 85 112 L 85 150 L 70 150 Z" fill="#F4FAF7" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Gold flakes inside resin -->
+        <polygon points="76,96 79,93 81,97 78,99" fill="#D4AF37"/>
+        <polygon points="122,96 125,93 128,97 125,100" fill="#D4AF37"/>
+        <polygon points="100,126 103,122 106,127 102,129" fill="#D4AF37"/>
+        <polygon points="74,136 78,133 79,139 73,140" fill="#D4AF37"/>
+        <polygon points="124,134 128,131 129,137 125,138" fill="#D4AF37"/>
+        <!-- Freshwater pearl dot -->
+        <circle cx="101" cy="110" r="3.5" fill="#FFF9E6" stroke="#C59B27" stroke-width="1"/>
+
+        <!-- Fluffy peach tassel hanging -->
+        <path d="M 60 48 Q 50 65 48 95 Q 56 95 62 95 Q 60 65 60 48 Z" fill="#F6A98A" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="58" cy="56" r="3" fill="#D4AF37"/>
+      </g>
+    </svg>

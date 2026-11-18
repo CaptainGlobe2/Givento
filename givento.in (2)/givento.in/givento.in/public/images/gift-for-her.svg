@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-8">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-8)">
+        <path d="M 35 70 L 165 70 L 160 170 L 40 170 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12" stroke-linejoin="round"/>
+        
+        <!-- Gift box base -->
+        <rect x="42" y="90" width="116" height="75" rx="4" fill="#FDEBF0" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="38" y="78" width="124" height="18" rx="4" fill="#F8B195" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Ribbon bands -->
+        <rect x="94" y="78" width="12" height="87" fill="#7A1C30"/>
+        
+        <!-- Big plush ribbon bow on top -->
+        <path d="M 100 78 C 80 60 70 75 92 78 C 100 78 100 78 100 78 C 100 78 100 78 108 78 C 130 75 120 60 100 78 Z" fill="#7A1C30" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="100" cy="78" r="6" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Items peeking out / illustrated in front -->
+        <!-- Perfume bottle -->
+        <rect x="52" y="105" width="24" height="34" rx="4" fill="#FFF2EC" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="59" y="98" width="10" height="7" rx="1" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="64" cy="120" r="5" fill="#E88299"/>
+
+        <!-- Gold necklace pendant -->
+        <circle cx="100" cy="115" r="7" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 88 95 Q 100 110 112 95" stroke="#C59B27" stroke-width="2"/>
+
+        <!-- Chocolate bar -->
+        <rect x="122" y="108" width="26" height="32" rx="2" fill="#5A2E16" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="122" y="118" width="26" height="12" fill="#D4AF37"/>
+
+        <!-- Tag -->
+        <path d="M 68 148 L 88 148 L 84 160 L 64 160 Z" fill="#FEF08A" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="76" y="156" font-family="cursive" font-size="6" fill="#2D1527" text-anchor="middle">for you ♥</text>
+      </g>
+    </svg>

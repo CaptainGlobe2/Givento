@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-19">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-19)">
+        <!-- Beetle car outline -->
+        <path d="M 35 130 C 35 115 45 100 65 95 C 75 70 105 60 135 70 C 155 75 165 95 170 110 L 175 130 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-linejoin="round"/>
+        
+        <!-- Roof luggage rack -->
+        <rect x="85" y="55" width="40" height="8" rx="2" fill="#C59B27" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Mini luggage suitcase on roof -->
+        <rect x="90" y="42" width="30" height="14" rx="2" fill="#E2BA86" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="105" y1="42" x2="105" y2="56" stroke="#7A1C30" stroke-width="2"/>
+
+        <!-- Car body in pastel turquoise -->
+        <path d="M 35 130 C 35 115 45 100 65 95 C 75 70 105 60 135 70 C 155 75 165 95 170 110 L 175 130 Q 105 138 35 130 Z" fill="#76BBE3" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Windows -->
+        <path d="M 75 92 C 82 76 100 72 102 92 Z" fill="#FFFDF8" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 108 92 C 110 72 128 76 135 92 Z" fill="#FFFDF8" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Door line -->
+        <line x1="105" y1="92" x2="105" y2="132" stroke="#2D1527" stroke-width="2.5"/>
+        <rect x="108" y="105" width="6" height="3" rx="1" fill="#D4AF37"/>
+
+        <!-- Wheel arches & wheels -->
+        <!-- Front wheel -->
+        <circle cx="65" cy="135" r="14" fill="#2D1527"/>
+        <circle cx="65" cy="135" r="7" fill="#E8D1B5" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Rear wheel -->
+        <circle cx="145" cy="135" r="14" fill="#2D1527"/>
+        <circle cx="145" cy="135" r="7" fill="#E8D1B5" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Headlight and bumper -->
+        <circle cx="172" cy="112" r="5" fill="#FEF08A" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="30" y="128" width="10" height="6" rx="2" fill="#C0C0C0" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="168" y="128" width="10" height="6" rx="2" fill="#C0C0C0" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>

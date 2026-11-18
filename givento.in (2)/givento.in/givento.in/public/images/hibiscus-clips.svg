@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-18">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-18)">
+        <circle cx="100" cy="100" r="55" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12"/>
+        <!-- 5 Petal Hibiscus Claw Clip -->
+        <g fill="#F4A6B6" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 100 95 C 90 55 120 50 112 85 Z"/>
+          <path d="M 100 95 C 135 75 155 105 115 105 Z"/>
+          <path d="M 100 105 C 120 145 90 150 95 115 Z"/>
+          <path d="M 95 105 C 60 135 45 105 85 98 Z"/>
+          <path d="M 95 95 C 65 65 85 45 100 85 Z"/>
+        </g>
+        <!-- Center pistil -->
+        <circle cx="100" cy="100" r="9" fill="#FFF2EC" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 100 100 Q 115 88 122 80" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="122" cy="80" r="3" fill="#D4AF37"/>
+        <!-- Plastic claw teeth visible under -->
+        <path d="M 85 110 L 85 120 M 95 112 L 95 122 M 105 112 L 105 122 M 115 110 L 115 120" stroke="#2D1527" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+    </svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow)">
+        <!-- White sticker background contour -->
+        <path d="M 60 40 Q 100 15 140 40 Q 175 75 160 115 L 115 185 Q 100 195 85 185 L 40 115 Q 25 75 60 40 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12" stroke-linejoin="round"/>
+        
+        <!-- Wrapper kraft paper -->
+        <path d="M 70 95 L 100 180 L 130 95 Q 100 105 70 95 Z" fill="#E2BA86" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 65 92 L 100 180" stroke="#C59B27" stroke-width="2" stroke-dasharray="3 3"/>
+        <!-- Ribbon bow -->
+        <path d="M 90 135 C 80 130 75 145 88 142 C 96 140 100 138 100 138 C 100 138 104 140 112 142 C 125 145 120 130 110 135 Z" fill="#7A1C30" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="100" cy="137" r="4" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 97 141 L 90 160" stroke="#7A1C30" stroke-width="3" stroke-linecap="round"/>
+        <path d="M 103 141 L 110 160" stroke="#7A1C30" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Leaves -->
+        <path d="M 60 80 Q 45 70 52 55 Q 70 65 68 80 Z" fill="#86C5AE" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 140 80 Q 155 70 148 55 Q 130 65 132 80 Z" fill="#86C5AE" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+        <!-- Petals -->
+        <g fill="#F5B731" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="100" cy="35" rx="10" ry="18" />
+          <ellipse cx="100" cy="85" rx="10" ry="18" />
+          <ellipse cx="75" cy="60" rx="18" ry="10" />
+          <ellipse cx="125" cy="60" rx="18" ry="10" />
+          <ellipse cx="82" cy="42" rx="11" ry="16" transform="rotate(-45 82 42)" />
+          <ellipse cx="118" cy="42" rx="11" ry="16" transform="rotate(45 118 42)" />
+          <ellipse cx="82" cy="78" rx="11" ry="16" transform="rotate(45 82 78)" />
+          <ellipse cx="118" cy="78" rx="11" ry="16" transform="rotate(-45 118 78)" />
+        </g>
+        
+        <!-- Sunflower center -->
+        <circle cx="100" cy="60" r="18" fill="#5A2E16" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="100" cy="60" r="13" fill="#6B3A1C" />
+        <circle cx="95" cy="56" r="2" fill="#D4AF37" />
+        <circle cx="104" cy="58" r="2" fill="#D4AF37" />
+        <circle cx="98" cy="64" r="2" fill="#D4AF37" />
+
+        <!-- Sparkles -->
+        <path d="M 145 35 L 147 40 L 152 42 L 147 44 L 145 49 L 143 44 L 138 42 L 143 40 Z" fill="#D4AF37" />
+        <path d="M 52 40 L 53 43 L 56 44 L 53 45 L 52 48 L 51 45 L 48 44 L 51 43 Z" fill="#D4AF37" />
+      </g>
+    </svg>

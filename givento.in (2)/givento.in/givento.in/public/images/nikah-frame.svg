@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-6">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-6)">
+        <!-- White sticker contour -->
+        <rect x="35" y="25" width="130" height="150" rx="8" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12" stroke-linejoin="round"/>
+        <!-- Outer wooden gold frame -->
+        <rect x="40" y="30" width="120" height="140" rx="6" fill="#C59B27" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <!-- Inner white passe-partout -->
+        <rect x="50" y="40" width="100" height="120" rx="4" fill="#FFFDF8" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        
+        <!-- Islamic Arch header -->
+        <path d="M 65 65 C 65 50 100 42 100 42 C 100 42 135 50 135 65 L 135 72 L 65 72 Z" fill="#FDEBF0" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        
+        <!-- Arabic Calligraphy stylized curve (Bismillah / Love) -->
+        <path d="M 78 58 Q 88 52 100 52 Q 112 52 122 58 M 92 64 Q 100 60 108 64" stroke="#7A1C30" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="100" cy="46" r="2" fill="#D4AF37"/>
+
+        <!-- Names & Date -->
+        <text x="100" y="90" font-family="serif" font-weight="bold" font-size="10" fill="#2D1527" text-anchor="middle">Zayd &amp; Ayesha</text>
+        <path d="M 80 96 L 120 96" stroke="#D4AF37" stroke-width="1.5"/>
+        <circle cx="100" cy="96" r="2.5" fill="#7A1C30"/>
+        <text x="100" y="108" font-family="sans-serif" font-size="6.5" fill="#5E3C57" text-anchor="middle">14 · NOVEMBER · 2026</text>
+        
+        <!-- Quranic verse excerpt -->
+        <rect x="58" y="118" width="84" height="28" rx="3" fill="#FFF1EB" stroke="#D4AF37" stroke-width="1"/>
+        <text x="100" y="128" font-family="serif" font-style="italic" font-size="5.5" fill="#7A1C30" text-anchor="middle">“And He created between you</text>
+        <text x="100" y="137" font-family="serif" font-style="italic" font-size="5.5" fill="#7A1C30" text-anchor="middle">love and compassion...” (30:21)</text>
+
+        <!-- Corner floral flourishes -->
+        <circle cx="56" cy="46" r="3" fill="#7BBFA6"/>
+        <circle cx="144" cy="46" r="3" fill="#7BBFA6"/>
+        <circle cx="56" cy="154" r="3" fill="#7BBFA6"/>
+        <circle cx="144" cy="154" r="3" fill="#7BBFA6"/>
+      </g>
+    </svg>

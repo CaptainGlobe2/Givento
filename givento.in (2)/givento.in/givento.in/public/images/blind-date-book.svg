@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-10">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-10)" transform="rotate(-3 100 100)">
+        <rect x="45" y="35" width="110" height="135" rx="6" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12"/>
+        <!-- Kraft paper wrapped book -->
+        <rect x="50" y="40" width="100" height="125" rx="4" fill="#D8A874" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Book thickness / spine shadow -->
+        <path d="M 50 40 L 58 40 L 58 165 L 50 165 Z" fill="#C08F5A"/>
+
+        <!-- Jute twine tied crosswise -->
+        <line x1="50" y1="95" x2="150" y2="95" stroke="#7A5229" stroke-width="3" stroke-dasharray="4 2"/>
+        <line x1="105" y1="40" x2="105" y2="165" stroke="#7A5229" stroke-width="3" stroke-dasharray="4 2"/>
+        
+        <!-- Twine bow -->
+        <circle cx="105" cy="95" r="5" fill="#E2BA86" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Clue tag taped to book -->
+        <rect x="68" y="112" width="65" height="42" rx="3" fill="#FFFDF8" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="rotate(4 100 133)"/>
+        <text x="100" y="125" font-family="sans-serif" font-weight="bold" font-size="6" fill="#7A1C30" text-anchor="middle">BLIND DATE CLUE</text>
+        <text x="100" y="134" font-family="cursive" font-size="6.5" fill="#2D1527" text-anchor="middle">“enemies to lovers</text>
+        <text x="100" y="143" font-family="cursive" font-size="6.5" fill="#2D1527" text-anchor="middle">&amp; rainy tea shop...”</text>
+
+        <!-- Red Wax seal with question mark -->
+        <circle cx="132" cy="62" r="13" fill="#7A1C30" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="132" y="68" font-family="serif" font-weight="bold" font-size="14" fill="#D4AF37" text-anchor="middle">?</text>
+      </g>
+    </svg>

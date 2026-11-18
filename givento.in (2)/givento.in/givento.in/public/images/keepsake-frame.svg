@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-7">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-7)">
+        <rect x="40" y="25" width="120" height="150" rx="8" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="12"/>
+        <rect x="45" y="30" width="110" height="140" rx="5" fill="#E2BA86" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="55" y="40" width="90" height="120" rx="3" fill="#F4FAF7" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Pressed green botanicals inside glass -->
+        <path d="M 62 140 Q 75 100 70 60" stroke="#7BBFA6" stroke-width="2"/>
+        <ellipse cx="65" cy="90" rx="6" ry="3" fill="#7BBFA6" transform="rotate(-30 65 90)"/>
+        <ellipse cx="73" cy="105" rx="6" ry="3" fill="#7BBFA6" transform="rotate(30 73 105)"/>
+        <ellipse cx="66" cy="75" rx="5" ry="2.5" fill="#86C5AE" transform="rotate(-25 66 75)"/>
+
+        <!-- Mini photo clipped -->
+        <rect x="85" y="55" width="50" height="60" rx="2" fill="#FFFFFF" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="88" y="58" width="44" height="42" fill="#FFF2EC"/>
+        <circle cx="110" cy="75" r="9" fill="#E88299"/>
+        <text x="110" y="110" font-family="cursive" font-size="6" fill="#2D1527" text-anchor="middle">happy days ✨</text>
+        
+        <!-- Brass clip -->
+        <rect x="105" y="51" width="10" height="8" rx="2" fill="#C59B27" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>

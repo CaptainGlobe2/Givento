@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <filter id="sticker-shadow-13">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2D1527" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g filter="url(#sticker-shadow-13)">
+        <path d="M 40 40 Q 100 170 160 40" stroke="#FFFFFF" stroke-width="14" fill="none"/>
+        <circle cx="100" cy="130" r="28" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="10"/>
+
+        <!-- Dainty snake chain loop -->
+        <path d="M 40 40 Q 100 170 160 40" stroke="#D4AF37" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M 40 40 Q 100 170 160 40" stroke="#2D1527" stroke-width="1" stroke-dasharray="2 3" fill="none"/>
+
+        <!-- Starlight Medallion Pendant -->
+        <circle cx="100" cy="130" r="22" fill="#D4AF37" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="100" cy="130" r="18" fill="#C59B27"/>
+
+        <!-- 8-Point North Star Embossing -->
+        <path d="M 100 114 L 103 126 L 115 130 L 103 134 L 100 146 L 97 134 L 85 130 L 97 126 Z" fill="#FFFDF8" stroke="#2D1527" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="100" cy="130" r="2.5" fill="#76BBE3"/>
+      </g>
+    </svg>
