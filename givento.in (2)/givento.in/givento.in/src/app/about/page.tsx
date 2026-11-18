@@ -2,109 +2,216 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { InstagramIcon } from '../../components/Icons';
-import { Sparkles, Heart, ArrowLeft, MessageCircle } from 'lucide-react';
+import {
+  ArrowLeft,
+  MessageCircle,
+  Phone,
+  Mail,
+  ArrowRight,
+  Sparkles,
+} from 'lucide-react';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans pb-20 md:pb-0">
       <Navbar />
 
-      <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-10 relative z-10 w-full space-y-6">
-        <div>
+      <main className="flex-1 max-w-md sm:max-w-lg mx-auto px-4 sm:px-6 py-8 sm:py-12 relative z-10 w-full space-y-4">
+        {/* 1. Top Navigation Bar (Matching Image 1: Back on Left, Status/Action on Right) */}
+        <div className="flex items-center justify-between pb-1">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#EFE8E1] text-xs font-semibold text-[#1C1917] hover:text-[#7A1C3B] shadow-2xs transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#7A1C3B] hover:text-[#5A1230] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Storefront</span>
           </Link>
+          <span className="text-[11px] font-semibold text-[#78716C] uppercase tracking-wider">
+            Studio Profile
+          </span>
         </div>
 
-        {/* Story Sheet */}
-        <div className="bg-white border border-[#EFE8E1] rounded-3xl p-6 sm:p-12 shadow-xs space-y-8 relative overflow-hidden">
-          <div className="text-center space-y-3 pt-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3ECE2] border border-[#E5DACD] text-[10px] font-semibold uppercase tracking-wider text-[#8C827A]">
-              <Sparkles className="w-3.5 h-3.5 text-[#7A1C3B]" />
-              <span>Our Studio Story</span>
-            </div>
-            <h1 className="font-display font-normal text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight">
-              About Givento.in
+        {/* 2. Main Profile Sheet (Matching Image 1 Layout & Component Alignment) */}
+        <div className="bg-white border border-[#EFE8E1] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+          {/* Header Block: Title, Subtitle, and Status Badge Pill */}
+          <div className="text-center space-y-2.5">
+            <h1 className="font-display font-normal text-3xl sm:text-4xl text-[#1C1917] tracking-tight">
+              Givento Studio
             </h1>
-            <p className="text-sm sm:text-base text-[#78716C] max-w-lg mx-auto">
-              Handcrafted gifts made with soul, archival paper, gold leaf, and genuine care.
+
+            <p className="text-[11px] sm:text-xs text-[#78716C] max-w-xs mx-auto leading-relaxed">
+              Handcrafted in Adirampattinam, Tamil Nadu · Established 2023
             </p>
-          </div>
 
-          {/* Story body */}
-          <div className="space-y-6 text-sm text-[#57534E] leading-relaxed">
-            <div className="p-6 bg-[#FAF7F2]/60 rounded-2xl border border-[#EFE8E1] space-y-3">
-              <h2 className="font-display font-normal text-xl text-[#1C1917]">
-                How it all began
-              </h2>
-              <p>
-                Givento started late at night on a desk piled high with textured Korean crepe paper, silicone molds, gold leaf tweezers, and a glue gun. We were tired of walking through gift stores and seeing the exact same mass-produced plastic mugs and plastic flowers everywhere.
-              </p>
-              <p>
-                We wanted gifts that feel like opening a handwritten letter from someone who truly knows you. Everlasting sunflowers that stay on study tables for years without wilting, Nikah frames with real pressed gold leaf and Quranic verses, and crystal resin letters embedded with Arabic calligraphy and pearls.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-5 bg-white rounded-2xl border border-[#EFE8E1] space-y-2">
-                <div className="font-display font-normal text-base text-[#7A1C3B] flex items-center gap-2">
-                  <span>🌻</span>
-                  <span>Forever Everlasting</span>
-                </div>
-                <p className="text-xs text-[#78716C] leading-relaxed">
-                  Every flower petal is shaped and rolled by hand using heavyweight treated paper that resists moisture and retains vibrant warmth forever.
-                </p>
-              </div>
-
-              <div className="p-5 bg-white rounded-2xl border border-[#EFE8E1] space-y-2">
-                <div className="font-display font-normal text-base text-[#7A1C3B] flex items-center gap-2">
-                  <span>✨</span>
-                  <span>Personalisation with Care</span>
-                </div>
-                <p className="text-xs text-[#78716C] leading-relaxed">
-                  Arabic names, wedding vows, or photos — we don&apos;t just print a template; we carefully align each letter and check proofs before wrapping.
-                </p>
-              </div>
-            </div>
-
-            <div className="p-6 bg-[#FAF7F2] rounded-2xl border border-[#E5DACD] space-y-3 text-center sm:text-left">
-              <h3 className="font-sans text-xs font-bold text-[#7A1C3B] uppercase tracking-wider">
-                Our Promise to You:
-              </h3>
-              <p className="font-display italic text-base sm:text-lg text-[#1C1917] leading-relaxed">
-                “No factory assembly lines. No fake reviews. No generic cardboard boxes. Every parcel leaving our studio is wrapped with floral tissue, tied with satin ribbon, and hand-stamped with our signature Givento wax seal.”
-              </p>
-              <div className="text-xs text-[#8C827A] font-semibold text-right">
-                — From the Givento Workshop Team (@givento.in)
-              </div>
+            <div className="pt-1">
+              <span className="inline-block px-3 py-0.5 rounded-full bg-[#E8F5ED] border border-[#C3E6D0] text-[11px] font-semibold text-[#2C7A54]">
+                Artisan Atelier
+              </span>
             </div>
           </div>
 
-          {/* Action buttons */}
-          <div className="pt-6 border-t border-[#EFE8E1] flex flex-wrap items-center justify-center gap-3">
+          {/* 3. Four Circular Action Buttons (Matching Image 1: Text, Call, Email, Add Note / Instagram) */}
+          <div className="grid grid-cols-4 gap-2 pt-2 pb-1 text-center">
+            {/* WhatsApp / Text */}
+            <a
+              href="https://wa.me/919344013255?text=Hello%20Givento!%20Connecting%20from%20your%20About%20page"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col items-center cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-full bg-[#7A1C3B] text-white flex items-center justify-center shadow-xs group-hover:bg-[#5A1230] group-hover:scale-105 active:scale-95 transition-all">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-medium text-[#57534E] group-hover:text-[#1C1917] mt-1.5 transition-colors">
+                Text
+              </span>
+            </a>
+
+            {/* Phone Call */}
+            <a
+              href="tel:9344013255"
+              className="group flex flex-col items-center cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-full bg-[#7A1C3B] text-white flex items-center justify-center shadow-xs group-hover:bg-[#5A1230] group-hover:scale-105 active:scale-95 transition-all">
+                <Phone className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-medium text-[#57534E] group-hover:text-[#1C1917] mt-1.5 transition-colors">
+                Call
+              </span>
+            </a>
+
+            {/* Email */}
+            <a
+              href="mailto:hello@givento.in"
+              className="group flex flex-col items-center cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-full bg-[#7A1C3B] text-white flex items-center justify-center shadow-xs group-hover:bg-[#5A1230] group-hover:scale-105 active:scale-95 transition-all">
+                <Mail className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-medium text-[#57534E] group-hover:text-[#1C1917] mt-1.5 transition-colors">
+                Email
+              </span>
+            </a>
+
+            {/* Instagram */}
             <a
               href="https://instagram.com/givento.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-3 rounded-xl bg-white border border-[#EFE8E1] hover:border-[#DFD5CB] text-[#1C1917] font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-2xs transition"
+              className="group flex flex-col items-center cursor-pointer"
             >
-              <InstagramIcon className="w-4 h-4 text-[#7A1C3B]" />
-              <span>Watch Making Reels @givento.in</span>
+              <div className="w-12 h-12 rounded-full bg-[#7A1C3B] text-white flex items-center justify-center shadow-xs group-hover:bg-[#5A1230] group-hover:scale-105 active:scale-95 transition-all">
+                <InstagramIcon className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-medium text-[#57534E] group-hover:text-[#1C1917] mt-1.5 transition-colors">
+                Instagram
+              </span>
             </a>
+          </div>
 
+          {/* 4. Narrative / Bio Text (Matching Image 1 Centered Intro Paragraph) */}
+          <p className="text-xs sm:text-sm text-[#78716C] text-center leading-relaxed max-w-sm mx-auto pt-1">
+            Givento is an independent handcrafted atelier dedicated to creating everlasting paper flower blooms, bespoke Nikah contract plaques, preserved floral resin keepsakes, and anti-tarnish stainless steel jewellery.
+          </p>
+
+          {/* 5. "Details" Section (Matching Image 1 Section Header & Stacked Detail Rows) */}
+          <div className="border-t border-[#EFE8E1] pt-6 space-y-4">
+            <h2 className="font-bold text-base text-[#1C1917]">
+              Details
+            </h2>
+
+            <div className="space-y-3.5 text-xs sm:text-sm divide-y divide-[#EFE8E1]/60">
+              {/* Email Address */}
+              <div className="pt-2 first:pt-0 space-y-0.5">
+                <span className="block text-[11px] font-medium text-[#78716C]">
+                  Email Address
+                </span>
+                <a
+                  href="mailto:hello@givento.in"
+                  className="block font-medium text-[#7A1C3B] hover:underline"
+                >
+                  hello@givento.in
+                </a>
+              </div>
+
+              {/* Studio Location */}
+              <div className="pt-3 space-y-0.5">
+                <span className="block text-[11px] font-medium text-[#78716C]">
+                  Studio Workshop Address
+                </span>
+                <span className="block font-semibold text-[#1C1917] leading-snug">
+                  East Coast Road, Adirampattinam, Thanjavur District, Tamil Nadu 614701, India
+                </span>
+              </div>
+
+              {/* Artisan Team */}
+              <div className="pt-3 space-y-0.5">
+                <span className="block text-[11px] font-medium text-[#78716C]">
+                  Makers &amp; Craft Collective
+                </span>
+                <span className="block font-semibold text-[#1C1917]">
+                  Handcrafted by local women artisans
+                </span>
+              </div>
+
+              {/* Specialties */}
+              <div className="pt-3 space-y-0.5">
+                <span className="block text-[11px] font-medium text-[#78716C]">
+                  Craft Specialties
+                </span>
+                <span className="block font-semibold text-[#1C1917] leading-snug">
+                  Preserved Floral Resin, Everlasting Crepe Bouquets, Nikah Keepsake Frames &amp; Anti-Tarnish Jewellery
+                </span>
+              </div>
+
+              {/* WhatsApp Support */}
+              <div className="pt-3 space-y-0.5">
+                <span className="block text-[11px] font-medium text-[#78716C]">
+                  Direct WhatsApp Support
+                </span>
+                <a
+                  href="https://wa.me/919344013255"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block font-semibold text-[#1C1917] hover:text-[#7A1C3B] transition-colors"
+                >
+                  +91 93440 13255
+                </a>
+              </div>
+
+              {/* Packaging */}
+              <div className="pt-3 space-y-0.5">
+                <span className="block text-[11px] font-medium text-[#78716C]">
+                  Packaging &amp; Presentation
+                </span>
+                <span className="block font-semibold text-[#1C1917] leading-snug">
+                  Zero plastic mass production. Every parcel wrapped in floral tissue, tied with satin ribbon, and stamped with our wax seal.
+                </span>
+              </div>
+
+              {/* Dispatch */}
+              <div className="pt-3 space-y-0.5">
+                <span className="block text-[11px] font-medium text-[#78716C]">
+                  Delivery Coverage
+                </span>
+                <span className="block font-semibold text-[#1C1917]">
+                  Pan-India Express Dispatch via Bluedart &amp; DTDC with live tracking
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Storefront Action */}
+          <div className="pt-4 border-t border-[#EFE8E1]">
             <Link
               href="/category/all"
-              className="px-6 py-3 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs sm:text-sm shadow-xs transition"
+              className="w-full py-3.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition active:scale-[0.99]"
             >
-              Explore the Collections 🌻
+              <span>Explore Handcrafted Collections</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
