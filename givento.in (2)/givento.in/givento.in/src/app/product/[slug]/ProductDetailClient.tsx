@@ -458,38 +458,27 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                <div className="sm:col-span-7 flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => toggleWishlist(product)}
-                    className={`p-3.5 rounded-xl border border-[#EFE8E1] flex items-center justify-center transition cursor-pointer shadow-2xs ${
-                      isInWishlist(product.id)
-                        ? 'bg-[#FDF0F3] text-[#7A1C3B] border-[#FADDE3]'
-                        : 'bg-white text-[#1C1917] hover:border-[#DFD5CB] hover:text-[#7A1C3B]'
-                    }`}
-                    title={isInWishlist(product.id) ? 'Saved in wishlist' : 'Save to wishlist'}
-                  >
-                    <Heart className={`w-5 h-5 ${isInWishlist(product.id) ? 'fill-[#7A1C3B]' : ''}`} />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleAddToBasket}
-                    className="flex-1 py-3.5 px-4 font-bold text-sm rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white flex items-center justify-center gap-2 shadow-xs transition cursor-pointer"
-                  >
-                    <ShoppingBag className="w-4 h-4" />
-                    <span>Add to bag</span>
-                  </button>
-                </div>
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => toggleWishlist(product)}
+                  className={`p-3.5 rounded-xl border border-[#EFE8E1] flex items-center justify-center transition cursor-pointer shadow-2xs ${
+                    isInWishlist(product.id)
+                      ? 'bg-[#FDF0F3] text-[#7A1C3B] border-[#FADDE3]'
+                      : 'bg-white text-[#1C1917] hover:border-[#DFD5CB] hover:text-[#7A1C3B]'
+                  }`}
+                  title={isInWishlist(product.id) ? 'Saved in wishlist' : 'Save to wishlist'}
+                >
+                  <Heart className={`w-5 h-5 ${isInWishlist(product.id) ? 'fill-[#7A1C3B]' : ''}`} />
+                </button>
 
                 <button
                   type="button"
-                  onClick={() => { setWaModalMode('order'); setWaModalOpen(true); }}
-                  className="sm:col-span-5 py-3.5 px-4 font-bold text-sm rounded-xl bg-white border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5 flex items-center justify-center gap-2 text-center cursor-pointer transition shadow-2xs"
+                  onClick={handleAddToBasket}
+                  className="flex-1 py-3.5 px-6 font-bold text-sm rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white flex items-center justify-center gap-2 shadow-xs transition cursor-pointer"
                 >
-                  <MessageCircle className="w-4 h-4 fill-[#25D366]" />
-                  <span>Order on WhatsApp</span>
+                  <ShoppingBag className="w-4 h-4" />
+                  <span>Add to bag</span>
                 </button>
               </div>
 

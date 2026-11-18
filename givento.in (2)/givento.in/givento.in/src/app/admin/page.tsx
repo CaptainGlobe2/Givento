@@ -2110,14 +2110,14 @@ export default function AdminDashboard() {
 
                       {/* Product Thumbnail */}
                       <div className="w-full aspect-square bg-[#faf7f2] rounded-lg border border-[#EFE8E1] p-3 mb-3 flex items-center justify-center overflow-hidden">
-                        <div className="relative w-32 h-32">
-                          <Image
-                            src={p.images[0] || '/images/sunflower-bouquet.svg'}
-                            alt={p.name}
-                            fill
-                            className="object-contain"
-                          />
-                        </div>
+                        <img
+                          src={p.images?.[0] || '/images/sunflower-bouquet.svg'}
+                          alt={p.name}
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/images/sunflower-bouquet.svg';
+                          }}
+                        />
                       </div>
 
                       {/* Title & Description */}

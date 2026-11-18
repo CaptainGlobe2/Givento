@@ -637,6 +637,19 @@ export const db = {
       const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
       if (!error && data && data.length > 0) return data as Product[];
     }
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('givento_db_products_v4');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            localProducts = parsed;
+          }
+        }
+      } catch (err) {
+        console.error('Failed reading products from localStorage', err);
+      }
+    }
     return localProducts;
   },
 
@@ -815,9 +828,25 @@ export const db = {
     });
     if (found) return found;
 
-    // 2. Direct check in localStorage for last placed order
+    // 2. Direct check in givento_user_orders (orders placed by customer on this device)
     if (typeof window !== 'undefined') {
       try {
+        const userOrders = localStorage.getItem('givento_user_orders');
+        if (userOrders) {
+          const parsedList: AdminOrder[] = JSON.parse(userOrders);
+          if (Array.isArray(parsedList)) {
+            const uFound = parsedList.find((o) => {
+              const oid = o.id.toUpperCase();
+              return (
+                oid === clean ||
+                oid === `GVN-${clean}` ||
+                oid.replace(/^GVN-/, '') === clean.replace(/^GVN-/, '')
+              );
+            });
+            if (uFound) return uFound;
+          }
+        }
+
         const lastPlaced = localStorage.getItem('givento_last_placed_order');
         if (lastPlaced) {
           const parsed: AdminOrder = JSON.parse(lastPlaced);
@@ -836,6 +865,24 @@ export const db = {
     }
 
     return null;
+  },
+
+  async getUserOrders(): Promise<AdminOrder[]> {
+    if (typeof window !== 'undefined') {
+      try {
+        const userOrders = localStorage.getItem('givento_user_orders');
+        if (userOrders) {
+          const parsed: AdminOrder[] = JSON.parse(userOrders);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+        const lastPlaced = localStorage.getItem('givento_last_placed_order');
+        if (lastPlaced) {
+          const parsed: AdminOrder = JSON.parse(lastPlaced);
+          if (parsed && parsed.id) return [parsed];
+        }
+      } catch {}
+    }
+    return [];
   },
 
   async createManualOrder(orderData: Partial<AdminOrder>): Promise<AdminOrder> {
@@ -898,6 +945,16 @@ export const db = {
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('givento_last_placed_order', JSON.stringify(newOrder));
+        const raw = localStorage.getItem('givento_user_orders');
+        let userOrdersList: AdminOrder[] = [];
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) userOrdersList = parsed;
+          } catch {}
+        }
+        userOrdersList = [newOrder, ...userOrdersList.filter((o) => o.id !== newOrder.id)];
+        localStorage.setItem('givento_user_orders', JSON.stringify(userOrdersList));
       } catch {}
     }
 
@@ -971,6 +1028,16 @@ export const db = {
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('givento_last_placed_order', JSON.stringify(newOrder));
+        const raw = localStorage.getItem('givento_user_orders');
+        let userOrdersList: AdminOrder[] = [];
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) userOrdersList = parsed;
+          } catch {}
+        }
+        userOrdersList = [newOrder, ...userOrdersList.filter((o) => o.id !== newOrder.id)];
+        localStorage.setItem('givento_user_orders', JSON.stringify(userOrdersList));
       } catch {}
     }
 
@@ -1197,17 +1264,37 @@ export const db = {
 
   // COUPONS
   async getCoupons(): Promise<Coupon[]> {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('givento_db_coupons');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) localCoupons = parsed;
+        }
+      } catch {}
+    }
     return localCoupons;
   },
 
   async addCoupon(coupon: Coupon): Promise<Coupon> {
-    localCoupons.push(coupon);
+    const existingIdx = localCoupons.findIndex((c) => c.code.toUpperCase() === coupon.code.toUpperCase());
+    if (existingIdx !== -1) {
+      localCoupons[existingIdx] = coupon;
+    } else {
+      localCoupons = [coupon, ...localCoupons];
+    }
     persistAll();
     return coupon;
   },
 
+  async deleteCoupon(code: string): Promise<boolean> {
+    localCoupons = localCoupons.filter((c) => c.code.toUpperCase() !== code.toUpperCase());
+    persistAll();
+    return true;
+  },
+
   async toggleCoupon(code: string): Promise<void> {
-    const c = localCoupons.find((x) => x.code === code);
+    const c = localCoupons.find((x) => x.code.toUpperCase() === code.toUpperCase());
     if (c) {
       c.isActive = !c.isActive;
       persistAll();
