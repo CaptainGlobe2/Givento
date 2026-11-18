@@ -314,7 +314,4 @@ export default function OrderInfoModal({
       </div>
     </div>
   );
-      </div>
-    </div>
-  );
 }

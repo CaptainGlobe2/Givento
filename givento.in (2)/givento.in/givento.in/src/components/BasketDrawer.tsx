@@ -253,7 +253,7 @@ export default function BasketDrawer() {
                 <span className="text-[11px] font-semibold tracking-wider uppercase text-[#78716c]">
                   Order Number
                 </span>
-                <div className="font-serif text-2xl font-bold text-[#7a1c3b] mt-0.5">
+                <div className="font-display font-normal text-2xl text-[#7A1C3B] mt-0.5">
                   {placedOrder.orderId}
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f8eed6] text-[#7a1c3b] text-xs font-semibold mt-2 border border-[#b98a2e]/30">

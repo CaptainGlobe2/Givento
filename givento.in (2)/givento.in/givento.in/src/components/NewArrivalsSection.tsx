@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Plus, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../types';
@@ -8,25 +8,8 @@ import { PRODUCTS as DEFAULT_PRODUCTS } from '../data/sampleData';
 import { db } from '../lib/database';
 import { useBasket } from '../context/BasketContext';
 
-interface NewArrivalsFilter {
-  id: string;
-  label: string;
-  categoryKey?: string;
-}
-
-const CATEGORY_CHIPS: NewArrivalsFilter[] = [
-  { id: 'all', label: 'All Pieces' },
-  { id: 'jewel', label: 'Jewellery', categoryKey: 'stainless-steel-jewellery' },
-  { id: 'hair', label: 'Hair Clips', categoryKey: 'hair-accessories' },
-  { id: 'bouquet', label: 'Bouquets', categoryKey: 'bouquets' },
-  { id: 'resin', label: 'Resin Art', categoryKey: 'resin-art' },
-  { id: 'frame', label: 'Frames', categoryKey: 'frames' },
-  { id: 'hamper', label: 'Hampers', categoryKey: 'gift-hampers' },
-];
-
 export default function NewArrivalsSection() {
   const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS);
-  const [activeChip, setActiveChip] = useState<string>('all');
   const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -44,23 +27,6 @@ export default function NewArrivalsSection() {
       active = false;
     };
   }, []);
-
-  // Filter products by selected category chip
-  const filteredProducts = useMemo(() => {
-    const selected = CATEGORY_CHIPS.find((c) => c.id === activeChip);
-    if (!selected || selected.id === 'all') {
-      return products;
-    }
-
-    return products.filter((p) => {
-      return (
-        p.categoryId === selected.categoryKey ||
-        p.realmId === selected.categoryKey ||
-        p.categoryName?.toLowerCase().includes(selected.label.toLowerCase()) ||
-        p.subcategoryName?.toLowerCase().includes(selected.label.toLowerCase())
-      );
-    });
-  }, [products, activeChip]);
 
   // Quick 1-tap add to bag
   const handleQuickAdd = (e: React.MouseEvent, product: Product) => {
@@ -83,48 +49,19 @@ export default function NewArrivalsSection() {
     }
   };
 
-  const seeAllHref = useMemo(() => {
-    const selected = CATEGORY_CHIPS.find((c) => c.id === activeChip);
-    if (selected && selected.categoryKey) {
-      return `/category/${selected.categoryKey}`;
-    }
-    return '/category/all';
-  }, [activeChip]);
-
   return (
-    <section className="py-10 sm:py-14 bg-white border-b border-[#EFE8E1]">
+    <section className="pt-4 pb-10 sm:pb-14 bg-white border-b border-[#EFE8E1]">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
-        {/* 1. Category Filter Pills (Matching Reference Top Bar) */}
-        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-4 scrollbar-none">
-          {CATEGORY_CHIPS.map((chip) => {
-            const isActive = activeChip === chip.id;
-            return (
-              <button
-                key={chip.id}
-                type="button"
-                onClick={() => setActiveChip(chip.id)}
-                className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-[#1C1917] text-white shadow-xs'
-                    : 'bg-[#F7F4EE] text-[#6A5B60] hover:text-[#1C1917] hover:bg-[#EFE9DF]'
-                }`}
-              >
-                {chip.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* 2. Section Header: "New Arrivals" on Left, "See all" + Arrows on Right */}
-        <div className="flex items-center justify-between gap-4 mt-2 mb-6">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-[#1C1917]">
+        {/* Section Header: "New Arrivals" on Left, "See all" on Right (Matching Reference Screenshot) */}
+        <div className="flex items-center justify-between gap-4 mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#1C1917] font-sans">
             New Arrivals
           </h2>
 
           <div className="flex items-center gap-3">
             <Link
-              href={seeAllHref}
-              className="text-xs sm:text-sm font-medium text-[#78716C] hover:text-[#1C1917] transition-colors"
+              href="/category/all"
+              className="text-xs sm:text-sm font-medium text-[#78716C] hover:text-[#1C1917] transition-colors font-sans"
             >
               See all
             </Link>
@@ -151,12 +88,12 @@ export default function NewArrivalsSection() {
           </div>
         </div>
 
-        {/* 3. Product Carousel (Portrait Cards Matching User Screenshot) */}
+        {/* Product Carousel (Portrait Cards Matching User Reference Screenshot) */}
         <div
           ref={scrollContainerRef}
           className="flex gap-3.5 sm:gap-5 overflow-x-auto pb-4 pt-1 scrollbar-none snap-x snap-mandatory scroll-smooth"
         >
-          {filteredProducts.map((p) => {
+          {products.map((p) => {
             const isAdded = !!addedIds[p.id];
             const priceDisplay =
               typeof p.price === 'number'
@@ -175,7 +112,7 @@ export default function NewArrivalsSection() {
                 className="group flex flex-col w-[155px] sm:w-[195px] md:w-[220px] shrink-0 snap-start select-none"
               >
                 {/* Image Card Container with Rounded Corners & Floating "+" Button */}
-                <div className="relative aspect-[3/3.8] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#F5F2EB] mb-2.5 shadow-2xs">
+                <div className="relative aspect-[3/3.8] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#F5F2EB] shadow-2xs">
                   <Link href={`/product/${p.slug}`} className="block w-full h-full">
                     <img
                       src={mainImage}
@@ -198,7 +135,7 @@ export default function NewArrivalsSection() {
                     aria-label={isAdded ? 'Added to bag' : `Add ${p.name} to bag`}
                     className={`absolute top-2.5 right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center shadow-xs transition-all active:scale-90 z-10 cursor-pointer ${
                       isAdded
-                        ? 'bg-emerald-600 text-white scale-110'
+                        ? 'bg-[#7A1C3B] text-white scale-105'
                         : 'bg-white/95 backdrop-blur-xs text-[#1C1917] hover:bg-[#1C1917] hover:text-white'
                     }`}
                   >
@@ -210,9 +147,9 @@ export default function NewArrivalsSection() {
                   </button>
                 </div>
 
-                {/* Below Card: Title & Price */}
-                <Link href={`/product/${p.slug}`} className="block group">
-                  <h3 className="font-semibold text-xs sm:text-sm text-[#1C1917] truncate leading-snug group-hover:text-[#7A1C3B] transition-colors">
+                {/* Below Card: Title & Price (Matching Reference Font Hierarchy) */}
+                <Link href={`/product/${p.slug}`} className="block group mt-2.5">
+                  <h3 className="font-medium text-xs sm:text-sm text-[#57534E] truncate leading-snug group-hover:text-[#7A1C3B] transition-colors">
                     {p.name}
                   </h3>
                   <div className="font-bold text-xs sm:text-sm text-[#1C1917] mt-0.5 tabular-nums">

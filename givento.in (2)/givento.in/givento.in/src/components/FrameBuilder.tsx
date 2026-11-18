@@ -438,12 +438,12 @@ export default function FrameBuilder() {
                 style={{ borderColor: borderFinishStyle.innerBorder }}
               >
                 {/* Islamic Bismillah / Botanical Ornament */}
-                <span className="block text-[#b98a2e] text-lg font-serif mb-1">
+                <span className="block text-[#b98a2e] text-lg font-display mb-1">
                   ﷽
                 </span>
 
                 {/* Names */}
-                <h4 className="font-serif text-lg font-bold text-[#7a1c3b] tracking-wide leading-snug">
+                <h4 className="font-display text-lg font-normal text-[#7a1c3b] tracking-wide leading-snug">
                   {namesText || 'Faris & Amina'}
                 </h4>
 
@@ -456,7 +456,7 @@ export default function FrameBuilder() {
                 </span>
 
                 {/* Verse / Blessing */}
-                <p className="font-serif italic text-xs text-[#231a1d] leading-relaxed m-0 line-clamp-3">
+                <p className="font-display italic text-xs text-[#231a1d] leading-relaxed m-0 line-clamp-3">
                   “{verseText || 'And We created you in pairs'}”
                 </p>
 

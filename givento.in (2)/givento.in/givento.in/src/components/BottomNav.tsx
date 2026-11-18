@@ -36,7 +36,7 @@ export default function BottomNav({ onOpenProfile }: BottomNavProps) {
   return (
     <nav
       aria-label="Bottom Navigation Bar"
-      className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#e8dcdc] py-1.5 px-3 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] safe-bottom"
+      className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#EFE8E1] py-1.5 px-3 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] safe-bottom"
     >
       <div className="grid grid-cols-5 items-center max-w-md mx-auto">
         {/* 1. Home */}

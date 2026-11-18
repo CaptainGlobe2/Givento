@@ -21,7 +21,7 @@ interface CircularCategoriesProps {
 export const CIRCULAR_CATEGORIES: CircularCategoryItem[] = [
   {
     id: 'frames',
-    name: 'Personalised Gifts',
+    name: 'Frames',
     subtext: 'Frames & Plaques',
     image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=320&q=80',
     fallbackSvg: '/images/nikah-frame.svg',
@@ -29,7 +29,7 @@ export const CIRCULAR_CATEGORIES: CircularCategoryItem[] = [
   },
   {
     id: 'bouquets',
-    name: 'Fresh Bouquets',
+    name: 'Bouquets',
     subtext: 'Sunflowers & Roses',
     image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=320&q=80',
     fallbackSvg: '/images/sunflower-bouquet.svg',
@@ -37,7 +37,7 @@ export const CIRCULAR_CATEGORIES: CircularCategoryItem[] = [
   },
   {
     id: 'gift-hampers',
-    name: 'Gift Hampers',
+    name: 'Hampers',
     subtext: 'Curated Boxes',
     image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=320&q=80',
     fallbackSvg: '/images/gift-for-her.svg',
@@ -45,7 +45,7 @@ export const CIRCULAR_CATEGORIES: CircularCategoryItem[] = [
   },
   {
     id: 'stainless-steel-jewellery',
-    name: 'Unique Jewellery',
+    name: 'Jewellery',
     subtext: 'Anti-tarnish',
     image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=320&q=80',
     fallbackSvg: '/images/starlight-chain.svg',
@@ -53,7 +53,7 @@ export const CIRCULAR_CATEGORIES: CircularCategoryItem[] = [
   },
   {
     id: 'resin-art',
-    name: 'Resin Art & Decor',
+    name: 'Resin Art',
     subtext: 'Clocks & Keepsakes',
     image: 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=320&q=80',
     fallbackSvg: '/images/resin-clock.svg',
@@ -61,7 +61,7 @@ export const CIRCULAR_CATEGORIES: CircularCategoryItem[] = [
   },
   {
     id: 'hair-accessories',
-    name: 'On Sale & Clips',
+    name: 'Hair Clips',
     subtext: 'Crochet Accessories',
     image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=320&q=80',
     fallbackSvg: '/images/crochet-clips.svg',
@@ -72,32 +72,33 @@ export const CIRCULAR_CATEGORIES: CircularCategoryItem[] = [
 export default function CircularCategories({
   selectedGroup,
   onSelectGroup,
-  headline = 'Fresh finds fit for cosy season.',
+  headline,
 }: CircularCategoriesProps) {
   return (
-    <section className="bg-[#fbf4f0] border-b border-[#ebdcd5] pt-6 pb-9 sm:py-10 transition-colors">
-      <div className="max-w-[1180px] mx-auto px-4 text-center">
-        {/* Editorial Serif Headline (matching reference screenshot) */}
-        <h2 className="font-display font-normal text-[1.45rem] sm:text-2xl md:text-3xl text-[#231a1d] tracking-tight mb-6 sm:mb-8 max-w-xl mx-auto leading-snug">
-          {headline}
-        </h2>
+    <section className="bg-white pt-5 pb-3 sm:pt-7 sm:pb-4 border-b border-[#EFE8E1]/60">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
+        {headline && (
+          <h2 className="font-display font-normal text-xl sm:text-2xl text-[#1C1917] tracking-tight mb-4 text-center">
+            {headline}
+          </h2>
+        )}
 
-        {/* Circular Categories Grid (2 rows of 3 on mobile, 6 across on desktop) */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-x-3 gap-y-5 sm:gap-4 md:gap-6 justify-items-center max-w-4xl mx-auto">
+        {/* Circular Categories Row: Horizontal Scrolling (Matching Reference Screenshot Top Bar) */}
+        <div className="flex items-center gap-4 sm:gap-7 overflow-x-auto scrollbar-none pb-2 justify-start sm:justify-center">
           {CIRCULAR_CATEGORIES.map((item) => {
             const isSelected = selectedGroup === item.groupKey || selectedGroup === item.id;
             return (
               <Link
                 key={item.id}
                 href={`/category/${item.groupKey}`}
-                className="group flex flex-col items-center focus:outline-none cursor-pointer w-full max-w-[110px]"
+                className="group flex flex-col items-center shrink-0 focus:outline-none cursor-pointer w-[68px] sm:w-[84px]"
               >
-                {/* Circular Container */}
+                {/* Circular Avatar Container */}
                 <div
-                  className={`w-20 h-20 sm:w-24 sm:h-24 md:w-26 md:h-26 rounded-full overflow-hidden bg-white p-1 transition-all duration-300 relative shadow-xs flex items-center justify-center ${
+                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-[#FAF7F2] p-0.5 transition-all duration-300 relative flex items-center justify-center ${
                     isSelected
-                      ? 'ring-2.5 ring-[#7a1c3b] ring-offset-2 scale-105 shadow-md'
-                      : 'border border-[#ecdcd4] group-hover:scale-105 group-hover:shadow-md group-hover:border-[#7a1c3b]/50'
+                      ? 'ring-2 ring-[#7A1C3B] ring-offset-2 scale-105 shadow-sm'
+                      : 'ring-1 ring-[#EFE8E1] group-hover:scale-105 group-hover:ring-[#7A1C3B]/50'
                   }`}
                 >
                   <img
@@ -115,10 +116,10 @@ export default function CircularCategories({
 
                 {/* Category Label */}
                 <span
-                  className={`font-body text-xs sm:text-[0.88rem] leading-tight text-center mt-2.5 px-0.5 line-clamp-2 transition-colors ${
+                  className={`font-sans text-xs sm:text-[13px] leading-tight text-center mt-2 truncate w-full transition-colors ${
                     isSelected
-                      ? 'font-bold text-[#7a1c3b]'
-                      : 'font-semibold text-[#231a1d] group-hover:text-[#7a1c3b]'
+                      ? 'font-bold text-[#7A1C3B]'
+                      : 'font-medium text-[#57534E] group-hover:text-[#1C1917]'
                   }`}
                 >
                   {item.name}

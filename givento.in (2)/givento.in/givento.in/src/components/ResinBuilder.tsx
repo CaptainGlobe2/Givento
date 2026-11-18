@@ -281,10 +281,10 @@ export default function ResinBuilder() {
                         key={char}
                         type="button"
                         onClick={() => setSelectedLetter(char)}
-                        className={`w-7 h-7 rounded-[4px] text-xs font-bold font-serif transition-colors cursor-pointer ${
+                        className={`w-7 h-7 rounded-lg text-xs font-semibold font-display transition-colors cursor-pointer ${
                           isChar
-                            ? 'bg-[#7a1c3b] text-white'
-                            : 'bg-white border border-[#e8dcdc] text-[#231a1d] hover:border-[#7a1c3b]'
+                            ? 'bg-[#7a1c3b] text-white shadow-xs'
+                            : 'bg-white border border-[#EFE8E1] text-[#231a1d] hover:border-[#7a1c3b]'
                         }`}
                       >
                         {char}
@@ -514,7 +514,7 @@ export default function ResinBuilder() {
               <div className="relative z-10 text-center px-3">
                 {currentShape?.name.includes('Initial') && (
                   <span
-                    className={`block font-serif text-5xl font-bold tracking-tight drop-shadow-sm ${
+                    className={`block font-display text-5xl font-normal tracking-tight drop-shadow-sm ${
                       isDarkTint ? 'text-[#f8eed6]' : 'text-[#7a1c3b]'
                     }`}
                   >
@@ -523,7 +523,7 @@ export default function ResinBuilder() {
                 )}
 
                 <span
-                  className={`block font-serif text-base font-semibold leading-tight drop-shadow-xs ${
+                  className={`block font-display text-base font-normal leading-tight drop-shadow-xs ${
                     isDarkTint ? 'text-white' : 'text-[#231a1d]'
                   }`}
                 >

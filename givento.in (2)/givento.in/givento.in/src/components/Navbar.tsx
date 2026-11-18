@@ -99,13 +99,13 @@ export default function Navbar({
       </div>
 
       {/* 2. Main Etsy-style Header */}
-      <header className="sticky top-0 z-30 bg-white border-b border-[#e8dcdc] shadow-xs">
+      <header className="sticky top-0 z-30 bg-white border-b border-[#EFE8E1] shadow-xs">
         <div className="max-w-[1180px] mx-auto px-3 sm:px-4 pt-2.5 pb-2 sm:py-3">
           {/* Top Bar: Brand Logo & Actions (Matching Reference Screenshot) */}
           <div className="flex items-center justify-between gap-4 mb-2 sm:mb-2.5">
             {/* Logo */}
             <Link href="/" className="no-underline flex items-center gap-1.5 group">
-              <span className="font-display font-normal text-[1.75rem] sm:text-[2.1rem] leading-none text-[#7a1c3b] tracking-[-0.02em] group-hover:text-[#5a1230] transition-colors">
+              <span className="font-display font-normal text-[1.75rem] sm:text-[2.1rem] leading-none text-[#7A1C3B] tracking-[-0.02em] group-hover:text-[#5A1230] transition-colors">
                 Givento
               </span>
             </Link>
@@ -116,14 +116,14 @@ export default function Navbar({
               <button
                 type="button"
                 onClick={handleProfileClick}
-                className="text-xs sm:text-sm font-semibold hover:text-[#7a1c3b] transition-colors cursor-pointer py-1"
+                className="text-xs sm:text-sm font-semibold hover:text-[#7A1C3B] transition-colors cursor-pointer py-1"
               >
                 Sign in
               </button>
 
               {/* Currency / Region Badge */}
               <div
-                className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#faf6f4] border border-[#e8dcdc] text-xs font-semibold text-[#6a5b60]"
+                className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#EFE8E1] text-xs font-semibold text-[#6A5B60]"
                 title="Currency: Indian Rupee (INR)"
               >
                 <span className="text-sm">🇮🇳</span>
@@ -134,11 +134,11 @@ export default function Navbar({
               <Link
                 href="/wishlist"
                 aria-label={`View wishlist with ${wishlistCount} items`}
-                className="relative p-1.5 text-[#231a1d] hover:text-[#7a1c3b] transition-colors"
+                className="relative p-1.5 text-[#1C1917] hover:text-[#7A1C3B] transition-colors"
               >
                 <Heart className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.8]" />
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#7a1c3b] text-white text-[10px] font-bold flex items-center justify-center tabular-nums">
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#7A1C3B] text-white text-[10px] font-bold flex items-center justify-center tabular-nums">
                     {wishlistCount > 99 ? '99+' : wishlistCount}
                   </span>
                 )}
@@ -149,11 +149,11 @@ export default function Navbar({
                 type="button"
                 onClick={openBasket}
                 aria-label={`Open shopping cart with ${itemCount} items`}
-                className="relative p-1.5 text-[#231a1d] hover:text-[#7a1c3b] transition-colors cursor-pointer"
+                className="relative p-1.5 text-[#1C1917] hover:text-[#7A1C3B] transition-colors cursor-pointer"
               >
                 <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.8]" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#7a1c3b] text-white text-[10px] font-bold flex items-center justify-center tabular-nums">
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#7A1C3B] text-white text-[10px] font-bold flex items-center justify-center tabular-nums">
                     {itemCount > 99 ? '99+' : itemCount}
                   </span>
                 )}
@@ -247,18 +247,18 @@ export default function Navbar({
             aria-label="Navigation Menu"
           >
             {/* Header */}
-            <div className="p-4 border-b border-[#e8dcdc] flex items-center justify-between bg-[#fbf4f0]">
+            <div className="p-4 border-b border-[#EFE8E1] flex items-center justify-between bg-[#FAF7F2]">
               <Link
                 href="/"
                 onClick={() => setIsMenuOpen(false)}
-                className="font-display text-2xl text-[#7a1c3b]"
+                className="font-display text-2xl text-[#7A1C3B]"
               >
                 Givento
               </Link>
               <button
                 type="button"
                 onClick={() => setIsMenuOpen(false)}
-                className="w-8 h-8 rounded-full bg-white border border-[#e8dcdc] flex items-center justify-center text-[#231a1d] hover:bg-[#faf6f4] cursor-pointer"
+                className="w-8 h-8 rounded-full bg-white border border-[#EFE8E1] flex items-center justify-center text-[#1C1917] hover:bg-[#FAF7F2] cursor-pointer"
                 aria-label="Close menu"
               >
                 <X className="w-4 h-4" />
@@ -276,14 +276,14 @@ export default function Navbar({
                   key={c.id}
                   href={`/category/${c.slug}`}
                   onClick={() => setIsMenuOpen(false)}
-                  className="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-semibold text-[#231a1d] hover:bg-[#faf6f4] hover:text-[#7a1c3b] transition-colors text-left cursor-pointer"
+                  className="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-semibold text-[#231a1d] hover:bg-[#FAF7F2] hover:text-[#7A1C3B] transition-colors text-left cursor-pointer"
                 >
                   <span>{c.name}</span>
                   <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
                 </Link>
               ))}
 
-              <hr className="my-3 border-[#e8dcdc]" />
+              <hr className="my-3 border-[#EFE8E1]" />
 
               <span className="text-[11px] font-bold tracking-wider text-[#6a5b60] uppercase px-2 mb-2 block">
                 Special Features
@@ -292,19 +292,19 @@ export default function Navbar({
               <Link
                 href="/custom-order"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-bold text-[#7a1c3b] bg-[#fdf7f4] hover:bg-[#f6e9ee] transition-colors"
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-bold text-[#7A1C3B] bg-[#FAF7F2] hover:bg-[#F3ECE2] transition-colors"
               >
                 <span className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#b98a2e]" />
+                  <Sparkles className="w-4 h-4 text-[#B98A2E]" />
                   Custom Handcrafted Orders
                 </span>
-                <span className="text-[10px] bg-[#f8eed6] text-[#7a1c3b] px-1.5 py-0.5 rounded font-bold">Studio</span>
+                <span className="text-[10px] bg-[#F8EED6] text-[#7A1C3B] px-1.5 py-0.5 rounded font-bold">Studio</span>
               </Link>
 
               <Link
                 href="/track"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#faf6f4] transition-colors"
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
               >
                 <span className="flex items-center gap-2">
                   <Package className="w-4 h-4 text-[#6a5b60]" />
@@ -316,7 +316,7 @@ export default function Navbar({
               <Link
                 href="/about"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#faf6f4] transition-colors"
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
               >
                 <span>About Givento Studio</span>
                 <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
@@ -325,7 +325,7 @@ export default function Navbar({
               <Link
                 href="/contact"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#faf6f4] transition-colors"
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
               >
                 <span>Contact &amp; Support</span>
                 <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
@@ -333,12 +333,12 @@ export default function Navbar({
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-[#e8dcdc] bg-[#faf6f4]">
+            <div className="p-4 border-t border-[#EFE8E1] bg-[#FAF7F2]">
               <a
                 href="https://wa.me/919344013255?text=Hi%20Givento!%20I%20have%20an%20inquiry."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-center bg-[#2c7a54] text-white py-2 px-4 rounded-lg font-bold text-xs hover:bg-[#236344] transition-colors"
+                className="block text-center bg-[#25D366] text-white py-2 px-4 rounded-xl font-bold text-xs hover:bg-[#1db954] transition-colors"
               >
                 Chat on WhatsApp
               </a>

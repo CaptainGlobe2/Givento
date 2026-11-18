@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import { InstagramIcon, WhatsAppIcon } from '../../components/Icons';
-import { MapPin, Mail, MessageCircle, ArrowLeft, Send, Sparkles } from 'lucide-react';
+import { MapPin, Phone, ArrowLeft, Send, Mail, CheckCircle2 } from 'lucide-react';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phoneOrEmail, setPhoneOrEmail] = useState('');
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
 
@@ -17,7 +16,8 @@ export default function ContactPage() {
     e.preventDefault();
     const waUrl = `https://wa.me/919344013255?text=${encodeURIComponent(
       `Hello Givento! 🌸\n` +
-        `My name is ${name} (${phone}).\n` +
+        `Name: ${name}\n` +
+        `Contact: ${phoneOrEmail}\n` +
         `Message: ${message}`
     )}`;
     window.open(waUrl, '_blank');
@@ -28,160 +28,156 @@ export default function ContactPage() {
     <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans pb-20 md:pb-0">
       <Navbar />
 
-      <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-10 relative z-10 w-full space-y-6">
-        <div>
+      {/* 1. Hero Header (Matching Image 2: Dark Atmospheric Hero with Centered Header & Subtext) */}
+      <section className="relative w-full bg-[#1C1917] text-white py-14 sm:py-20 px-4 sm:px-6 overflow-hidden">
+        {/* Background Image with Dark Tint Overlay */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity scale-105"
+          style={{
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=80)',
+          }}
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1C1917]/70 via-[#1C1917]/90 to-[#1C1917]" />
+
+        <div className="relative z-10 max-w-xl mx-auto text-center space-y-3">
+          <h1 className="font-display font-normal text-3xl sm:text-4xl md:text-5xl text-white tracking-tight">
+            Contact Us
+          </h1>
+          <p className="text-xs sm:text-sm text-[#D6D3D1] leading-relaxed max-w-md mx-auto">
+            We&apos;re here to help! From bespoke keepsake inquiries to courier tracking updates, feel free to connect with our studio.
+          </p>
+        </div>
+      </section>
+
+      {/* 2. Main Content (Matching Image 2 Layout: Stacked Location Cards + "SEND US MESSAGE" Form Card) */}
+      <main className="flex-1 max-w-xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 relative z-20 w-full space-y-4 pb-12">
+        {/* Back Link */}
+        <div className="flex items-center justify-between pb-1">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#EFE8E1] text-xs font-semibold text-[#1C1917] hover:text-[#7A1C3B] shadow-2xs transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#7A1C3B] hover:text-[#5A1230] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Storefront</span>
           </Link>
+          <span className="text-[11px] text-[#78716C] font-medium">
+            Studio Hours: 9 AM – 8 PM IST
+          </span>
         </div>
 
-        <div className="bg-white border border-[#EFE8E1] rounded-3xl p-6 sm:p-10 shadow-xs space-y-8 relative overflow-hidden">
-          <div className="text-center space-y-3 pt-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3ECE2] border border-[#E5DACD] text-[10px] font-semibold uppercase tracking-wider text-[#8C827A]">
-              <Sparkles className="w-3.5 h-3.5 text-[#7A1C3B]" />
-              <span>We Love Hearing From You</span>
+        {/* Location Card 1 (Matching "USA" card in Image 2) */}
+        <div className="bg-white border border-[#EFE8E1] rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+          <h2 className="font-bold text-xs sm:text-[13px] tracking-wider text-[#1C1917] uppercase">
+            ADIRAMPATTINAM STUDIO
+          </h2>
+
+          <div className="space-y-2 text-xs sm:text-sm text-[#57534E]">
+            <div className="flex items-start gap-2.5">
+              <MapPin className="w-4 h-4 text-[#7A1C3B] shrink-0 mt-0.5" />
+              <p className="leading-relaxed">
+                East Coast Road, Adirampattinam, Thanjavur District, 614701, Tamil Nadu, India.
+              </p>
             </div>
-            <h1 className="font-display font-normal text-3xl sm:text-4xl text-[#1C1917] tracking-tight">
-              Contact Our Studio
-            </h1>
-            <p className="text-xs sm:text-sm text-[#78716C] max-w-md mx-auto">
-              Whether you have a custom photo frame question or want to collaborate at an expo, drop us a line!
-            </p>
+
+            <div className="flex items-center gap-2.5 pt-0.5">
+              <Phone className="w-4 h-4 text-[#7A1C3B] shrink-0" />
+              <a
+                href="tel:9344013255"
+                className="font-medium hover:text-[#7A1C3B] transition-colors"
+              >
+                +91 93440 13255
+              </a>
+            </div>
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            {/* Contact Information Cards */}
-            <div className="space-y-3 text-xs">
-              {/* WhatsApp Direct */}
-              <a
-                href="https://wa.me/919344013255?text=Hi%20Givento!%20Connecting%20from%20your%20website"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-4 bg-[#FAF7F2]/60 border border-[#EFE8E1] hover:border-[#DFD5CB] rounded-2xl shadow-2xs flex items-start gap-3.5 transition block"
-              >
-                <div className="w-10 h-10 rounded-xl bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-center flex-shrink-0 text-[#25D366]">
-                  <WhatsAppIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-display font-normal text-base text-[#1C1917]">WhatsApp Studio Chat</h3>
-                  <p className="text-[#57534E] mt-0.5 font-medium">+91 93440 13255</p>
-                  <span className="text-xs text-[#7A1C3B] font-semibold">
-                    Fastest reply · Usually replies within an hour ✨
-                  </span>
-                </div>
-              </a>
+        {/* Location Card 2 (Matching "INDIA" card in Image 2) */}
+        <div className="bg-white border border-[#EFE8E1] rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+          <h2 className="font-bold text-xs sm:text-[13px] tracking-wider text-[#1C1917] uppercase">
+            PAN-INDIA DISPATCH &amp; CONCIERGE
+          </h2>
 
-              {/* Instagram */}
-              <a
-                href="https://instagram.com/givento.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-4 bg-[#FAF7F2]/60 border border-[#EFE8E1] hover:border-[#DFD5CB] rounded-2xl shadow-2xs flex items-start gap-3.5 transition block"
-              >
-                <div className="w-10 h-10 rounded-xl bg-[#FDF0F3] border border-[#FADDE3] flex items-center justify-center flex-shrink-0 text-[#7A1C3B]">
-                  <InstagramIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-display font-normal text-base text-[#1C1917]">Instagram DM</h3>
-                  <p className="text-[#57534E] mt-0.5 font-medium">@givento.in</p>
-                  <span className="text-xs text-[#7A1C3B] font-semibold">
-                    Tag us in your unboxing videos!
-                  </span>
-                </div>
-              </a>
-
-              {/* Studio Location */}
-              <div className="p-4 bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl shadow-2xs flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#EFE8E1] flex items-center justify-center flex-shrink-0 text-[#7A1C3B]">
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-display font-normal text-base text-[#1C1917]">Workshop Studio</h3>
-                  <p className="text-[#57534E] mt-0.5">
-                    Adirampattinam &amp; Kozhikode Corridor, India
-                  </p>
-                  <span className="text-[11px] text-[#8C827A]">
-                    * Visits by appointment &amp; pop-up expos
-                  </span>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="p-4 bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl shadow-2xs flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#EFE8E1] flex items-center justify-center flex-shrink-0 text-[#7A1C3B]">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-display font-normal text-base text-[#1C1917]">Studio Email</h3>
-                  <p className="text-[#57534E] mt-0.5 font-medium">hello@givento.in</p>
-                </div>
-              </div>
+          <div className="space-y-2 text-xs sm:text-sm text-[#57534E]">
+            <div className="flex items-start gap-2.5">
+              <MapPin className="w-4 h-4 text-[#7A1C3B] shrink-0 mt-0.5" />
+              <p className="leading-relaxed">
+                Daily express dispatch across 19,000+ pincodes via Bluedart, DTDC &amp; Speed Post.
+              </p>
             </div>
 
-            {/* Quick Message Form */}
-            <form
-              onSubmit={handleSubmit}
-              className="bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl p-6 shadow-2xs space-y-4 text-xs"
+            <div className="flex items-center gap-2.5 pt-0.5">
+              <Mail className="w-4 h-4 text-[#7A1C3B] shrink-0" />
+              <a
+                href="mailto:hello@givento.in"
+                className="font-medium hover:text-[#7A1C3B] transition-colors"
+              >
+                hello@givento.in
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Form Card (Matching "SEND US MESSAGE" section in Image 2) */}
+        <div className="bg-white border border-[#EFE8E1] rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+          <h2 className="font-bold text-xs sm:text-[13px] tracking-wider text-[#1C1917] uppercase">
+            SEND US MESSAGE
+          </h2>
+
+          <form onSubmit={handleSubmit} className="space-y-3">
+            {/* Name Input */}
+            <div>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your Name"
+                className="w-full px-4 py-3 bg-[#FAF7F2]/60 focus:bg-white border border-[#EFE8E1] rounded-xl text-xs sm:text-sm text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B] focus:ring-1 focus:ring-[#7A1C3B] transition"
+              />
+            </div>
+
+            {/* Email / WhatsApp Input */}
+            <div>
+              <input
+                type="text"
+                required
+                value={phoneOrEmail}
+                onChange={(e) => setPhoneOrEmail(e.target.value)}
+                placeholder="WhatsApp Number or E-mail id"
+                className="w-full px-4 py-3 bg-[#FAF7F2]/60 focus:bg-white border border-[#EFE8E1] rounded-xl text-xs sm:text-sm text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B] focus:ring-1 focus:ring-[#7A1C3B] transition"
+              />
+            </div>
+
+            {/* Message Textarea */}
+            <div>
+              <textarea
+                rows={4}
+                required
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Write your message or custom order inquiry..."
+                className="w-full px-4 py-3 bg-[#FAF7F2]/60 focus:bg-white border border-[#EFE8E1] rounded-xl text-xs sm:text-sm text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B] focus:ring-1 focus:ring-[#7A1C3B] transition resize-none leading-relaxed"
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-3.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition active:scale-[0.99] cursor-pointer"
             >
-              <h3 className="font-display font-normal text-lg text-[#1C1917] border-b border-[#EFE8E1] pb-2">
-                Send a Note to the Maker
-              </h3>
+              <Send className="w-3.5 h-3.5" />
+              <span>Send Message</span>
+            </button>
 
-              <div className="space-y-1.5">
-                <label className="block font-semibold text-[#1C1917]">Your Name <span className="text-[#B3261E]">*</span></label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Ayesha"
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#EFE8E1] rounded-xl text-xs sm:text-sm text-[#1C1917] placeholder:text-[#A89F91] focus:outline-none focus:border-[#7A1C3B] focus:ring-2 focus:ring-[#7A1C3B]/20"
-                />
+            {sent && (
+              <div className="p-3 bg-[#E8F5ED] border border-[#C3E6D0] rounded-xl text-center text-xs text-[#2C7A54] font-semibold flex items-center justify-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#2C7A54]" />
+                <span>Message opened on WhatsApp! Talk to you shortly ✨</span>
               </div>
-
-              <div className="space-y-1.5">
-                <label className="block font-semibold text-[#1C1917]">WhatsApp Phone <span className="text-[#B3261E]">*</span></label>
-                <input
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="e.g. 9845012345"
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#EFE8E1] rounded-xl text-xs sm:text-sm text-[#1C1917] placeholder:text-[#A89F91] focus:outline-none focus:border-[#7A1C3B] focus:ring-2 focus:ring-[#7A1C3B]/20"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block font-semibold text-[#1C1917]">Your Note / Question <span className="text-[#B3261E]">*</span></label>
-                <textarea
-                  rows={4}
-                  required
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Ask about a custom bouquet size, Arabic spelling, or expo dates..."
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#EFE8E1] rounded-xl text-xs sm:text-sm text-[#1C1917] placeholder:text-[#A89F91] focus:outline-none focus:border-[#7A1C3B] focus:ring-2 focus:ring-[#7A1C3B]/20 resize-none leading-relaxed"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs transition cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>Send Message on WhatsApp</span>
-              </button>
-
-              {sent && (
-                <div className="p-3 bg-[#E8F5ED] border border-[#C3E6D0] rounded-xl text-center text-xs text-[#2C7A54] font-semibold">
-                  Message launched on WhatsApp! Talk to you shortly ✨
-                </div>
-              )}
-            </form>
-          </div>
+            )}
+          </form>
         </div>
       </main>
 

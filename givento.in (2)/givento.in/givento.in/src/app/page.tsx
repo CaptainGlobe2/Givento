@@ -38,11 +38,10 @@ export default function HomePage() {
         {/* 2. Top Banner / Rotating Slideshow Carousel */}
         <HeroCarousel />
 
-        {/* 3. Circular Categories (Each Links Directly to its Dedicated Category Page) */}
+        {/* 3. Circular Categories (Matching Reference: Horizontal Scrolling Row Directly Above New Arrivals) */}
         <CircularCategories
           selectedGroup=""
           onSelectGroup={handleSelectGroup}
-          headline="Fresh finds fit for cosy season."
         />
 
         {/* 4. New Arrivals (Matching Reference: Filter Pills, Portrait Cards with Quick '+' Add, Title & Price) */}

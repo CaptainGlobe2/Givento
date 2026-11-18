@@ -5,7 +5,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FFF7F4] flex items-center justify-center font-heading text-lg text-[#7A1C30]">
+        <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-display text-xl text-[#7A1C3B]">
           Checking parcel tracking... ✨
         </div>
       }
