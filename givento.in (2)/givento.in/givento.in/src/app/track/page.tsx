@@ -29,13 +29,24 @@ export default function TrackPage() {
       return;
     }
 
-    const orders = await db.getOrders();
-    const found = orders.find((o) => {
-      const matchId = cleanId && (o.id.toUpperCase() === cleanId || o.id.toUpperCase() === `GVN-${cleanId}`);
-      const matchPhone = cleanPhone && o.customerPhone.replace(/\D/g, '').includes(cleanPhone);
-      if (cleanId && cleanPhone) return matchId && matchPhone;
-      return matchId || matchPhone;
-    });
+    let found = null;
+    if (cleanId) {
+      found = await db.getOrderById(cleanId);
+    }
+
+    if (!found) {
+      const orders = await db.getOrders();
+      found = orders.find((o) => {
+        const matchId = cleanId && (
+          o.id.toUpperCase() === cleanId ||
+          o.id.toUpperCase() === `GVN-${cleanId}` ||
+          o.id.toUpperCase().replace(/^GVN-/, '') === cleanId.replace(/^GVN-/, '')
+        );
+        const matchPhone = cleanPhone && o.customerPhone.replace(/\D/g, '').includes(cleanPhone);
+        if (cleanId && cleanPhone) return matchId && matchPhone;
+        return matchId || matchPhone;
+      });
+    }
 
     if (found) {
       router.push(`/order/${found.id}`);

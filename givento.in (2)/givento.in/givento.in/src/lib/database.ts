@@ -783,7 +783,59 @@ export const db = {
 
   // ORDERS
   async getOrders(): Promise<AdminOrder[]> {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('givento_db_orders');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            localOrders = parsed;
+          }
+        }
+      } catch (err) {
+        console.error('Failed reading orders from localStorage', err);
+      }
+    }
     return localOrders;
+  },
+
+  async getOrderById(orderId: string): Promise<AdminOrder | null> {
+    if (!orderId) return null;
+    const clean = orderId.trim().toUpperCase().replace(/^#/, '');
+    const allOrders = await this.getOrders();
+
+    // 1. Check allOrders list
+    let found = allOrders.find((o) => {
+      const oid = o.id.toUpperCase();
+      return (
+        oid === clean ||
+        oid === `GVN-${clean}` ||
+        oid.replace(/^GVN-/, '') === clean.replace(/^GVN-/, '')
+      );
+    });
+    if (found) return found;
+
+    // 2. Direct check in localStorage for last placed order
+    if (typeof window !== 'undefined') {
+      try {
+        const lastPlaced = localStorage.getItem('givento_last_placed_order');
+        if (lastPlaced) {
+          const parsed: AdminOrder = JSON.parse(lastPlaced);
+          if (parsed && parsed.id) {
+            const pId = parsed.id.toUpperCase();
+            if (
+              pId === clean ||
+              pId === `GVN-${clean}` ||
+              pId.replace(/^GVN-/, '') === clean.replace(/^GVN-/, '')
+            ) {
+              return parsed;
+            }
+          }
+        }
+      } catch {}
+    }
+
+    return null;
   },
 
   async createManualOrder(orderData: Partial<AdminOrder>): Promise<AdminOrder> {
@@ -843,6 +895,11 @@ export const db = {
 
     localOrders = [newOrder, ...localOrders];
     persistAll();
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('givento_last_placed_order', JSON.stringify(newOrder));
+      } catch {}
+    }
 
     await this.logOrderStatusChange({
       orderId: newOrder.id,
@@ -911,6 +968,11 @@ export const db = {
 
     localOrders = [newOrder, ...localOrders];
     persistAll();
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('givento_last_placed_order', JSON.stringify(newOrder));
+      } catch {}
+    }
 
     if (isSupabaseConfigured && supabase) {
       await supabase.from('orders').insert([{

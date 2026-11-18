@@ -190,7 +190,7 @@ export default function CartPage() {
     pincode: string;
     instructions: string;
   }) => {
-    await db.createOrder({
+    const newOrder = await db.createOrder({
       customerName: customerData.name,
       customerPhone: customerData.phone,
       address: customerData.address,
@@ -224,6 +224,7 @@ export default function CartPage() {
     });
     // Clear cart once order is confirmed
     clearBasket();
+    return newOrder;
   };
 
   // WhatsApp message template (NOT pre-encoded — OrderInfoModal appends customer details)

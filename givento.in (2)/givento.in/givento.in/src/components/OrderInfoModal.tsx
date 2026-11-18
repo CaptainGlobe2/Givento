@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, MessageCircle, User, Phone, MapPin, Building2, Hash, FileText, CheckCircle2 } from 'lucide-react';
+import { AdminOrder } from '../lib/database';
 
 export interface OrderInfoData {
   name: string;
@@ -20,7 +21,7 @@ interface Props {
   /** Label shown on submit button */
   submitLabel?: string;
   /** Optional callback to create the order in the database */
-  onCompleteOrder?: (customerData: OrderInfoData) => Promise<void> | void;
+  onCompleteOrder?: (customerData: OrderInfoData) => Promise<AdminOrder | void> | AdminOrder | void;
 }
 
 const ADMIN_WA = '919344013255';
@@ -44,6 +45,7 @@ export default function OrderInfoModal({
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [preparedWaUrl, setPreparedWaUrl] = useState('');
+  const [createdOrder, setCreatedOrder] = useState<AdminOrder | null>(null);
 
   if (!isOpen) return null;
 
@@ -66,12 +68,18 @@ export default function OrderInfoModal({
     setIsSubmitting(true);
 
     try {
+      let placed: AdminOrder | null = null;
       if (onCompleteOrder) {
-        await onCompleteOrder(form);
+        const res = await onCompleteOrder(form);
+        if (res && typeof res === 'object' && 'id' in res) {
+          placed = res as AdminOrder;
+          setCreatedOrder(placed);
+        }
       }
 
+      const orderRefTag = placed?.id ? `\nOrder ID: *#${placed.id}*` : '';
       const customerBlock =
-        `\n\n📦 *Delivery Details*\n` +
+        `\n\n📦 *Delivery Details*${orderRefTag}\n` +
         `Customer Name: *${form.name.trim()}*\n` +
         `Customer Phone: *+91 ${form.phone.trim()}*\n` +
         `Address: ${form.address.trim()}, ${form.city.trim()} - ${form.pincode.trim()}` +
@@ -95,6 +103,7 @@ export default function OrderInfoModal({
     setSubmitted(false);
     setForm({ name: '', phone: '', address: '', city: '', pincode: '', instructions: '' });
     setErrors({});
+    setCreatedOrder(null);
     onClose();
   };
 
@@ -126,13 +135,54 @@ export default function OrderInfoModal({
               <span className="inline-block px-3 py-0.5 rounded-full bg-[#E8F5ED] text-[#2C7A54] text-[10px] font-bold uppercase tracking-wider mb-2 border border-[#C3E6D0]">
                 Order Placed Successfully
               </span>
-              <h3 className="font-display font-normal text-2xl text-[#1C1917] mb-1.5">
+              <h3 className="font-display font-normal text-2xl text-[#1C1917] mb-1">
                 Thank You, {form.name.trim()}! 🌸
               </h3>
+              {createdOrder?.id && (
+                <div className="inline-block px-3.5 py-1 bg-[#FAF7F2] border border-[#EFE8E1] rounded-full text-xs font-mono font-bold text-[#7A1C3B] mb-2">
+                  Order ID: #{createdOrder.id}
+                </div>
+              )}
               <p className="text-xs text-[#78716C] max-w-sm mx-auto leading-relaxed">
-                Your order details and delivery address have been recorded in the Givento Studio Admin system.
+                Your handcrafted order has been recorded in our workshop system.
               </p>
             </div>
+
+            {/* Ordered Items Preview */}
+            {createdOrder && createdOrder.items && createdOrder.items.length > 0 && (
+              <div className="w-full text-left bg-[#FAF7F2] rounded-2xl border border-[#EFE8E1] p-3.5 space-y-2">
+                <div className="text-[11px] font-bold text-[#8C827A] uppercase tracking-wider">
+                  Ordered Products ({createdOrder.items.length}):
+                </div>
+                <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                  {createdOrder.items.map((it, idx) => (
+                    <div key={idx} className="flex items-center gap-2.5 text-xs bg-white p-2 rounded-xl border border-[#EFE8E1]">
+                      {it.image ? (
+                        <img
+                          src={it.image}
+                          alt={it.productName}
+                          className="w-10 h-10 rounded-lg object-cover bg-[#FAF7F2] border border-[#EFE8E1] shrink-0"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src =
+                              'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=400&q=80';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-[#FAF7F2] border border-[#EFE8E1] flex items-center justify-center shrink-0 text-sm">
+                          🎁
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-[#1C1917] truncate">{it.quantity}x {it.productName}</div>
+                        {it.price > 0 && (
+                          <span className="text-[#7A1C3B] font-mono text-[11px] font-bold">₹{it.price * it.quantity}</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="w-full p-4 bg-[#FAF7F2] rounded-2xl border border-[#EFE8E1] text-left text-xs space-y-2">
               <div className="flex justify-between items-center pb-2 border-b border-[#EFE8E1]">
@@ -156,10 +206,10 @@ export default function OrderInfoModal({
             {/* Actions */}
             <div className="w-full space-y-2 pt-2">
               <a
-                href={`/track`}
-                className="w-full py-3 px-5 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
+                href={createdOrder ? `/order/${createdOrder.id}` : `/track`}
+                className="w-full py-3.5 px-5 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
               >
-                <span>Track Order Status</span>
+                <span>View Order Details &amp; Live Tracking</span>
                 <span>→</span>
               </a>
 

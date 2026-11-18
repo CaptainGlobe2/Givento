@@ -143,21 +143,6 @@ export default function Navbar({
                   </span>
                 )}
               </Link>
-
-              {/* Basket / Cart Icon */}
-              <button
-                type="button"
-                onClick={openBasket}
-                aria-label={`Open shopping cart with ${itemCount} items`}
-                className="relative p-1.5 text-[#1C1917] hover:text-[#7A1C3B] transition-colors cursor-pointer"
-              >
-                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.8]" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#7A1C3B] text-white text-[10px] font-bold flex items-center justify-center tabular-nums">
-                    {itemCount > 99 ? '99+' : itemCount}
-                  </span>
-                )}
-              </button>
             </div>
           </div>
 

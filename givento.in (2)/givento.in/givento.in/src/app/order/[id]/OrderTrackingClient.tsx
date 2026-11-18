@@ -29,50 +29,57 @@ export default function OrderTrackingClient({
 
   useEffect(() => {
     async function fetchOrder() {
-      const orders = await db.getOrders();
-      const found = orders.find((o) => o.id === orderId);
+      const found = await db.getOrderById(orderId);
       if (found) {
         setOrder(found);
       } else {
-        // Fallback simulated order for preview
-        setOrder({
-          id: orderId,
-          customerName: 'Valued Customer',
-          customerPhone: '9840012345',
-          address: 'Main Street / Studio Handover',
-          city: 'Adirampattinam',
-          state: 'Tamil Nadu',
-          pincode: '614701',
-          status: 'Pending WhatsApp Confirmation',
-          paymentMethod: 'whatsapp',
-          paymentStatus: 'Pending',
-          subtotal: 799,
-          giftWrap: true,
-          giftNote: 'Happy Birthday! Handcrafted with lots of love ✨',
-          deliveryFee: 0,
-          deliveryRule: 'Adirampattinam Express Local Delivery',
-          total: 848,
-          items: [
-            {
-              productName: 'Handcrafted Bouquet & Keepsake Parcel',
-              quantity: 1,
-              price: 799,
-            },
-          ],
-          createdAt: new Date().toISOString(),
-        });
+        setOrder(null);
       }
       setLoading(false);
     }
     fetchOrder();
   }, [orderId]);
 
-  if (loading || !order) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
         <div className="font-display font-normal text-xl text-[#7A1C3B]">
           Checking parcel tracking status... ✨
         </div>
+      </div>
+    );
+  }
+
+  if (!order) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans">
+        <Navbar />
+        <main className="flex-1 max-w-lg mx-auto px-4 py-16 flex flex-col items-center justify-center text-center">
+          <div className="w-16 h-16 rounded-full bg-[#FDF0F3] text-[#7A1C3B] border border-[#FADDE3] flex items-center justify-center text-2xl mb-4">
+            📦
+          </div>
+          <h1 className="font-display font-normal text-2xl sm:text-3xl text-[#1C1917] mb-2">
+            Order Not Found
+          </h1>
+          <p className="text-xs sm:text-sm text-[#78716C] max-w-sm mb-6 leading-relaxed">
+            We couldn&apos;t find an order matching <span className="font-mono font-bold text-[#1C1917]">#{orderId}</span>. Please verify your order number or search with your mobile number.
+          </p>
+          <div className="w-full space-y-2.5">
+            <Link
+              href="/track"
+              className="w-full py-3.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition"
+            >
+              <span>Search by WhatsApp Phone / Order ID</span>
+            </Link>
+            <Link
+              href="/"
+              className="w-full py-3 bg-white border border-[#EFE8E1] hover:bg-[#FAF7F2] text-[#1C1917] rounded-xl font-semibold text-xs flex items-center justify-center transition"
+            >
+              Back to Storefront
+            </Link>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }

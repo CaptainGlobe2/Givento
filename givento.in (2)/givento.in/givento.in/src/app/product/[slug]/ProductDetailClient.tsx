@@ -125,7 +125,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
   }) => {
     const unitPrice = product.price || 0;
     const total = unitPrice * quantity;
-    await db.createOrder({
+    const newOrder = await db.createOrder({
       customerName: customerData.name,
       customerPhone: customerData.phone,
       address: customerData.address,
@@ -150,6 +150,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
         },
       ],
     });
+    return newOrder;
   };
 
   // Build WhatsApp message template (NOT pre-encoded — OrderInfoModal appends customer info + encodes)
