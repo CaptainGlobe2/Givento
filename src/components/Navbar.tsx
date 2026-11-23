@@ -158,13 +158,13 @@ export default function Navbar({
               <Menu className="w-6 h-6 stroke-[2]" />
             </button>
 
-            {/* Rounded Full Pill Search Bar matching Image 1 layout */}
+            {/* Rounded Full Pill Search Bar matching Reference layout */}
             <form onSubmit={handleSearchSubmit} className="relative flex-1">
               <label htmlFor="etsy-search" className="sr-only">
                 What are you looking for?
               </label>
               <div className="relative flex items-center w-full">
-                <Search className="absolute left-4 w-4 h-4 text-[#8C827A] pointer-events-none stroke-[2]" />
+                <Search className="absolute left-4.5 w-4 h-4 text-[#8C827A] pointer-events-none stroke-[2]" />
                 <input
                   id="etsy-search"
                   type="search"
@@ -172,12 +172,13 @@ export default function Navbar({
                   onChange={handleInputChange}
                   placeholder="What are you looking for?"
                   autoComplete="off"
-                  className="w-full h-11 sm:h-12 border border-[#EFE8E1] focus:border-[#7A1C3B] rounded-full bg-white pl-10.5 pr-11 text-xs sm:text-sm font-body text-[#1C1917] placeholder-[#8C827A] focus:outline-none focus:ring-2 focus:ring-[#7A1C3B]/10 transition-all shadow-xs"
+                  className="w-full h-11 sm:h-12 border border-[#EFE8E1] focus:border-[#7A1C3B] rounded-full bg-white pl-11 pr-14 text-xs sm:text-sm font-body text-[#1C1917] placeholder-[#8C827A] focus:outline-none focus:ring-2 focus:ring-[#7A1C3B]/10 transition-all shadow-xs"
                 />
+                <div className="absolute right-11 top-1/2 -translate-y-1/2 w-px h-5 bg-[#EFE8E1]" />
                 <button
                   type="submit"
                   aria-label="Filter or search"
-                  className="absolute right-1.5 w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-[#78716C] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] transition-colors cursor-pointer"
+                  className="absolute right-1.5 w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] transition-colors cursor-pointer"
                 >
                   <SlidersHorizontal className="w-4 h-4 stroke-[2]" />
                 </button>

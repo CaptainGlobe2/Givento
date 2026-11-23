@@ -2,59 +2,69 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Slide {
   id: string;
   badge: string;
-  title: string;
-  subtitle: string;
+  titleLine1: string;
+  titleLine2: string;
   ctaText: string;
   ctaLink: string;
   image: string;
   bgGradient: string;
+  ambientLightColor: string;
+  pillColor: string;
 }
 
 const SLIDES: Slide[] = [
   {
     id: 'slide-1',
     badge: 'Limited Offer',
-    title: 'First Purchase Enjoy a Special Offer',
-    subtitle: 'Handcrafted floral bouquets, personalised resin keepsakes, and curated luxury gift boxes.',
+    titleLine1: 'First Purchase Enjoy',
+    titleLine2: 'a Special Offer',
     ctaText: 'Shop Now',
     ctaLink: '/category/all',
-    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80',
-    bgGradient: 'from-[#FCECEE] via-[#FAF1E8] to-[#FBE9ED]',
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=900&q=80',
+    bgGradient: 'from-[#FCECEE] via-[#F8DEE5] to-[#F2CDD7]',
+    ambientLightColor: 'bg-white/40',
+    pillColor: '#7A1C3B',
   },
   {
     id: 'slide-2',
-    badge: 'Handmade Blooms',
-    title: 'Everlasting Bouquets Handcrafted with Love',
-    subtitle: 'Fresh paper blooms, crochet sunflowers, and bespoke floral wraps made in Adiram.',
-    ctaText: 'Explore Bouquets',
+    badge: 'Limited Offer',
+    titleLine1: 'Everlasting Bouquets',
+    titleLine2: 'Handcrafted with Love',
+    ctaText: 'Shop Now',
     ctaLink: '/category/bouquets',
-    image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
-    bgGradient: 'from-[#FFF0F3] via-[#FAF5EE] to-[#FDF0EC]',
+    image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=900&q=80',
+    bgGradient: 'from-[#EAF3E4] via-[#DEECD5] to-[#D2E4C6]',
+    ambientLightColor: 'bg-white/45',
+    pillColor: '#4A6B3D',
   },
   {
     id: 'slide-3',
     badge: 'Curated Luxury',
-    title: 'Aesthetic Gift Hampers for Every Celebration',
-    subtitle: 'Artisanal rigid gift boxes with wax-sealed calligraphy envelopes and keepsake touches.',
-    ctaText: 'Discover Hampers',
+    titleLine1: 'Aesthetic Gift Hampers',
+    titleLine2: 'for Every Celebration',
+    ctaText: 'Shop Now',
     ctaLink: '/category/gift-hampers',
-    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
-    bgGradient: 'from-[#F9F4EB] via-[#FCF8F2] to-[#F4ECE3]',
+    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=900&q=80',
+    bgGradient: 'from-[#FAF2E6] via-[#F5E6CE] to-[#EDD7B5]',
+    ambientLightColor: 'bg-white/40',
+    pillColor: '#8E6728',
   },
   {
     id: 'slide-4',
     badge: 'Anti-Tarnish',
-    title: 'Stainless Steel Luxury Everyday Jewellery',
-    subtitle: 'Waterproof, hypoallergenic dainty chains, kada, twisted rings, and mehandi hand chains.',
-    ctaText: 'Shop Jewellery',
+    titleLine1: 'Stainless Steel Luxury',
+    titleLine2: 'Everyday Jewellery',
+    ctaText: 'Shop Now',
     ctaLink: '/category/stainless-steel-jewellery',
-    image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80',
-    bgGradient: 'from-[#FAF0F4] via-[#F8F2EC] to-[#FBF1F5]',
+    image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=900&q=80',
+    bgGradient: 'from-[#F5EDF6] via-[#ECDEED] to-[#E1CCE3]',
+    ambientLightColor: 'bg-white/40',
+    pillColor: '#6B386C',
   },
 ];
 
@@ -79,84 +89,80 @@ export default function HeroCarousel() {
     return () => clearInterval(interval);
   }, [isPaused, nextSlide]);
 
+  const activeSlide = SLIDES[current];
+
   return (
     <section
       aria-label="Hero Banner"
-      className="w-full bg-[#FAF7F2] py-2 sm:py-3.5 px-3 sm:px-4"
+      className="w-full bg-[#FAF7F2] pt-2 pb-4 px-3 sm:px-4"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="max-w-[1180px] mx-auto">
-        {/* Rounded Hero Banner Card matching Reference Photo Layout */}
-        <div className="relative w-full rounded-3xl sm:rounded-[36px] overflow-hidden border border-[#EFE8E1] shadow-xs">
+        {/* Rounded Hero Banner Card - EXACT match to reference layout */}
+        <div className="relative w-full rounded-[32px] sm:rounded-[40px] overflow-hidden border border-[#EFE8E1] shadow-xs">
           {/* Slides Container */}
-          <div className="relative min-h-[300px] sm:min-h-[340px] md:min-h-[380px] flex items-center">
+          <div className="relative min-h-[290px] sm:min-h-[340px] md:min-h-[380px] flex items-center">
             {SLIDES.map((slide, idx) => {
               const isActive = idx === current;
               return (
                 <div
                   key={slide.id}
-                  className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out flex items-center bg-gradient-to-br ${slide.bgGradient} ${
+                  className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out bg-gradient-to-br ${slide.bgGradient} ${
                     isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
                   }`}
                 >
-                  {/* Background Product Image Layer (Soft translucent blend behind the card) */}
-                  <div className="absolute right-0 top-0 bottom-0 w-3/4 sm:w-3/5 overflow-hidden pointer-events-none opacity-20 sm:opacity-25 mix-blend-multiply">
-                    <img
-                      src={slide.image}
-                      alt=""
-                      className="w-full h-full object-cover scale-110 blur-[1px] transform origin-right"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#FAF1E8] via-[#FAF1E8]/60 to-transparent" />
-                  </div>
+                  {/* Organic ambient light circles matching reference */}
+                  <div className={`absolute -top-12 -right-12 w-80 h-80 rounded-full blur-3xl pointer-events-none ${slide.ambientLightColor}`} />
+                  <div className="absolute top-1/3 left-1/4 w-60 h-60 rounded-full bg-white/25 blur-2xl pointer-events-none" />
 
-                  {/* Ambient subtle glow decoration */}
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#7A1C3B]/5 rounded-full blur-3xl pointer-events-none" />
-                  <div className="absolute bottom-0 left-10 w-48 h-48 bg-[#B98A2E]/5 rounded-full blur-2xl pointer-events-none" />
-
-                  <div className="relative w-full h-full px-4 sm:px-8 md:px-12 py-5 sm:py-8 flex items-center justify-between gap-3 sm:gap-6 z-10">
-                    {/* Left Side: Badge, Title, Subtitle, CTA Button */}
-                    <div className="flex-1 max-w-[62%] sm:max-w-[60%] md:max-w-md space-y-2 sm:space-y-3.5 text-left z-10">
-                      {/* Black pill badge matching Reference */}
+                  {/* Inner Layout: Left Column Text & Right Column Seamless Image */}
+                  <div className="relative w-full h-full min-h-[290px] sm:min-h-[340px] md:min-h-[380px] px-6 sm:px-10 md:px-14 py-7 sm:py-9 flex items-center justify-between z-10">
+                    {/* LEFT COLUMN: Badge + Headline + Large CTA Button (Exact Reference Match) */}
+                    <div className="max-w-[62%] sm:max-w-[58%] md:max-w-md space-y-3 sm:space-y-4 md:space-y-5 text-left z-10">
+                      {/* 1. Solid Black Pill Badge */}
                       <div>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#1C1917] text-white text-[9px] sm:text-xs font-semibold tracking-wide uppercase shadow-2xs">
+                        <span className="inline-flex items-center px-3.5 sm:px-4 py-1 rounded-full bg-[#1C1917] text-white text-[10px] sm:text-xs font-semibold tracking-wide shadow-2xs">
                           {slide.badge}
                         </span>
                       </div>
 
-                      {/* Main Headline */}
-                      <h1 className="font-heading font-medium text-lg sm:text-2xl md:text-3xl lg:text-[2.35rem] text-[#1C1917] tracking-tight leading-[1.2]">
-                        {slide.title}
-                      </h1>
+                      {/* 2. Bold Clean Headline (Exact 2 lines) */}
+                      <h2 className="font-heading font-medium text-xl sm:text-3xl md:text-4xl lg:text-[2.65rem] text-[#1C1917] tracking-tight leading-[1.12]">
+                        {slide.titleLine1} <br />
+                        {slide.titleLine2}
+                      </h2>
 
-                      {/* Short Subtitle */}
-                      <p className="text-[11px] sm:text-xs md:text-sm text-[#78716C] leading-relaxed line-clamp-2">
-                        {slide.subtitle}
-                      </p>
-
-                      {/* CTA Pill Button with Arrow In Circle (Exact Reference Shape!) */}
+                      {/* 3. Big Pill CTA Button with Circular Disk holding Arrow (Exact Reference Match) */}
                       <div className="pt-1">
                         <Link
                           href={slide.ctaLink}
-                          className="inline-flex items-center gap-2 sm:gap-3 pl-3.5 sm:pl-5 pr-1 sm:pr-1.5 py-1 sm:py-1.5 rounded-full bg-[#1C1917] hover:bg-[#7A1C3B] text-white font-bold text-[11px] sm:text-xs md:text-sm transition-all duration-300 shadow-md group cursor-pointer active:scale-95"
+                          className="inline-flex items-center gap-3.5 sm:gap-4 pl-5 sm:pl-6 pr-1.5 sm:pr-2 py-1.5 sm:py-2 rounded-full bg-[#1C1917] hover:bg-[#7A1C3B] text-white font-medium text-xs sm:text-base transition-all duration-300 shadow-md group cursor-pointer active:scale-95"
                         >
-                          <span>{slide.ctaText}</span>
-                          <span className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white text-[#1C1917] flex items-center justify-center group-hover:scale-105 group-hover:rotate-45 transition-transform duration-200 shadow-xs">
-                            <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+                          <span className="font-semibold tracking-tight">{slide.ctaText}</span>
+                          <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white text-[#1C1917] flex items-center justify-center group-hover:scale-105 group-hover:rotate-45 transition-transform duration-300 shadow-xs">
+                            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.4]" />
                           </span>
                         </Link>
                       </div>
                     </div>
 
-                    {/* Right Side: Visible Product Image Card on Mobile and Desktop */}
-                    <div className="flex shrink-0 items-center justify-end z-10 pr-1 sm:pr-0">
-                      <div className="relative w-28 h-28 sm:w-48 sm:h-48 md:w-64 md:h-64 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border-2 border-white/95 bg-white transform hover:scale-105 transition-transform duration-500">
+                    {/* RIGHT COLUMN: Seamless Product Presentation standing directly on card floor (No box/border!) */}
+                    <div className="absolute right-2 sm:right-6 md:right-10 top-0 bottom-0 w-[45%] sm:w-[46%] md:w-[44%] flex items-end justify-center pointer-events-none pb-3 sm:pb-5">
+                      <div className="relative w-full h-full max-h-[250px] sm:max-h-[300px] md:max-h-[340px] flex items-end justify-center">
+                        {/* Soft contact shadow at bottom */}
+                        <div className="absolute bottom-2 inset-x-4 h-6 bg-black/15 rounded-full blur-md" />
+
+                        {/* Product visual seamlessly feathered into the scene */}
                         <img
                           src={slide.image}
-                          alt={slide.title}
-                          className="w-full h-full object-cover"
+                          alt={`${slide.titleLine1} ${slide.titleLine2}`}
+                          style={{
+                            WebkitMaskImage: 'radial-gradient(ellipse 90% 90% at 65% 55%, black 60%, transparent 100%)',
+                            maskImage: 'radial-gradient(ellipse 90% 90% at 65% 55%, black 60%, transparent 100%)',
+                          }}
+                          className="relative z-10 max-h-full w-auto object-contain rounded-3xl drop-shadow-[0_12px_24px_rgba(0,0,0,0.14)] transform hover:scale-105 transition-transform duration-700 ease-out"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
                       </div>
                     </div>
                   </div>
@@ -183,24 +189,27 @@ export default function HeroCarousel() {
             <ChevronRight className="w-4 h-4" />
           </button>
 
-          {/* Bottom Centered Pagination Pill (Matching Reference Dots with Active Pill) */}
-          <div className="absolute bottom-3 left-1/2 -translate-y-0 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 backdrop-blur-xs border border-white/60 shadow-2xs">
-            {SLIDES.map((slide, idx) => {
-              const isActive = idx === current;
-              return (
-                <button
-                  key={slide.id}
-                  type="button"
-                  onClick={() => setCurrent(idx)}
-                  aria-label={`Go to slide ${idx + 1}`}
-                  className={`transition-all duration-300 cursor-pointer ${
-                    isActive
-                      ? 'w-6 h-2 rounded-full bg-[#7A1C3B]'
-                      : 'w-2 h-2 rounded-full bg-[#D5CCC3] hover:bg-[#7A1C3B]/60'
-                  }`}
-                />
-              );
-            })}
+          {/* EXACT REFERENCE NOTCH: White Pill Tab carved into the bottom edge */}
+          <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 z-20">
+            <div className="bg-white px-4 sm:px-5 py-1 sm:py-1.5 rounded-t-2xl shadow-xs flex items-center gap-2 border-t border-x border-[#EFE8E1]/80">
+              {SLIDES.map((slide, idx) => {
+                const isActive = idx === current;
+                return (
+                  <button
+                    key={slide.id}
+                    type="button"
+                    onClick={() => setCurrent(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`transition-all duration-300 cursor-pointer ${
+                      isActive
+                        ? 'w-7 sm:w-8 h-2 rounded-full'
+                        : 'w-2 h-2 rounded-full bg-[#D5CCC3] hover:bg-[#7A1C3B]/60'
+                    }`}
+                    style={isActive ? { backgroundColor: slide.pillColor } : undefined}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
