@@ -15,7 +15,6 @@ import {
   Sparkles,
   Truck,
   Heart,
-  MessageCircle,
   Copy,
   Check,
   AlertCircle,
@@ -523,27 +522,15 @@ export default function OrdersTrackPage() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row items-center gap-2 pt-1">
+                    <div className="pt-1">
                       <Link
                         href={`/order/${order.id}`}
-                        className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition cursor-pointer"
+                        className="w-full py-3 px-4 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition cursor-pointer"
                       >
                         <Package className="w-4 h-4" />
                         <span>View Live Tracking &amp; Fulfillment Timeline</span>
                         <span>→</span>
                       </Link>
-
-                      <a
-                        href={`https://wa.me/919344013255?text=${encodeURIComponent(
-                          `Hello Givento Studio! 🌸 Checking status for my Order #${order.id}.`
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full sm:w-auto py-3 px-4 rounded-xl border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5 font-semibold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer"
-                      >
-                        <MessageCircle className="w-4 h-4 fill-[#25D366]" />
-                        <span>Chat on WhatsApp</span>
-                      </a>
                     </div>
                   </div>
                 </article>

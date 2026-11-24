@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { X, MessageCircle, User, Phone, MapPin, Building2, Hash, FileText, CheckCircle2, Sparkles } from 'lucide-react';
+import { X, User, Phone, MapPin, Building2, Hash, FileText, CheckCircle2, Sparkles } from 'lucide-react';
 import { AdminOrder } from '../lib/database';
 
 export interface OrderInfoData {
@@ -31,7 +31,7 @@ export default function OrderInfoModal({
   isOpen,
   onClose,
   waMessageTemplate,
-  submitLabel = 'Send Order on WhatsApp',
+  submitLabel = 'Confirm & Place Order',
   onCompleteOrder,
 }: Props) {
   const [form, setForm] = useState<OrderInfoData>({
@@ -224,18 +224,6 @@ export default function OrderInfoModal({
                 </Link>
               )}
 
-              {preparedWaUrl && (
-                <a
-                  href={preparedWaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-2.5 px-4 rounded-xl border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5 font-semibold text-xs flex items-center justify-center gap-2 cursor-pointer transition"
-                >
-                  <MessageCircle className="w-4 h-4 fill-[#25D366]" />
-                  <span>Chat with Studio on WhatsApp</span>
-                </a>
-              )}
-
               <button
                 type="button"
                 onClick={handleClose}
@@ -367,7 +355,7 @@ export default function OrderInfoModal({
               disabled={isSubmitting}
               className="w-full py-3.5 px-5 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] disabled:opacity-50 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
             >
-              <MessageCircle className="w-4 h-4 fill-white" />
+              <CheckCircle2 className="w-4 h-4" />
               <span>{isSubmitting ? 'Recording order...' : submitLabel}</span>
             </button>
           </form>

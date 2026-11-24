@@ -11,7 +11,6 @@ import {
   Package,
   Truck,
   Heart,
-  MessageCircle,
   ArrowLeft,
   Sparkles,
   Gift,
@@ -155,16 +154,6 @@ export default function OrderTrackingClient({
                 Customer: <strong>{order.customerName}</strong> (+91 {order.customerPhone})
               </p>
             </div>
-
-            <a
-              href={`https://wa.me/919344013255?text=Hello%20Givento!%20Checking%20in%20on%20my%20order%20%23${order.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 flex-shrink-0 shadow-xs transition cursor-pointer"
-            >
-              <MessageCircle className="w-4 h-4 text-[#F8EED6]" />
-              <span>Message Maker on WhatsApp</span>
-            </a>
           </div>
 
           {/* Cancelled Banner if Order Cancelled */}

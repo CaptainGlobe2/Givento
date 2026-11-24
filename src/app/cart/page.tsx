@@ -966,7 +966,7 @@ export default function CartPage() {
         isOpen={orderModalOpen}
         onClose={() => setOrderModalOpen(false)}
         waMessageTemplate={waCartTemplate}
-        submitLabel="Confirm & Send Order on WhatsApp"
+        submitLabel="Confirm & Place Order"
         onCompleteOrder={handleCartOrderSubmit}
       />
     </div>
