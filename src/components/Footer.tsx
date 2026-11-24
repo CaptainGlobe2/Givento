@@ -21,16 +21,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] gap-8">
           {/* Brand Info */}
           <div className="space-y-3">
-            <Link href="/" className="inline-flex items-center gap-2.5 text-inherit no-underline">
-              <BrandLogoSvg className="w-8 h-8 flex-none" />
-              <div>
-                <b className="font-heading font-normal text-2xl text-white leading-none block">
-                  Givento
-                </b>
-                <small className="block text-[0.68rem] text-[#cdb2bc] font-semibold tracking-[0.2em] uppercase mt-1">
-                  Gifts and keepsakes
-                </small>
-              </div>
+            <Link href="/" className="inline-flex items-center gap-2 text-inherit no-underline">
+              <span className="font-heading font-normal text-2xl text-white leading-none block">
+                Givento.in
+              </span>
             </Link>
             <p className="font-body text-xs sm:text-sm text-[#e9d6dd]/90 leading-relaxed max-w-sm">
               Bouquets, frames, hampers, resin keepsakes and jewellery, handcrafted with devotion in Adirampattinam, Tamil Nadu.

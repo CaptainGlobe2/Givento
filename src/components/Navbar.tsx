@@ -126,25 +126,12 @@ export default function Navbar({
               </button>
             </div>
 
-            {/* Center: Iconic Givento Brand Identity (matching Image 3 layout) */}
-            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center text-center">
-              <Link href="/" className="group flex flex-col items-center no-underline">
-                {/* Cute Boutique Emblem Icon */}
-                <div className="w-5 h-5 flex items-center justify-center text-[#7A1C3B] mb-0.5 group-hover:scale-110 transition-transform">
-                  <span className="text-base leading-none">🎁</span>
-                </div>
-
-                {/* Brand Name */}
-                <span className="font-heading font-normal text-2xl sm:text-[1.85rem] leading-none text-[#1C1917] tracking-tight group-hover:text-[#7A1C3B] transition-colors">
-                  Givento
+            {/* Center: Clean Givento.in Brand Identity */}
+            <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center text-center">
+              <Link href="/" className="group inline-flex items-center no-underline">
+                <span className="font-heading font-normal text-2xl sm:text-[1.9rem] leading-none text-[#1C1917] tracking-tight group-hover:text-[#7A1C3B] transition-colors">
+                  Givento.in
                 </span>
-
-                {/* Spaced Identity Subtitle with Delicate Dashes */}
-                <div className="flex items-center gap-1.5 sm:gap-2 mt-1 text-[8.5px] sm:text-[9.5px] tracking-[0.28em] text-[#8C827A] font-semibold uppercase">
-                  <span className="w-3 sm:w-5 h-px bg-[#D6CCC2]" />
-                  <span>GIFTS &amp; KEEPSAKES</span>
-                  <span className="w-3 sm:w-5 h-px bg-[#D6CCC2]" />
-                </div>
               </Link>
             </div>
 
@@ -268,7 +255,7 @@ export default function Navbar({
                 onClick={() => setIsMenuOpen(false)}
                 className="font-heading text-2xl text-[#7A1C3B]"
               >
-                Givento
+                Givento.in
               </Link>
               <button
                 type="button"
