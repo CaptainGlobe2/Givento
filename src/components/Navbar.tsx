@@ -3,7 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, Menu, X, Heart, ShoppingBag, User, Sparkles, ChevronRight, Package, HelpCircle, Shield, Store, SlidersHorizontal } from 'lucide-react';
+import {
+  Search,
+  Menu,
+  X,
+  Heart,
+  ShoppingBag,
+  User,
+  Sparkles,
+  ChevronRight,
+  Package,
+  SlidersHorizontal,
+} from 'lucide-react';
 import { useBasket } from '../context/BasketContext';
 import { useWishlist } from '../context/WishlistContext';
 import { Category } from '../types';
@@ -26,7 +37,7 @@ export default function Navbar({
   onSelectGroup,
   onOpenProfile,
 }: NavbarProps) {
-  const { openBasket, itemCount } = useBasket();
+  const { itemCount } = useBasket();
   const { wishlistCount } = useWishlist();
   const router = useRouter();
 
@@ -82,14 +93,14 @@ export default function Navbar({
   return (
     <>
       {/* 1. Subtle Announcement Ribbon */}
-      <div className="bg-[#5a1230] text-[#f6e9ee] text-[0.78rem] sm:text-[0.82rem] font-medium tracking-wide">
+      <div className="bg-[#5a1230] text-[#f6e9ee] text-[0.75rem] sm:text-[0.8rem] font-medium tracking-wide">
         <div className="max-w-[1180px] mx-auto px-4 py-1.5 flex justify-between items-center gap-4">
           <p className="m-0 truncate">
             ✨ Free handwritten gift note with every keepsake · Handcrafted in Adirampattinam
           </p>
           <div className="hidden sm:flex items-center gap-4 flex-shrink-0 text-xs">
-            <Link href="/custom-order" className="hover:text-[#f8eed6] underline underline-offset-2">
-              Custom Orders
+            <Link href="/about" className="hover:text-[#f8eed6] underline underline-offset-2">
+              Our Studio
             </Link>
             <Link href="/track" className="hover:text-[#f8eed6] underline underline-offset-2">
               Track Order
@@ -98,98 +109,122 @@ export default function Navbar({
         </div>
       </div>
 
-      {/* 2. Main Etsy-style Header */}
-      <header className="sticky top-0 z-30 bg-white border-b border-[#EFE8E1] shadow-xs">
-        <div className="max-w-[1180px] mx-auto px-3 sm:px-4 pt-2.5 pb-2 sm:py-3">
-          {/* Top Bar: Brand Logo & Actions (Matching Reference Screenshot) */}
-          <div className="flex items-center justify-between gap-4 mb-2 sm:mb-2.5">
-            {/* Logo */}
-            <Link href="/" className="no-underline flex items-center gap-1.5 group">
-              <span className="font-display font-normal text-[1.75rem] sm:text-[2.1rem] leading-none text-[#7A1C3B] tracking-[-0.02em] group-hover:text-[#5A1230] transition-colors">
-                Givento
-              </span>
-            </Link>
-
-            {/* Right Side Header Items: Sign In, Currency Flag, Wishlist, Cart */}
-            <div className="flex items-center gap-3 sm:gap-5 text-[#231a1d]">
-              {/* Sign In button */}
+      {/* 2. Main Header: Centered Identity matching Reference Image 3 */}
+      <header className="sticky top-0 z-30 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#EFE8E1] shadow-2xs">
+        <div className="max-w-[1180px] mx-auto px-3 sm:px-6 pt-3 pb-3">
+          {/* Top Row: Hamburger on Left, Centered Brand Identity, Actions on Right */}
+          <div className="relative flex items-center justify-between min-h-[58px]">
+            {/* Left: Clean Hamburger Menu Button */}
+            <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={handleProfileClick}
-                className="text-xs sm:text-sm font-semibold hover:text-[#7A1C3B] transition-colors cursor-pointer py-1"
+                onClick={() => setIsMenuOpen(true)}
+                aria-label="Open main menu"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-white border border-transparent hover:border-[#EFE8E1] transition-all cursor-pointer"
               >
-                Sign in
+                <Menu className="w-6 h-6 stroke-[2]" />
               </button>
+            </div>
 
-              {/* Currency / Region Badge */}
-              <div
-                className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#EFE8E1] text-xs font-semibold text-[#6A5B60]"
-                title="Currency: Indian Rupee (INR)"
-              >
-                <span className="text-sm">🇮🇳</span>
-                <span>(₹)</span>
-              </div>
+            {/* Center: Iconic Givento Brand Identity (matching Image 3 layout) */}
+            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center text-center">
+              <Link href="/" className="group flex flex-col items-center no-underline">
+                {/* Cute Boutique Emblem Icon */}
+                <div className="w-5 h-5 flex items-center justify-center text-[#7A1C3B] mb-0.5 group-hover:scale-110 transition-transform">
+                  <span className="text-base leading-none">🎁</span>
+                </div>
 
+                {/* Brand Name */}
+                <span className="font-heading font-normal text-2xl sm:text-[1.85rem] leading-none text-[#1C1917] tracking-tight group-hover:text-[#7A1C3B] transition-colors">
+                  Givento
+                </span>
+
+                {/* Spaced Identity Subtitle with Delicate Dashes */}
+                <div className="flex items-center gap-1.5 sm:gap-2 mt-1 text-[8.5px] sm:text-[9.5px] tracking-[0.28em] text-[#8C827A] font-semibold uppercase">
+                  <span className="w-3 sm:w-5 h-px bg-[#D6CCC2]" />
+                  <span>GIFTS &amp; KEEPSAKES</span>
+                  <span className="w-3 sm:w-5 h-px bg-[#D6CCC2]" />
+                </div>
+              </Link>
+            </div>
+
+            {/* Right: Actions (Wishlist & Cart) */}
+            <div className="flex items-center gap-1 sm:gap-2 text-[#1C1917]">
               {/* Wishlist Icon */}
               <Link
                 href="/wishlist"
                 aria-label={`View wishlist with ${wishlistCount} items`}
-                className="relative p-1.5 text-[#1C1917] hover:text-[#7A1C3B] transition-colors"
+                className="relative w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-white border border-transparent hover:border-[#EFE8E1] transition-all cursor-pointer"
               >
-                <Heart className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.8]" />
+                <Heart className="w-5 h-5 stroke-[1.8]" />
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#7A1C3B] text-white text-[10px] font-bold flex items-center justify-center tabular-nums">
+                  <span className="absolute top-1.5 right-1.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-[#7A1C3B] text-white text-[8px] font-bold flex items-center justify-center tabular-nums">
                     {wishlistCount > 99 ? '99+' : wishlistCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Shopping Bag Icon */}
+              <Link
+                href="/cart"
+                aria-label={`View cart with ${itemCount} items`}
+                className="relative w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-white border border-transparent hover:border-[#EFE8E1] transition-all cursor-pointer"
+              >
+                <ShoppingBag className="w-5 h-5 stroke-[1.8]" />
+                {itemCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-[#7A1C3B] text-white text-[8px] font-bold flex items-center justify-center tabular-nums">
+                    {itemCount}
                   </span>
                 )}
               </Link>
             </div>
           </div>
 
-          {/* Search Row: Hamburger Menu + Rounded Search Bar (Matching Reference Screenshot) */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Hamburger Menu Toggle */}
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen(true)}
-              aria-label="Open main menu"
-              className="p-2 -ml-1 text-[#231a1d] hover:bg-[#faf6f4] rounded-lg transition-colors cursor-pointer flex-shrink-0"
-            >
-              <Menu className="w-6 h-6 stroke-[2]" />
-            </button>
-
-            {/* Rounded Full Pill Search Bar matching Reference layout */}
-            <form onSubmit={handleSearchSubmit} className="relative flex-1">
-              <label htmlFor="etsy-search" className="sr-only">
-                What are you looking for?
+          {/* Underneath Row: Full-width / Centered Pill Search Bar matching Image 3 */}
+          <div className="mt-2.5 max-w-xl mx-auto">
+            <form onSubmit={handleSearchSubmit} className="relative w-full">
+              <label htmlFor="givento-search" className="sr-only">
+                Search bouquets, jewellery, frames &amp; more...
               </label>
               <div className="relative flex items-center w-full">
-                <Search className="absolute left-4.5 w-4 h-4 text-[#8C827A] pointer-events-none stroke-[2]" />
+                <Search className="absolute left-4 w-4 h-4 text-[#8C827A] pointer-events-none stroke-[2]" />
                 <input
-                  id="etsy-search"
+                  id="givento-search"
                   type="search"
                   value={localSearch}
                   onChange={handleInputChange}
-                  placeholder="What are you looking for?"
+                  placeholder="Search bouquets, jewellery, frames & more..."
                   autoComplete="off"
-                  className="w-full h-11 sm:h-12 border border-[#EFE8E1] focus:border-[#7A1C3B] rounded-full bg-white pl-11 pr-14 text-xs sm:text-sm font-body text-[#1C1917] placeholder-[#8C827A] focus:outline-none focus:ring-2 focus:ring-[#7A1C3B]/10 transition-all shadow-xs"
+                  className="w-full h-11 border border-[#EFE8E1] focus:border-[#7A1C3B] rounded-full bg-white pl-11 pr-11 text-xs sm:text-sm font-body text-[#1C1917] placeholder-[#8C827A] focus:outline-none focus:ring-2 focus:ring-[#7A1C3B]/10 transition-all shadow-2xs"
                 />
-                <div className="absolute right-11 top-1/2 -translate-y-1/2 w-px h-5 bg-[#EFE8E1]" />
-                <button
-                  type="submit"
-                  aria-label="Filter or search"
-                  className="absolute right-1.5 w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] transition-colors cursor-pointer"
-                >
-                  <SlidersHorizontal className="w-4 h-4 stroke-[2]" />
-                </button>
+                {localSearch ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLocalSearch('');
+                      if (onSearchChange) onSearchChange('');
+                    }}
+                    className="absolute right-3.5 p-1 rounded-full text-[#8C827A] hover:text-[#1C1917] transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    aria-label="Filter or search"
+                    className="absolute right-2 w-8 h-8 rounded-full flex items-center justify-center text-[#8C827A] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] transition-colors cursor-pointer"
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5 stroke-[2]" />
+                  </button>
+                )}
               </div>
             </form>
           </div>
 
-          {/* Optional Category Navigation Links (Visible on Tablet/Desktop) */}
+          {/* Category Quick Links (Desktop & Tablet) */}
           <nav
             aria-label="Desktop Categories"
-            className="hidden md:flex items-center gap-6 pt-2.5 overflow-x-auto scrollbar-none text-xs sm:text-sm font-semibold"
+            className="hidden md:flex items-center justify-center gap-6 pt-3 overflow-x-auto scrollbar-none text-xs sm:text-sm font-semibold"
           >
             {navCategories.map((c) => {
               const isSelected = selectedGroup === c.id || selectedGroup === c.groupKey || selectedGroup === c.slug;
@@ -207,13 +242,6 @@ export default function Navbar({
                 </Link>
               );
             })}
-            <Link
-              href="/custom-order"
-              className="py-1 border-b-2 border-transparent text-[#7a1c3b] font-bold hover:text-[#5a1230] flex items-center gap-1 ml-auto whitespace-nowrap"
-            >
-              <span>Custom Order</span>
-              <span className="text-[10px] bg-[#f8eed6] text-[#7a1c3b] px-1.5 py-0.2 rounded font-bold">Studio</span>
-            </Link>
           </nav>
         </div>
       </header>
@@ -238,7 +266,7 @@ export default function Navbar({
               <Link
                 href="/"
                 onClick={() => setIsMenuOpen(false)}
-                className="font-display text-2xl text-[#7A1C3B]"
+                className="font-heading text-2xl text-[#7A1C3B]"
               >
                 Givento
               </Link>
@@ -273,20 +301,8 @@ export default function Navbar({
               <hr className="my-3 border-[#EFE8E1]" />
 
               <span className="text-[11px] font-bold tracking-wider text-[#6a5b60] uppercase px-2 mb-2 block">
-                Special Features
+                Studio &amp; Orders
               </span>
-
-              <Link
-                href="/custom-order"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-bold text-[#7A1C3B] bg-[#FAF7F2] hover:bg-[#F3ECE2] transition-colors"
-              >
-                <span className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#B98A2E]" />
-                  Custom Handcrafted Orders
-                </span>
-                <span className="text-[10px] bg-[#F8EED6] text-[#7A1C3B] px-1.5 py-0.5 rounded font-bold">Studio</span>
-              </Link>
 
               <Link
                 href="/track"
@@ -321,14 +337,9 @@ export default function Navbar({
 
             {/* Footer */}
             <div className="p-4 border-t border-[#EFE8E1] bg-[#FAF7F2]">
-              <a
-                href="https://wa.me/919344013255?text=Hi%20Givento!%20I%20have%20an%20inquiry."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center bg-[#25D366] text-white py-2 px-4 rounded-xl font-bold text-xs hover:bg-[#1db954] transition-colors"
-              >
-                Chat on WhatsApp
-              </a>
+              <p className="text-[11px] text-[#78716C] text-center">
+                Handcrafted with love in Adirampattinam, Tamil Nadu
+              </p>
             </div>
           </aside>
         </div>

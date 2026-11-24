@@ -50,9 +50,6 @@ export default function HomePage() {
         {/* 5. Featured Collections (4 Arch-Topped Cards Linking to Jewellery Categories) */}
         <FeaturedCollections />
 
-        {/* 5. How to Order (3 Simple Steps) */}
-        <HowToOrder />
-
         {/* 6. Find Us at Expos & Studio Info */}
         <ExpoSection />
       </main>

@@ -27,6 +27,22 @@ interface CategoryPageClientProps {
   slug: string;
 }
 
+const CATEGORY_BACKGROUND_IMAGES: Record<string, string> = {
+  frames: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85',
+  bouquets: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=1600&q=85',
+  'gift-hampers': 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=85',
+  hampers: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=85',
+  'stainless-steel-jewellery': 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85',
+  jewel: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85',
+  'resin-art': 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1600&q=85',
+  resin: 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1600&q=85',
+  'baby-kids': 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=1600&q=85',
+  crochet: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=1600&q=85',
+  'nikah-wedding': 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85',
+  wedding: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85',
+  all: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85',
+};
+
 export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -221,28 +237,52 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
           </div>
         </div>
 
-        {/* 3. Category Hero Banner */}
-        <div className="bg-white border border-[#EFE8E1] rounded-2xl sm:rounded-3xl p-6 sm:p-8 mb-8 shadow-xs relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F3ECE2] border border-[#E5DACD] text-[10px] font-semibold text-[#8C827A] uppercase tracking-wider mb-3">
-              <span>{currentCategory?.icon || '🌻'}</span>
-              <span>Handcrafted Collection</span>
-              <span className="text-[#D6CCC2]">•</span>
-              <span className="text-[#6A5B60] lowercase font-normal">{categoryProducts.length} items available</span>
+        {/* 3. Category Hero Banner with Atmospheric Background Image */}
+        {(() => {
+          const categoryKey = slug?.toLowerCase() || 'all';
+          const heroBgImage =
+            CATEGORY_BACKGROUND_IMAGES[categoryKey] ||
+            CATEGORY_BACKGROUND_IMAGES[currentCategory?.groupKey?.toLowerCase() || ''] ||
+            CATEGORY_BACKGROUND_IMAGES[currentCategory?.id?.toLowerCase() || ''] ||
+            'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85';
+
+          return (
+            <div className="relative rounded-3xl p-6 sm:p-10 mb-8 shadow-md overflow-hidden min-h-[220px] sm:min-h-[270px] flex flex-col justify-end border border-white/20">
+              {/* Background Image */}
+              <img
+                src={heroBgImage}
+                alt={categoryTitle}
+                className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.65] contrast-[1.08] transition-all duration-700 hover:scale-105"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85';
+                }}
+              />
+
+              {/* Premium Multi-layer Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30" />
+
+              {/* Content on top */}
+              <div className="relative z-10 max-w-2xl space-y-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] sm:text-xs font-semibold text-white uppercase tracking-wider shadow-2xs">
+                  <span>{currentCategory?.icon || '✨'}</span>
+                  <span>Handcrafted Collection</span>
+                  <span className="text-white/60">•</span>
+                  <span className="text-white/90 lowercase font-medium">{categoryProducts.length} items available</span>
+                </div>
+
+                <h1 className="font-heading font-medium text-3xl sm:text-4xl md:text-5xl text-white tracking-tight drop-shadow-md">
+                  {categoryTitle}
+                </h1>
+
+                <p className="text-xs sm:text-sm text-white/90 leading-relaxed max-w-xl font-body drop-shadow-sm">
+                  {categoryDescription}
+                </p>
+              </div>
             </div>
-
-            <h1 className="font-display font-normal text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight mb-2.5">
-              {categoryTitle}
-            </h1>
-
-            <p className="text-xs sm:text-sm text-[#78716C] leading-relaxed max-w-xl">
-              {categoryDescription}
-            </p>
-          </div>
-
-          {/* Decorative Background Blob */}
-          <div className="absolute right-0 -bottom-10 w-64 h-64 bg-radial from-[#FCE7DF]/40 to-transparent pointer-events-none rounded-full blur-2xl" />
-        </div>
+          );
+        })()}
 
         {/* 4. Subcategory Pills & Sort Controls Row */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -493,27 +533,6 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
             })}
           </div>
         )}
-
-        {/* 6. Custom Bespoke Order Banner Callout */}
-        <div className="bg-white border border-[#EFE8E1] rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 mb-12 shadow-xs">
-          <div className="space-y-1 text-center sm:text-left">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#7A1C3B]">Bespoke Studio Service</span>
-            <h3 className="font-display font-normal text-2xl sm:text-3xl text-[#1C1917]">
-              Want a custom {categoryTitle.toLowerCase()} designed specially?
-            </h3>
-            <p className="text-xs text-[#78716C] max-w-lg leading-relaxed">
-              Our artisans handcraft custom stems, custom photo inserts, personalized laser-cut plaques, and bespoke gift hampers on demand.
-            </p>
-          </div>
-
-          <Link
-            href="/custom-order"
-            className="shrink-0 px-6 py-3.5 rounded-xl bg-[#7A1C3B] hover:bg-[#5a1230] text-white font-bold text-xs sm:text-sm shadow-xs transition-all flex items-center gap-2 cursor-pointer"
-          >
-            <span>Request Custom Order</span>
-            <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
       </main>
 
       <Footer />
