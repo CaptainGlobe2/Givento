@@ -218,10 +218,15 @@
   line-height: 28px;
 }
 
-/* Accessible focus ring */
+/* Focus styling: clean reset without harsh rectangular box */
 :focus-visible {
-  outline: 3px solid #7A1C30;
-  outline-offset: 2px;
+  outline: none;
+}
+input, textarea, select, button {
+  outline: none;
+}
+input:focus-visible, textarea:focus-visible {
+  outline: none !important;
 }
 
 /* Scrollbar none utility */

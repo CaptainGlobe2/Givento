@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { X, User, Phone, MapPin, Building2, Hash, FileText, CheckCircle2, Sparkles } from 'lucide-react';
 import { AdminOrder } from '../lib/database';
+import { ParticleButton } from '@/components/ui/particle-button';
 
 export interface OrderInfoData {
   name: string;
@@ -349,15 +350,15 @@ export default function OrderInfoModal({
               />
             </div>
 
-            {/* Submit Button */}
-            <button
+            {/* Submit Particle Button */}
+            <ParticleButton
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 px-5 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] disabled:opacity-50 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
+              className="w-full h-auto py-3.5 px-5 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] disabled:opacity-50 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>{isSubmitting ? 'Recording order...' : submitLabel}</span>
-            </button>
+            </ParticleButton>
           </form>
         )}
       </div>

@@ -14,6 +14,7 @@ import {
   Sparkles,
   Check,
   ChevronRight,
+  ChevronDown,
 } from 'lucide-react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
@@ -27,82 +28,6 @@ interface CategoryPageClientProps {
   slug: string;
 }
 
-interface CategoryBannerInfo {
-  bgImage: string;
-  showcaseImage: string;
-  badge: string;
-  tagline?: string;
-}
-
-const CATEGORY_BANNERS: Record<string, CategoryBannerInfo> = {
-  frames: {
-    bgImage: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=600&q=80',
-    badge: '🖼️ Sacred Keepsakes & Nikah Plaques',
-    tagline: 'Gold-foiled Nikah celebration frames, custom photo plaques & Quranic calligraphy.',
-  },
-  bouquets: {
-    bgImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1591886960571-74d43a9d4166?auto=format&fit=crop&w=600&q=80',
-    badge: '🌻 Everlasting Paper & Satin Blooms',
-    tagline: 'Hand-rolled Italian crepe sunflowers, satin roses, and chocolate arrangements that never wilt.',
-  },
-  'gift-hampers': {
-    bgImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=600&q=80',
-    badge: '🎁 Curated Luxury Celebration Boxes',
-    tagline: 'Boutique hampers tied with double satin ribbon, wax-sealed card notes & luxury surprises.',
-  },
-  hampers: {
-    bgImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=600&q=80',
-    badge: '🎁 Curated Luxury Celebration Boxes',
-    tagline: 'Boutique hampers tied with double satin ribbon, wax-sealed card notes & luxury surprises.',
-  },
-  'stainless-steel-jewellery': {
-    bgImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
-    badge: '💍 18k Gold Waterproof & Anti-Tarnish',
-    tagline: 'Everyday anti-tarnish stainless steel chains, adjustable stone rings, and charm anklets.',
-  },
-  jewel: {
-    bgImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
-    badge: '💍 18k Gold Waterproof & Anti-Tarnish',
-    tagline: 'Everyday anti-tarnish stainless steel chains, adjustable stone rings, and charm anklets.',
-  },
-  'resin-art': {
-    bgImage: 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80',
-    badge: '✨ Botanical Resin Preservation',
-    tagline: 'High-clarity preserved floral epoxy clocks, ocean trays, and personalized gold-flake keychains.',
-  },
-  resin: {
-    bgImage: 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80',
-    badge: '✨ Botanical Resin Preservation',
-    tagline: 'High-clarity preserved floral epoxy clocks, ocean trays, and personalized gold-flake keychains.',
-  },
-  'hair-accessories': {
-    bgImage: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=600&q=80',
-    badge: '🌸 Handcrafted Hair Ornaments',
-    tagline: 'Crochet floral alligator clips, matte banana clutchers, and hibiscus blossom accessories.',
-  },
-  keychains: {
-    bgImage: 'https://images.unsplash.com/photo-1611591475155-4284ec28d351?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80',
-    badge: '🔑 Personalised Charm Keychains',
-    tagline: 'Arabic calligraphy letters, pressed flower charms, and kawaii keepsake bag trinkets.',
-  },
-  all: {
-    bgImage: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85',
-    showcaseImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80',
-    badge: '🌸 Complete Atelier Catalog',
-    tagline: 'Every handcrafted bloom, keepsake frame, resin artwork, and waterproof jewellery piece.',
-  },
-};
-
 export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -113,10 +38,27 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'rating'>('featured');
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortDropdownRef = React.useRef<HTMLDivElement>(null);
   const [addedProductId, setAddedProductId] = useState<string | null>(null);
 
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { addToBasket } = useBasket();
+
+  // Close sort dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
+        setIsSortOpen(false);
+      }
+    }
+    if (isSortOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSortOpen]);
 
   // Sync with live DB products and categories
   useEffect(() => {
@@ -249,29 +191,16 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
     <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-24 md:pb-0">
       <Navbar />
 
-      <main className="flex-1 max-w-[1240px] mx-auto px-4 sm:px-6 py-6 w-full">
-        {/* 1. Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#8C827A] mb-4 overflow-x-auto">
-          <Link href="/" className="hover:text-[#7A1C3B] transition-colors flex items-center gap-1">
-            <span>Home</span>
-          </Link>
-          <span className="text-[#D6CCC2]">/</span>
-          <Link href="/category/all" className="hover:text-[#7A1C3B] transition-colors">
-            Categories
-          </Link>
-          <span className="text-[#D6CCC2]">/</span>
-          <span className="text-[#1C1917] font-semibold truncate max-w-xs">{categoryTitle}</span>
-        </nav>
-
-        {/* 2. Horizontal Category Switcher Bar */}
-        <div className="mb-6 border-b border-[#EFE8E1] pb-3 overflow-x-auto scrollbar-none">
-          <div className="flex items-center gap-2 sm:gap-2.5 min-w-max">
+      <main className="flex-1 max-w-[1240px] mx-auto px-3.5 sm:px-6 py-3 sm:py-5 w-full">
+        {/* 1. Category Switcher Bar (Smooth Horizontal Scrollable Strip) */}
+        <div className="mb-3.5 overflow-x-auto scrollbar-none -mx-3.5 px-3.5 sm:mx-0 sm:px-0">
+          <div className="flex items-center gap-2 min-w-max pb-1">
             <Link
               href="/category/all"
-              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
                 isAll
                   ? 'bg-[#7A1C3B] text-white shadow-xs'
-                  : 'bg-white text-[#6A5B60] hover:text-[#1C1917] border border-[#EFE8E1] hover:border-[#DFD5CB] hover:bg-[#FAF7F2]'
+                  : 'bg-white text-[#6A5B60] hover:text-[#1C1917] border border-[#EFE8E1] hover:bg-[#FAF7F2]'
               }`}
             >
               All Pieces
@@ -283,10 +212,10 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
                 <Link
                   key={c.id}
                   href={`/category/${c.slug}`}
-                  className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 ${
                     active
                       ? 'bg-[#7A1C3B] text-white shadow-xs'
-                      : 'bg-white text-[#6A5B60] hover:text-[#1C1917] border border-[#EFE8E1] hover:border-[#DFD5CB] hover:bg-[#FAF7F2]'
+                      : 'bg-white text-[#6A5B60] hover:text-[#1C1917] border border-[#EFE8E1] hover:bg-[#FAF7F2]'
                   }`}
                 >
                   <span>{c.icon || '✨'}</span>
@@ -297,148 +226,136 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
           </div>
         </div>
 
-        {/* 3. Category Hero Banner with Atmospheric Background Image & Showcase Photo */}
-        {(() => {
-          const categoryKey = slug?.toLowerCase() || 'all';
-          const bannerInfo =
-            CATEGORY_BANNERS[categoryKey] ||
-            CATEGORY_BANNERS[currentCategory?.groupKey?.toLowerCase() || ''] ||
-            CATEGORY_BANNERS[currentCategory?.id?.toLowerCase() || ''] ||
-            CATEGORY_BANNERS.all;
+        {/* 2. Unified Toolbar: Title & Count on Left, Search & Sort on Right */}
+        <div className="flex items-center justify-between gap-3 mb-4 pb-2.5 border-b border-[#EFE8E1]">
+          {/* Title & Count */}
+          <div className="flex items-baseline gap-2 min-w-0">
+            <h1 className="font-heading font-medium text-xl sm:text-2xl text-[#1C1917] tracking-tight truncate">
+              {categoryTitle}
+            </h1>
+            <span className="text-xs font-medium text-[#8C827A] shrink-0">
+              ({sortedProducts.length})
+            </span>
+          </div>
 
-          return (
-            <div className="relative rounded-3xl p-6 sm:p-10 mb-8 shadow-md overflow-hidden min-h-[220px] sm:min-h-[270px] flex flex-col md:flex-row md:items-center justify-between gap-6 border border-white/20">
-              {/* Full-bleed Background Photo: clearly visible behind the category letter/title */}
-              <img
-                src={bannerInfo.bgImage}
-                alt={categoryTitle}
-                className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.1] transition-transform duration-700 hover:scale-105"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85';
-                }}
-              />
-
-              {/* Rich Multi-stop Dark & Vignette Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/25" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-
-              {/* Left Content Column */}
-              <div className="relative z-10 max-w-xl space-y-3">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] sm:text-xs font-semibold text-white uppercase tracking-wider shadow-2xs">
-                  <span>{bannerInfo.badge}</span>
-                  <span className="text-white/60">•</span>
-                  <span className="text-white/90 lowercase font-medium">{categoryProducts.length} items available</span>
-                </div>
-
-                {/* Big Bold Category Title: 'Frames', 'Bouquets', etc. directly in front of the image */}
-                <h1 className="font-heading font-medium text-3xl sm:text-5xl md:text-6xl text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
-                  {categoryTitle}
-                </h1>
-
-                <p className="text-xs sm:text-sm text-white/90 leading-relaxed font-body drop-shadow-sm max-w-lg">
-                  {categoryDescription}
-                </p>
-              </div>
-
-              {/* Right Showcase Photo Preview */}
-              <div className="relative z-10 hidden sm:flex items-center justify-center shrink-0">
-                <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden border-2 border-white/60 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-300 bg-white">
-                  <img
-                    src={bannerInfo.showcaseImage}
-                    alt={`${categoryTitle} showcase`}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = bannerInfo.bgImage;
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                  <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-[9px] font-bold text-white uppercase tracking-wider">
-                    {categoryTitle}
-                  </span>
-                </div>
-              </div>
-            </div>
-          );
-        })()}
-
-        {/* 4. Subcategory Pills & Sort Controls Row */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          {/* Subcategory Pills */}
-          {subcategories.length > 0 ? (
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-              <button
-                type="button"
-                onClick={() => setSelectedSubcategory('all')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                  selectedSubcategory === 'all'
-                    ? 'bg-[#1C1917] text-white'
-                    : 'bg-white text-[#6A5B60] hover:bg-[#FAF7F2] border border-[#EFE8E1]'
-                }`}
-              >
-                All {categoryTitle}
-              </button>
-              {subcategories.map((sub) => (
-                <button
-                  key={sub.id}
-                  type="button"
-                  onClick={() => setSelectedSubcategory(sub.id)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                    selectedSubcategory === sub.id
-                      ? 'bg-[#1C1917] text-white'
-                      : 'bg-white text-[#6A5B60] hover:bg-[#FAF7F2] border border-[#EFE8E1]'
-                  }`}
-                >
-                  {sub.name}
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="text-xs text-[#8C827A] flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#7A1C3B]" />
-              <span>Showing all handcrafted pieces</span>
-            </div>
-          )}
-
-          {/* Search within Category & Sort Dropdown */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            {/* Live Filter Input */}
-            <div className="relative flex-1 sm:w-56">
-              <Search className="w-3.5 h-3.5 text-[#A8A29E] absolute left-3 top-1/2 -translate-y-1/2" />
+          {/* Search & Sort */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Search Input - Sleek Pill */}
+            <div className="relative w-36 sm:w-48">
+              <Search className="w-3.5 h-3.5 text-[#8C827A] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
-                placeholder={`Search in ${categoryTitle}...`}
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 bg-white border border-[#EFE8E1] rounded-xl text-xs text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B] focus:ring-2 focus:ring-[#7A1C3B]/20"
+                className="w-full h-8 pl-7.5 pr-6 bg-white border border-[#E4DAD0] rounded-full text-xs text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B] focus:ring-1 focus:ring-[#7A1C3B]/20 shadow-2xs transition-all"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-[#A8A29E] hover:text-[#1C1917]"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#A8A29E] hover:text-[#1C1917]"
                 >
                   ✕
                 </button>
               )}
             </div>
 
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-1.5 bg-white border border-[#EFE8E1] rounded-xl px-3 py-2 text-xs">
-              <SlidersHorizontal className="w-3 h-3 text-[#78716C]" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-transparent text-[#1C1917] text-xs font-medium focus:outline-none cursor-pointer pr-1"
+            {/* Awesome Custom Sort Dropdown */}
+            <div className="relative" ref={sortDropdownRef}>
+              <button
+                type="button"
+                onClick={() => setIsSortOpen((prev) => !prev)}
+                aria-label="Sort options"
+                aria-expanded={isSortOpen}
+                className={`flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-semibold transition-all cursor-pointer select-none active:scale-95 shadow-2xs ${
+                  isSortOpen
+                    ? 'bg-[#7A1C3B] text-white border border-[#7A1C3B] shadow-xs'
+                    : 'bg-white text-[#1C1917] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] border border-[#E4DAD0]'
+                }`}
               >
-                <option value="featured">Featured First</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="rating">Top Rated</option>
-              </select>
+                <SlidersHorizontal className={`w-3.5 h-3.5 ${isSortOpen ? 'text-white' : 'text-[#7A1C3B]'}`} />
+                <span className="whitespace-nowrap font-medium text-xs">
+                  {sortBy === 'featured' && 'Featured'}
+                  {sortBy === 'price-asc' && 'Price: Low to High'}
+                  {sortBy === 'price-desc' && 'Price: High to Low'}
+                  {sortBy === 'rating' && 'Top Rated'}
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                    isSortOpen ? 'rotate-180 text-white' : 'text-[#8C827A]'
+                  }`}
+                />
+              </button>
+
+              {/* Floating Menu */}
+              {isSortOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-[#EFE8E1] py-1.5 z-40 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#8C827A] border-b border-[#F5EFE8] mb-1">
+                    Sort Collection
+                  </div>
+                  {[
+                    { id: 'featured', label: 'Featured' },
+                    { id: 'price-asc', label: 'Price: Low to High' },
+                    { id: 'price-desc', label: 'Price: High to Low' },
+                    { id: 'rating', label: 'Top Rated' },
+                  ].map((option) => {
+                    const isSelected = sortBy === option.id;
+                    return (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() => {
+                          setSortBy(option.id as any);
+                          setIsSortOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-left transition-colors cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#FAF7F2] text-[#7A1C3B] font-semibold'
+                            : 'text-[#1C1917] hover:bg-[#FAF7F2] hover:text-[#7A1C3B]'
+                        }`}
+                      >
+                        <span>{option.label}</span>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-[#7A1C3B]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>
+
+        {/* 3. Subcategory Pills (Only displayed when current category has subcategories) */}
+        {subcategories.length > 0 && (
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-3.5 scrollbar-none">
+            <button
+              type="button"
+              onClick={() => setSelectedSubcategory('all')}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                selectedSubcategory === 'all'
+                  ? 'bg-[#1C1917] text-white shadow-xs'
+                  : 'bg-white text-[#6A5B60] hover:bg-[#FAF7F2] border border-[#EFE8E1]'
+              }`}
+            >
+              All {categoryTitle}
+            </button>
+            {subcategories.map((sub) => (
+              <button
+                key={sub.id}
+                type="button"
+                onClick={() => setSelectedSubcategory(sub.id)}
+                className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                  selectedSubcategory === sub.id
+                    ? 'bg-[#1C1917] text-white shadow-xs'
+                    : 'bg-white text-[#6A5B60] hover:bg-[#FAF7F2] border border-[#EFE8E1]'
+                }`}
+              >
+                {sub.name}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* 5. Product Grid */}
         {sortedProducts.length === 0 ? (

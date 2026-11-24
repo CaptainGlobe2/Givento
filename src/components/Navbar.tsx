@@ -100,63 +100,62 @@ export default function Navbar({
 
   return (
     <>
-      {/* 2. Main Header: Centered Identity matching Reference Image 3 */}
-      <header className="sticky top-0 z-30 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#EFE8E1] shadow-2xs">
-        <div className="max-w-[1180px] mx-auto px-3 sm:px-6 pt-3 pb-3">
+      {/* 2. Main Header: Signature Givento Boutique Wine Header */}
+      <header className="sticky top-0 z-30 bg-[#7A1C3B] text-white border-b border-[#5E132C] shadow-sm transition-all">
+        <div className="max-w-[1180px] mx-auto px-4 sm:px-6 py-2 sm:py-2.5">
           {/* Top Row: Hamburger on Left, Centered Brand Identity, Actions on Right */}
-          <div className="relative flex items-center justify-between min-h-[58px]">
+          <div className="relative flex items-center justify-between h-10 sm:h-12">
             {/* Left: Clean Hamburger Menu Button */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center">
               <button
                 type="button"
                 onClick={() => setIsMenuOpen(true)}
                 aria-label="Open main menu"
-                className="w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-white border border-transparent hover:border-[#EFE8E1] transition-all cursor-pointer"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
               >
-                <Menu className="w-6 h-6 stroke-[2]" />
+                <Menu className="w-5 h-5 stroke-[2]" />
               </button>
             </div>
 
             {/* Center: Clean Givento.in Brand Identity */}
             <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center text-center">
               <Link href="/" className="group inline-flex items-center no-underline">
-                <span className="font-heading font-normal text-2xl sm:text-[1.9rem] leading-none text-[#1C1917] tracking-tight group-hover:text-[#7A1C3B] transition-colors">
+                <span className="font-heading font-medium text-xl sm:text-2xl leading-none text-white tracking-wide group-hover:text-[#F8EED6] transition-colors">
                   Givento.in
                 </span>
               </Link>
             </div>
 
             {/* Right: Profile Action */}
-            <div className="flex items-center text-[#1C1917]">
-              {/* Profile Icon Button */}
+            <div className="flex items-center text-white">
               <button
                 type="button"
                 onClick={handleProfileClick}
                 aria-label="Open profile and studio account"
-                className="w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-white border border-transparent hover:border-[#EFE8E1] transition-all cursor-pointer"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
               >
-                <User className="w-5 h-5 stroke-[1.8]" />
+                <User className="w-5 h-5 stroke-[2]" />
               </button>
             </div>
           </div>
 
-          {/* Underneath Row: Full-width / Centered Pill Search Bar (Only shown on storefront / discovery pages) */}
+          {/* Underneath Row: Compact, Sleek Search Bar (Only shown on storefront / discovery pages) */}
           {shouldShowSearch && (
-            <div className="mt-2.5 max-w-xl mx-auto">
+            <div className="mt-2 max-w-md sm:max-w-lg mx-auto">
               <form onSubmit={handleSearchSubmit} className="relative w-full">
                 <label htmlFor="givento-search" className="sr-only">
                   Search bouquets, jewellery, frames &amp; more...
                 </label>
                 <div className="relative flex items-center w-full">
-                  <Search className="absolute left-4 w-4 h-4 text-[#8C827A] pointer-events-none stroke-[2]" />
+                  <Search className="absolute left-3.5 w-4 h-4 text-[#7A1C3B] pointer-events-none stroke-[2]" />
                   <input
                     id="givento-search"
                     type="search"
                     value={localSearch}
                     onChange={handleInputChange}
-                    placeholder="Search bouquets, jewellery, frames & more..."
+                    placeholder="Search bouquets, jewellery, gifts..."
                     autoComplete="off"
-                    className="w-full h-11 border border-[#EFE8E1] focus:border-[#7A1C3B] rounded-full bg-white pl-11 pr-11 text-xs sm:text-sm font-body text-[#1C1917] placeholder-[#8C827A] focus:outline-none focus:ring-2 focus:ring-[#7A1C3B]/10 transition-all shadow-2xs"
+                    className="w-full h-10 border border-white/20 focus:border-white/50 rounded-full bg-white pl-10 pr-10 text-xs sm:text-sm font-body text-[#1C1917] placeholder-[#8C827A] focus:outline-none focus:ring-2 focus:ring-white/40 transition-all shadow-xs"
                   />
                   {localSearch ? (
                     <button
@@ -165,15 +164,15 @@ export default function Navbar({
                         setLocalSearch('');
                         if (onSearchChange) onSearchChange('');
                       }}
-                      className="absolute right-3.5 p-1 rounded-full text-[#8C827A] hover:text-[#1C1917] transition-colors"
+                      className="absolute right-3 p-1 rounded-full text-[#8C827A] hover:text-[#1C1917] transition-colors cursor-pointer"
                     >
-                      <X className="w-3.5 h-3.5" />
+                      <X className="w-4 h-4" />
                     </button>
                   ) : (
                     <button
                       type="submit"
                       aria-label="Filter or search"
-                      className="absolute right-2 w-8 h-8 rounded-full flex items-center justify-center text-[#8C827A] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] transition-colors cursor-pointer"
+                      className="absolute right-2 w-7 h-7 rounded-full flex items-center justify-center text-[#8C827A] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] transition-colors cursor-pointer"
                     >
                       <SlidersHorizontal className="w-3.5 h-3.5 stroke-[2]" />
                     </button>
@@ -195,11 +194,10 @@ export default function Navbar({
                   <Link
                     key={c.id}
                     href={`/category/${c.slug}`}
-                    className={`py-1 border-b-2 transition-all whitespace-nowrap cursor-pointer ${
-                      isSelected
-                        ? 'text-[#7a1c3b] border-[#7a1c3b] font-bold'
-                        : 'border-transparent text-[#231a1d] hover:text-[#7a1c3b]'
-                    }`}
+                    className={`py-1 border-b-2 transition-all whitespace-nowrap cursor-pointer ${isSelected
+                      ? 'text-white border-white font-bold'
+                      : 'border-transparent text-white/80 hover:text-white'
+                      }`}
                   >
                     {c.name}
                   </Link>
