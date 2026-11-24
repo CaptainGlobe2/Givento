@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, MessageCircle, User, Phone, MapPin, Building2, Hash, FileText, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { X, MessageCircle, User, Phone, MapPin, Building2, Hash, FileText, CheckCircle2, Sparkles } from 'lucide-react';
 import { AdminOrder } from '../lib/database';
 
 export interface OrderInfoData {
@@ -114,7 +115,7 @@ export default function OrderInfoModal({
         <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-[#EFE8E1] px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
           <div>
             <h2 className="font-display font-normal text-xl text-[#1C1917] tracking-tight">Delivery &amp; Order Details</h2>
-            <p className="text-xs text-[#78716C] mt-0.5">Recorded directly in Givento Studio Admin</p>
+            <p className="text-xs text-[#78716C] mt-0.5">Enter delivery contact &amp; address for doorstep delivery</p>
           </div>
           <button
             type="button"
@@ -198,20 +199,30 @@ export default function OrderInfoModal({
               <div className="pt-1 flex items-start gap-2 text-[#7A1C3B] bg-[#FDF0F3] p-3 rounded-xl border border-[#FADDE3]">
                 <span className="text-sm">💬</span>
                 <p className="text-[11px] leading-relaxed">
-                  <strong>What happens next:</strong> Our studio admin will review your order and send your official confirmation and itemized bill directly to your WhatsApp at <strong>+91 {form.phone.trim()}</strong>!
+                  <strong>What happens next:</strong> Our studio team will review your order and send your official confirmation and itemized bill directly to your WhatsApp at <strong>+91 {form.phone.trim()}</strong>!
                 </p>
               </div>
             </div>
 
             {/* Actions */}
             <div className="w-full space-y-2 pt-2">
-              <a
-                href={createdOrder ? `/order/${createdOrder.id}` : `/track`}
+              <Link
+                href="/track"
                 className="w-full py-3.5 px-5 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
               >
-                <span>View Order Details &amp; Live Tracking</span>
+                <span>Go to Orders Page (View Complete Details)</span>
                 <span>→</span>
-              </a>
+              </Link>
+
+              {createdOrder?.id && (
+                <Link
+                  href={`/order/${createdOrder.id}`}
+                  className="w-full py-2.5 px-4 rounded-xl border border-[#7A1C3B]/20 bg-[#FAF7F2] hover:bg-[#F6E9EE] text-[#7A1C3B] font-semibold text-xs flex items-center justify-center gap-2 cursor-pointer transition"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Track Live Timeline (#{createdOrder.id})</span>
+                </Link>
+              )}
 
               {preparedWaUrl && (
                 <a
@@ -221,7 +232,7 @@ export default function OrderInfoModal({
                   className="w-full py-2.5 px-4 rounded-xl border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5 font-semibold text-xs flex items-center justify-center gap-2 cursor-pointer transition"
                 >
                   <MessageCircle className="w-4 h-4 fill-[#25D366]" />
-                  <span>Optional: Chat with Admin on WhatsApp</span>
+                  <span>Chat with Studio on WhatsApp</span>
                 </a>
               )}
 
@@ -230,7 +241,7 @@ export default function OrderInfoModal({
                 onClick={handleClose}
                 className="w-full py-2.5 rounded-xl border border-[#EFE8E1] text-[#6A5B60] hover:text-[#1C1917] hover:bg-[#FAF7F2] font-medium text-xs cursor-pointer transition"
               >
-                Continue Shopping
+                Stay Here &amp; Continue Shopping
               </button>
             </div>
           </div>

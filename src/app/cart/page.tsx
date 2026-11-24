@@ -300,7 +300,9 @@ export default function CartPage() {
         productName: it.isCustomBouquet ? 'Custom Bouquet' : it.product.name,
         quantity: it.quantity,
         price: it.isCustomBouquet && it.customBouquet ? it.customBouquet.totalPrice : (it.product.price || 0),
-        image: it.product.images?.[0],
+        image:
+          it.product.images?.[0] ||
+          'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=400&q=80',
         variants: it.selectedVariants,
         personalisation: it.personalisationData,
       })),

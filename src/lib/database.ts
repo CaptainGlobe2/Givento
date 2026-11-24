@@ -868,21 +868,51 @@ export const db = {
   },
 
   async getUserOrders(): Promise<AdminOrder[]> {
+    const allOrders = await this.getOrders();
+    let userOrdersList: AdminOrder[] = [];
+
     if (typeof window !== 'undefined') {
       try {
-        const userOrders = localStorage.getItem('givento_user_orders');
-        if (userOrders) {
-          const parsed: AdminOrder[] = JSON.parse(userOrders);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        const raw = localStorage.getItem('givento_user_orders');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            userOrdersList = parsed;
+          }
         }
         const lastPlaced = localStorage.getItem('givento_last_placed_order');
         if (lastPlaced) {
-          const parsed: AdminOrder = JSON.parse(lastPlaced);
-          if (parsed && parsed.id) return [parsed];
+          const parsed = JSON.parse(lastPlaced);
+          if (parsed && parsed.id && !userOrdersList.some((o) => o.id === parsed.id)) {
+            userOrdersList.unshift(parsed);
+          }
         }
       } catch {}
     }
-    return [];
+
+    if (userOrdersList.length > 0) {
+      // Merge with allOrders to pull any admin status/courier updates!
+      const merged = userOrdersList.map((uo) => {
+        const found = allOrders.find((ao) => ao.id === uo.id);
+        return found
+          ? {
+              ...uo,
+              ...found,
+              items:
+                found.items && found.items.length > 0
+                  ? found.items.map((fi, idx) => ({
+                      ...fi,
+                      image: fi.image || uo.items?.[idx]?.image,
+                    }))
+                  : uo.items,
+            }
+          : uo;
+      });
+      return merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+
+    // Fallback if no local user orders stored: return all non-empty orders sorted by date
+    return allOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   },
 
   async createManualOrder(orderData: Partial<AdminOrder>): Promise<AdminOrder> {

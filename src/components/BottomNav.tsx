@@ -22,7 +22,10 @@ export default function BottomNav({ onOpenProfile }: BottomNavProps) {
   }
 
   const isHome = pathname === '/';
-  const isOrders = pathname?.startsWith('/track') || pathname?.startsWith('/order');
+  const isOrders =
+    pathname?.startsWith('/track') ||
+    pathname?.startsWith('/order') ||
+    pathname?.startsWith('/orders');
   const isWishlist = pathname?.startsWith('/wishlist');
   const isCart = pathname?.startsWith('/cart') || pathname?.startsWith('/basket');
 
