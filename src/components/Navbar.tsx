@@ -139,8 +139,8 @@ export default function Navbar({
               </Link>
             </div>
 
-            {/* Right: Actions (Profile & Cart) */}
-            <div className="flex items-center gap-1 sm:gap-2 text-[#1C1917]">
+            {/* Right: Profile Action */}
+            <div className="flex items-center text-[#1C1917]">
               {/* Profile Icon Button */}
               <button
                 type="button"
@@ -150,20 +150,6 @@ export default function Navbar({
               >
                 <User className="w-5 h-5 stroke-[1.8]" />
               </button>
-
-              {/* Shopping Bag Icon */}
-              <Link
-                href="/cart"
-                aria-label={`View cart with ${itemCount} items`}
-                className="relative w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-white border border-transparent hover:border-[#EFE8E1] transition-all cursor-pointer"
-              >
-                <ShoppingBag className="w-5 h-5 stroke-[1.8]" />
-                {itemCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-[#7A1C3B] text-white text-[8px] font-bold flex items-center justify-center tabular-nums">
-                    {itemCount}
-                  </span>
-                )}
-              </Link>
             </div>
           </div>
 
