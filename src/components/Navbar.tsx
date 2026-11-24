@@ -139,21 +139,17 @@ export default function Navbar({
               </Link>
             </div>
 
-            {/* Right: Actions (Wishlist & Cart) */}
+            {/* Right: Actions (Profile & Cart) */}
             <div className="flex items-center gap-1 sm:gap-2 text-[#1C1917]">
-              {/* Wishlist Icon */}
-              <Link
-                href="/wishlist"
-                aria-label={`View wishlist with ${wishlistCount} items`}
-                className="relative w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-white border border-transparent hover:border-[#EFE8E1] transition-all cursor-pointer"
+              {/* Profile Icon Button */}
+              <button
+                type="button"
+                onClick={handleProfileClick}
+                aria-label="Open profile and studio account"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] hover:bg-white border border-transparent hover:border-[#EFE8E1] transition-all cursor-pointer"
               >
-                <Heart className="w-5 h-5 stroke-[1.8]" />
-                {wishlistCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-[#7A1C3B] text-white text-[8px] font-bold flex items-center justify-center tabular-nums">
-                    {wishlistCount > 99 ? '99+' : wishlistCount}
-                  </span>
-                )}
-              </Link>
+                <User className="w-5 h-5 stroke-[1.8]" />
+              </button>
 
               {/* Shopping Bag Icon */}
               <Link
