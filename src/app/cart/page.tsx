@@ -3,11 +3,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Navbar from '../../components/Navbar';
 import { useBasket } from '../../context/BasketContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { db, Coupon } from '../../lib/database';
 import OrderInfoModal from '../../components/OrderInfoModal';
 import {
+  ArrowLeft,
   ChevronLeft,
   ShoppingBag,
   X,
@@ -251,35 +253,46 @@ export default function CartPage() {
     `*Grand Total: ₹${finalTotal}*`;
 
   return (
-    <div className="min-h-screen bg-[#F7F5F2] text-[#1C1917] font-sans antialiased flex flex-col justify-between selection:bg-[#F6E9EE] selection:text-[#7A1C3B]">
-      {/* Centered App Container matching reference phone layout */}
-      <div className="w-full max-w-md mx-auto flex-1 flex flex-col px-5 pt-4 pb-8 space-y-6">
-        {/* 1. Header matching reference image:
-            Left: Clean chevron back button
-            Center: "Shopping Bag"
-            Right: Black pill badge button with bag icon and count
-        */}
-        <header className="flex items-center justify-between pt-1">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#1C1917] font-sans antialiased flex flex-col justify-between selection:bg-[#F6E9EE] selection:text-[#7A1C3B]">
+      <Navbar />
+
+      {/* Main Container harmonized with website layout */}
+      <main className="w-full max-w-xl mx-auto flex-1 flex flex-col px-4 sm:px-6 pt-5 pb-12 space-y-6">
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center gap-2 text-xs font-semibold text-[#8C827A]">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-[#7A1C3B] hover:underline"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Storefront</span>
+          </Link>
+          <span className="text-[#D5CCC3]">/</span>
+          <span>Shopping Bag</span>
+        </div>
+
+        {/* 1. Header matching reference image layout */}
+        <header className="flex items-center justify-between pb-1">
           <button
             type="button"
             onClick={() => router.back()}
             aria-label="Go back"
-            className="w-10 h-10 rounded-full flex items-center justify-center text-[#1C1917] hover:bg-white/80 active:scale-95 transition cursor-pointer"
+            className="w-10 h-10 rounded-full bg-white border border-[#EFE8E1] flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] active:scale-95 transition cursor-pointer shadow-2xs"
           >
-            <ChevronLeft className="w-6 h-6 stroke-[2.2]" />
+            <ChevronLeft className="w-5 h-5 stroke-[2.2]" />
           </button>
 
-          <h1 className="font-heading font-medium text-lg sm:text-xl text-[#1C1917] tracking-tight text-center">
+          <h1 className="font-heading font-normal text-2xl sm:text-3xl text-[#1C1917] tracking-tight text-center">
             Shopping Bag
           </h1>
 
           {/* Right bag button with count badge */}
           <div className="relative">
-            <div className="w-10 h-10 rounded-2xl bg-white border border-[#E8E2D9] shadow-2xs flex items-center justify-center text-[#1C1917]">
+            <div className="w-10 h-10 rounded-2xl bg-white border border-[#EFE8E1] shadow-2xs flex items-center justify-center text-[#1C1917]">
               <ShoppingBag className="w-5 h-5 stroke-[1.9]" />
             </div>
             {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#1C1917] text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#7A1C3B] text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
                 {itemCount}
               </span>
             )}
@@ -597,14 +610,14 @@ export default function CartPage() {
               <button
                 type="button"
                 onClick={() => setOrderModalOpen(true)}
-                className="w-full py-4 px-6 rounded-full bg-[#1C1917] hover:bg-[#7A1C3B] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer"
+                className="w-full py-4 px-6 rounded-full bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer"
               >
                 <span>Proceed To Checkout</span>
               </button>
             </div>
           </div>
         )}
-      </div>
+      </main>
 
       {/* Order Info Modal to capture customer delivery address and create order */}
       <OrderInfoModal

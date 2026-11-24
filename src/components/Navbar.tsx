@@ -92,23 +92,6 @@ export default function Navbar({
 
   return (
     <>
-      {/* 1. Subtle Announcement Ribbon */}
-      <div className="bg-[#5a1230] text-[#f6e9ee] text-[0.75rem] sm:text-[0.8rem] font-medium tracking-wide">
-        <div className="max-w-[1180px] mx-auto px-4 py-1.5 flex justify-between items-center gap-4">
-          <p className="m-0 truncate">
-            ✨ Free handwritten gift note with every keepsake · Handcrafted in Adirampattinam
-          </p>
-          <div className="hidden sm:flex items-center gap-4 flex-shrink-0 text-xs">
-            <Link href="/about" className="hover:text-[#f8eed6] underline underline-offset-2">
-              Our Studio
-            </Link>
-            <Link href="/track" className="hover:text-[#f8eed6] underline underline-offset-2">
-              Track Order
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* 2. Main Header: Centered Identity matching Reference Image 3 */}
       <header className="sticky top-0 z-30 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#EFE8E1] shadow-2xs">
         <div className="max-w-[1180px] mx-auto px-3 sm:px-6 pt-3 pb-3">

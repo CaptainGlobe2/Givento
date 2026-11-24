@@ -185,24 +185,24 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
             </button>
 
             <Link
-              href="/contact"
+              href="/faq"
               onClick={onClose}
-              className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#1C1917] hover:bg-white transition-colors"
+              className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-[#1C1917] hover:bg-white hover:shadow-2xs transition-all"
             >
               <span className="flex items-center gap-2.5 text-[#44403C]">
-                <HelpCircle className="w-4 h-4 text-[#8C827A]" />
+                <HelpCircle className="w-4 h-4 text-[#7A1C3B]" />
                 Help &amp; FAQs
               </span>
               <ChevronRight className="w-3.5 h-3.5 text-[#A8A29E]" />
             </Link>
 
             <Link
-              href="/contact"
+              href="/delivery"
               onClick={onClose}
-              className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#1C1917] hover:bg-white transition-colors"
+              className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-[#1C1917] hover:bg-white hover:shadow-2xs transition-all"
             >
               <span className="flex items-center gap-2.5 text-[#44403C]">
-                <Shield className="w-4 h-4 text-[#8C827A]" />
+                <Shield className="w-4 h-4 text-[#7A1C3B]" />
                 Delivery &amp; Customer Support
               </span>
               <ChevronRight className="w-3.5 h-3.5 text-[#A8A29E]" />

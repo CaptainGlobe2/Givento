@@ -102,7 +102,6 @@ export default function AdminDashboard() {
     | 'settings'
     | 'inventory'
     | 'analytics'
-    | 'ai_assistant'
   >('dashboard');
 
   // Master Data state
@@ -1494,43 +1493,23 @@ export default function AdminDashboard() {
             <BarChart3 className="w-4 h-4" />
             <span>Profit &amp; Analytics</span>
           </button>
-
-          <button
-            onClick={() => setActiveTab('ai_assistant')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'ai_assistant'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
-          >
-            <Sparkles className="w-4 h-4 text-[#C5A059]" />
-            <span>AI Chats</span>
-            <span
-              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                activeTab === 'ai_assistant' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
-              }`}
-            >
-              {aiConversations.length}
-            </span>
-          </button>
         </div>
 
         {/* ==================================================== */}
-        {/* TAB 0: DASHBOARD & BUSINESS ANALYZE (Per Reference) */}
+        {/* TAB 0: DASHBOARD & WORKSHOP OVERVIEW */}
         {/* ==================================================== */}
         {activeTab === 'dashboard' && (
           <div className="space-y-6">
-            {/* Top Bar: Greeting, Date, Report Download & Add Item */}
+            {/* Top Bar: Workshop Title, Date, Report Download & Add Item */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[#EFE8E1] rounded-3xl p-6 sm:p-7 shadow-xs">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <h1 className="font-heading font-normal text-2xl sm:text-3xl text-[#1C1917] tracking-tight">
-                    Good Morning, Artisan!
+                    Givento Workshop Desk
                   </h1>
-                  <span className="text-2xl animate-pulse">🌸</span>
                 </div>
                 <p className="font-sans text-xs sm:text-sm text-[#78716C]">
-                  Here&apos;s what&apos;s happening with your handcrafted gift boutique today.
+                  Live studio orders, fulfillment tracking, and inventory control · Adirampattinam
                 </p>
               </div>
 
@@ -4630,195 +4609,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* ==================================================== */}
-        {/* TAB 10: AI ASSISTANT CONVERSATIONS & SETTINGS */}
-        {/* ==================================================== */}
-        {activeTab === 'ai_assistant' && (
-          <div className="space-y-6">
-            <div>
-              <h2 className="font-display text-2xl text-[#1c1917]">
-                AI Gift Assistant Management
-              </h2>
-              <p className="font-sans text-xs text-[#78716c]">
-                Review customer gift inquiries, edit assistant prompt guidelines, and control recommendable products.
-              </p>
-            </div>
 
-            {/* Assistant Guidelines & Persona Configuration */}
-            <div className="bg-white border border-[#EFE8E1] rounded-xl p-5 shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-display text-lg text-[#1c1917]">Assistant Persona &amp; Studio Guidelines</h3>
-                  <p className="text-xs text-[#78716c]">
-                    Configure how the AI advises customers on occasions, budgets, and craft recommendations.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleSaveAiInstructions}
-                  className="px-3.5 py-1.5 bg-[#7a1c3b] hover:bg-[#5a1230] text-white rounded-lg text-xs font-semibold shadow-xs transition cursor-pointer"
-                >
-                  Save Guidelines
-                </button>
-              </div>
-
-              <textarea
-                rows={3}
-                value={aiInstructions}
-                onChange={(e) => setAiInstructions(e.target.value)}
-                placeholder="Enter system prompt instructions for the AI assistant..."
-                className="w-full p-3 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs font-sans text-[#1c1917] focus:bg-white focus:border-[#7a1c3b] focus:outline-none transition"
-              />
-
-              {/* Supported Occasions List */}
-              <div className="pt-2 border-t border-[#f5f5f4] flex flex-wrap items-center gap-1.5 text-xs">
-                <span className="font-bold text-[#1c1917] text-[11px] mr-1">Supported Occasions:</span>
-                {[
-                  'Birthday',
-                  'Anniversary',
-                  "Valentine's Day",
-                  "Children's Day",
-                  'Wedding / Nikah',
-                  'Engagement',
-                  'Graduation',
-                  'Friendship Day',
-                  "Mother's Day",
-                  "Father's Day",
-                  'Baby Shower',
-                  'Return Gifts',
-                  'Eid & Festivals',
-                ].map((occ) => (
-                  <span
-                    key={occ}
-                    className="px-2.5 py-0.5 rounded-full bg-[#fbf3e4] text-[#7a1c3b] font-medium text-[11px] border border-[#c5a059]/30"
-                  >
-                    {occ}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Product Recommendability Toggle Matrix */}
-            <div className="bg-white border border-[#EFE8E1] rounded-xl p-5 shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-display text-lg text-[#1c1917]">
-                  Catalogue Recommendation Controls
-                </h3>
-                <span className="text-xs text-[#78716c]">
-                  {products.filter((p) => (p as any).isAiRecommendable !== false).length} of {products.length} recommendable
-                </span>
-              </div>
-              <p className="text-xs text-[#78716c] -mt-1">
-                Toggle whether specific products appear in AI Gift Assistant recommendations.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 max-h-48 overflow-y-auto pr-1">
-                {products.map((p) => {
-                  const isRec = (p as any).isAiRecommendable !== false;
-                  return (
-                    <div
-                      key={p.id}
-                      className="p-2.5 bg-[#faf7f2] rounded-lg border border-[#EFE8E1] flex items-center justify-between gap-2 text-xs"
-                    >
-                      <div className="truncate">
-                        <span className="font-bold text-[#1c1917] block truncate">{p.name}</span>
-                        <span className="text-[10px] text-[#78716c]">
-                          {p.price ? `₹${p.price}` : 'Price on request'}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => handleToggleAiRecommendable(p.id, isRec)}
-                        className={`px-2 py-0.5 rounded text-[10px] font-semibold border flex-none cursor-pointer ${
-                          isRec
-                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                            : 'bg-rose-50 text-rose-800 border-rose-300'
-                        }`}
-                      >
-                        {isRec ? 'Enabled' : 'Disabled'}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Conversation Sessions & Transcript */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white border border-[#EFE8E1] rounded-xl p-4 shadow-xs space-y-2">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-semibold text-[#78716c] uppercase">Recent Sessions</span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#faf7f2] border border-[#EFE8E1]">
-                    {aiConversations.length} total
-                  </span>
-                </div>
-                {aiConversations.length === 0 ? (
-                  <p className="text-xs text-[#78716c] py-4 text-center">No customer chats logged yet.</p>
-                ) : (
-                  <div className="space-y-1.5 max-h-[460px] overflow-y-auto pr-1">
-                    {aiConversations.map((conv) => (
-                      <div
-                        key={conv.id}
-                        onClick={() => handleSelectAiConversation(conv)}
-                        className={`p-3 rounded-lg border cursor-pointer text-xs space-y-1 transition ${
-                          selectedAiConv?.id === conv.id
-                            ? 'bg-[#f6e9ee] border-[#7a1c3b]'
-                            : 'bg-[#faf7f2] hover:bg-[#fbf3e4]/50 border-[#EFE8E1]'
-                        }`}
-                      >
-                        <div className="font-semibold text-[#1c1917] capitalize">{conv.occasion || 'Gift Inquiry'}</div>
-                        <div className="text-[#78716c] font-mono text-[10px] flex justify-between">
-                          <span>{new Date(conv.createdAt).toLocaleDateString('en-IN')}</span>
-                          <span>{conv.sessionId.slice(-6)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="md:col-span-2 bg-white border border-[#EFE8E1] rounded-xl p-5 shadow-xs">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-display text-base text-[#1c1917]">Conversation Transcript</h4>
-                  {selectedAiConv && (
-                    <span className="text-xs font-mono text-[#78716c]">
-                      Session: {selectedAiConv.sessionId}
-                    </span>
-                  )}
-                </div>
-
-                {selectedAiMessages.length === 0 ? (
-                  <div className="py-16 text-center text-xs text-[#78716c] border border-dashed border-[#EFE8E1] rounded-xl">
-                    Select a conversation on the left to inspect customer questions and AI recommendations.
-                  </div>
-                ) : (
-                  <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
-                    {selectedAiMessages.map((msg) => (
-                      <div
-                        key={msg.id}
-                        className={`p-3.5 rounded-[10px] text-xs ${
-                          msg.role === 'user'
-                            ? 'bg-[#f6e9ee] border border-[#EFE8E1] text-[#231a1d] ml-8'
-                            : 'bg-[#faf7f2] border border-[#EFE8E1] text-[#1c1917] mr-8'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-bold uppercase text-[10px] text-[#7a1c3b]">
-                            {msg.role === 'user' ? 'Customer' : 'Givento Assistant'}
-                          </span>
-                          <span className="text-[10px] text-[#78716c] font-mono">
-                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                        </div>
-                        <p className="whitespace-pre-wrap leading-relaxed m-0">{msg.content}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* ==================================================== */}

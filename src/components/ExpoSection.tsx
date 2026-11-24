@@ -1,54 +1,116 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { MapPin, Calendar, Sparkles, MessageCircle, ArrowRight } from 'lucide-react';
+import { InstagramIcon } from './Icons';
 
 export default function ExpoSection() {
   return (
-    <section id="expos" className="py-11 border-b border-[#e8dcdc]">
-      <div className="max-w-[1180px] mx-auto px-4">
+    <section id="expos" className="py-10 sm:py-16 bg-[#FAF7F2] border-b border-[#EFE8E1]">
+      <div className="max-w-[1180px] mx-auto px-4 sm:px-6 space-y-8">
         {/* Section Heading */}
-        <div className="flex justify-between items-end gap-3 flex-wrap mb-5.5">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-3 border-b border-[#EFE8E1]">
           <div>
-            <h2 className="font-display font-normal text-[clamp(1.7rem,3.4vw,2.3rem)] leading-[1.1] text-[#231a1d]">
-              Find us at expos
+            <div className="inline-flex items-center gap-1.5 mb-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#7A1C3B]" />
+              <span className="text-[11px] font-bold tracking-[0.22em] text-[#7A1C3B] uppercase">
+                Studio Stalls &amp; Exhibitions
+              </span>
+            </div>
+            <h2 className="font-heading font-normal text-2xl sm:text-3xl md:text-4xl text-[#1C1917] tracking-tight">
+              Meet Us at Local Expos
             </h2>
-            <p className="font-body text-[#6a5b60] text-[0.95rem] mt-1.5 max-w-[60ch]">
-              We set up stalls at local expos, so you can see and try everything in person.
+            <p className="font-sans text-xs sm:text-sm text-[#78716C] mt-1 max-w-xl">
+              We love setting up pop-up studio stalls at community fairs and exhibitions across Tamil Nadu so you can touch the petals, try on jewellery, and see custom frames in person.
             </p>
           </div>
+
           <a
             href="https://www.instagram.com/givento.in/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[0.88rem] font-bold text-[#7a1c3b] hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#7A1C3B] hover:text-[#5A1230] group transition self-start sm:self-auto"
           >
-            Follow on Instagram →
+            <InstagramIcon className="w-4 h-4" />
+            <span>@givento.in on Instagram</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </a>
         </div>
 
-        {/* 2 Expo Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="border border-[#e8dcdc] border-l-4 border-l-[#c5a059] rounded-[10px] p-5.5 bg-white">
-            <h3 className="font-display text-[1.35rem] text-[#231a1d] mb-1.5">
-              Next expo
-            </h3>
-            <p className="font-body text-[#6a5b60] text-[0.95rem] m-0">
-              Dates and place coming soon. Follow @givento.in on Instagram to see them first.
-            </p>
-            <small className="block mt-2.5 text-[0.76rem] text-[#6a5b60]">
-              Sample wording. Edit it when you know the dates.
-            </small>
+        {/* 2 Expo Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          {/* Card 1: Upcoming Stall */}
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#EFE8E1] hover:border-[#7A1C3B]/30 shadow-2xs space-y-4 flex flex-col justify-between transition">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 rounded-full bg-[#F6E9EE] text-[#7A1C3B] text-[10px] font-bold tracking-wider uppercase">
+                  Upcoming Pop-Up
+                </span>
+                <span className="text-xs text-[#8C827A] flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-[#7A1C3B]" />
+                  <span>Next Exhibition</span>
+                </span>
+              </div>
+
+              <h3 className="font-heading font-medium text-xl text-[#1C1917]">
+                Adirai Handcraft &amp; Boutique Fair
+              </h3>
+
+              <p className="text-xs sm:text-sm text-[#78716C] leading-relaxed">
+                Catch our full range of waterproof stainless steel chains, custom gold-foiled Nikah celebration frames, and everlasting crepe paper flower bouquets live at our booth.
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-[#FAF7F2] flex items-center justify-between text-xs text-[#8C827A]">
+              <div className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#7A1C3B]" />
+                <span>Adirampattinam, Tamil Nadu</span>
+              </div>
+              <a
+                href="https://wa.me/919344013255?text=Hi%20Givento!%20When%20is%20your%20next%20expo%20stall?"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-[#7A1C3B] hover:underline"
+              >
+                Inquire Stall Dates →
+              </a>
+            </div>
           </div>
 
-          <div className="border border-[#e8dcdc] border-l-4 border-l-[#c5a059] rounded-[10px] p-5.5 bg-white">
-            <h3 className="font-display text-[1.35rem] text-[#231a1d] mb-1.5">
-              Adirai August Expo
-            </h3>
-            <p className="font-body text-[#6a5b60] text-[0.95rem] m-0">
-              We were there with our jewellery and accessories. Thank you to everyone who stopped by.
-            </p>
-            <small className="block mt-2.5 text-[0.76rem] text-[#6a5b60]">
-              Sample wording. Replace it with your own.
-            </small>
+          {/* Card 2: Studio Workshop Desk */}
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#EFE8E1] hover:border-[#7A1C3B]/30 shadow-2xs space-y-4 flex flex-col justify-between transition">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 rounded-full bg-[#F3ECE2] text-[#8C827A] text-[10px] font-bold tracking-wider uppercase">
+                  Permanent Workshop
+                </span>
+                <span className="text-xs text-[#8C827A] flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-[#7A1C3B]" />
+                  <span>Workshop Desk</span>
+                </span>
+              </div>
+
+              <h3 className="font-heading font-medium text-xl text-[#1C1917]">
+                Direct Studio Visits &amp; Pickups
+              </h3>
+
+              <p className="text-xs sm:text-sm text-[#78716C] leading-relaxed">
+                Can&apos;t wait for an expo? You are always welcome to pick up orders directly or consult on custom bridal frames and everlasting bouquets at our studio workspace.
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-[#FAF7F2] flex items-center justify-between text-xs text-[#8C827A]">
+              <span className="text-[#8C827A]">
+                East Coast Road, Adirampattinam
+              </span>
+              <a
+                href="tel:9344013255"
+                className="font-bold text-[#7A1C3B] hover:underline"
+              >
+                Call Studio Desk →
+              </a>
+            </div>
           </div>
         </div>
       </div>

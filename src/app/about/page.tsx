@@ -77,28 +77,28 @@ export default function AboutPage() {
           </div>
 
           <div className="md:col-span-6 grid grid-cols-2 gap-3 sm:gap-4">
-            <div className="space-y-3 sm:space-y-4">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1]">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="h-32 sm:h-40 rounded-2xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1]">
                 <img
-                  src="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=700&q=80"
+                  src="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80"
                   alt="Handmade Everlasting Bouquets"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#EFE8E1]">
+              <div className="p-2.5 bg-[#FAF7F2] rounded-xl border border-[#EFE8E1]">
                 <p className="font-heading font-medium text-xs text-[#1C1917]">4–6 Hours per Bouquet</p>
-                <p className="text-[11px] text-[#78716C] mt-0.5">Individually rolled petals on floral wire.</p>
+                <p className="text-[10px] text-[#78716C] mt-0.5">Individually rolled petals on floral wire.</p>
               </div>
             </div>
 
-            <div className="space-y-3 sm:space-y-4 pt-4 sm:pt-6">
-              <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#EFE8E1]">
+            <div className="space-y-2 sm:space-y-3 pt-3 sm:pt-4">
+              <div className="p-2.5 bg-[#FAF7F2] rounded-xl border border-[#EFE8E1]">
                 <p className="font-heading font-medium text-xs text-[#1C1917]">Gold Foil &amp; Glass Frames</p>
-                <p className="text-[11px] text-[#78716C] mt-0.5">350 GSM archival stock &amp; Quranic verses.</p>
+                <p className="text-[10px] text-[#78716C] mt-0.5">350 GSM archival stock &amp; Quranic verses.</p>
               </div>
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1]">
+              <div className="h-32 sm:h-40 rounded-2xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1]">
                 <img
-                  src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=700&q=80"
+                  src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80"
                   alt="Custom Framed Keepsakes"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
@@ -127,11 +127,11 @@ export default function AboutPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {/* 1. Bouquets */}
-            <div className="bg-white rounded-2xl p-5 border border-[#EFE8E1] flex flex-col justify-between space-y-4 hover:border-[#7A1C3B]/40 transition">
-              <div className="space-y-3">
-                <div className="aspect-square rounded-xl overflow-hidden bg-[#FAF7F2]">
+            <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#EFE8E1] flex flex-col justify-between space-y-3 hover:border-[#7A1C3B]/40 transition">
+              <div className="space-y-2.5">
+                <div className="h-28 sm:h-36 rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1]">
                   <img
                     src="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80"
                     alt="Paper Flower Bouquets"
@@ -151,9 +151,9 @@ export default function AboutPage() {
             </div>
 
             {/* 2. Frames */}
-            <div className="bg-white rounded-2xl p-5 border border-[#EFE8E1] flex flex-col justify-between space-y-4 hover:border-[#7A1C3B]/40 transition">
-              <div className="space-y-3">
-                <div className="aspect-square rounded-xl overflow-hidden bg-[#FAF7F2]">
+            <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#EFE8E1] flex flex-col justify-between space-y-3 hover:border-[#7A1C3B]/40 transition">
+              <div className="space-y-2.5">
+                <div className="h-28 sm:h-36 rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1]">
                   <img
                     src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80"
                     alt="Nikah & Memory Frames"
@@ -173,9 +173,9 @@ export default function AboutPage() {
             </div>
 
             {/* 3. Jewellery */}
-            <div className="bg-white rounded-2xl p-5 border border-[#EFE8E1] flex flex-col justify-between space-y-4 hover:border-[#7A1C3B]/40 transition">
-              <div className="space-y-3">
-                <div className="aspect-square rounded-xl overflow-hidden bg-[#FAF7F2]">
+            <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#EFE8E1] flex flex-col justify-between space-y-3 hover:border-[#7A1C3B]/40 transition">
+              <div className="space-y-2.5">
+                <div className="h-28 sm:h-36 rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1]">
                   <img
                     src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80"
                     alt="Anti-Tarnish Jewellery"
@@ -195,9 +195,9 @@ export default function AboutPage() {
             </div>
 
             {/* 4. Hampers & Resin */}
-            <div className="bg-white rounded-2xl p-5 border border-[#EFE8E1] flex flex-col justify-between space-y-4 hover:border-[#7A1C3B]/40 transition">
-              <div className="space-y-3">
-                <div className="aspect-square rounded-xl overflow-hidden bg-[#FAF7F2]">
+            <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#EFE8E1] flex flex-col justify-between space-y-3 hover:border-[#7A1C3B]/40 transition">
+              <div className="space-y-2.5">
+                <div className="h-28 sm:h-36 rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1]">
                   <img
                     src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80"
                     alt="Curated Hampers"
