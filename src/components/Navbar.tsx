@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   Search,
   Menu,
@@ -28,6 +28,7 @@ interface NavbarProps {
   selectedGroup?: string;
   onSelectGroup?: (groupKey: string) => void;
   onOpenProfile?: () => void;
+  showSearch?: boolean;
 }
 
 export default function Navbar({
@@ -36,10 +37,30 @@ export default function Navbar({
   selectedGroup = 'all',
   onSelectGroup,
   onOpenProfile,
+  showSearch,
 }: NavbarProps) {
   const { itemCount } = useBasket();
   const { wishlistCount } = useWishlist();
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Hide search bar & category nav on order, cart, wishlist, about, faq, delivery, etc.
+  const isExcludedPage =
+    pathname?.startsWith('/cart') ||
+    pathname?.startsWith('/order') ||
+    pathname?.startsWith('/orders') ||
+    pathname?.startsWith('/track') ||
+    pathname?.startsWith('/wishlist') ||
+    pathname?.startsWith('/about') ||
+    pathname?.startsWith('/faq') ||
+    pathname?.startsWith('/delivery') ||
+    pathname?.startsWith('/custom-order') ||
+    pathname?.startsWith('/contact') ||
+    pathname?.startsWith('/admin') ||
+    pathname?.startsWith('/product');
+
+  const shouldShowSearch = showSearch !== undefined ? showSearch : !isExcludedPage;
+  const shouldShowCategories = showSearch !== undefined ? showSearch : !isExcludedPage;
 
   const [localSearch, setLocalSearch] = useState(searchQuery);
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
@@ -150,69 +171,73 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* Underneath Row: Full-width / Centered Pill Search Bar matching Image 3 */}
-          <div className="mt-2.5 max-w-xl mx-auto">
-            <form onSubmit={handleSearchSubmit} className="relative w-full">
-              <label htmlFor="givento-search" className="sr-only">
-                Search bouquets, jewellery, frames &amp; more...
-              </label>
-              <div className="relative flex items-center w-full">
-                <Search className="absolute left-4 w-4 h-4 text-[#8C827A] pointer-events-none stroke-[2]" />
-                <input
-                  id="givento-search"
-                  type="search"
-                  value={localSearch}
-                  onChange={handleInputChange}
-                  placeholder="Search bouquets, jewellery, frames & more..."
-                  autoComplete="off"
-                  className="w-full h-11 border border-[#EFE8E1] focus:border-[#7A1C3B] rounded-full bg-white pl-11 pr-11 text-xs sm:text-sm font-body text-[#1C1917] placeholder-[#8C827A] focus:outline-none focus:ring-2 focus:ring-[#7A1C3B]/10 transition-all shadow-2xs"
-                />
-                {localSearch ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLocalSearch('');
-                      if (onSearchChange) onSearchChange('');
-                    }}
-                    className="absolute right-3.5 p-1 rounded-full text-[#8C827A] hover:text-[#1C1917] transition-colors"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    aria-label="Filter or search"
-                    className="absolute right-2 w-8 h-8 rounded-full flex items-center justify-center text-[#8C827A] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] transition-colors cursor-pointer"
-                  >
-                    <SlidersHorizontal className="w-3.5 h-3.5 stroke-[2]" />
-                  </button>
-                )}
-              </div>
-            </form>
-          </div>
+          {/* Underneath Row: Full-width / Centered Pill Search Bar (Only shown on storefront / discovery pages) */}
+          {shouldShowSearch && (
+            <div className="mt-2.5 max-w-xl mx-auto">
+              <form onSubmit={handleSearchSubmit} className="relative w-full">
+                <label htmlFor="givento-search" className="sr-only">
+                  Search bouquets, jewellery, frames &amp; more...
+                </label>
+                <div className="relative flex items-center w-full">
+                  <Search className="absolute left-4 w-4 h-4 text-[#8C827A] pointer-events-none stroke-[2]" />
+                  <input
+                    id="givento-search"
+                    type="search"
+                    value={localSearch}
+                    onChange={handleInputChange}
+                    placeholder="Search bouquets, jewellery, frames & more..."
+                    autoComplete="off"
+                    className="w-full h-11 border border-[#EFE8E1] focus:border-[#7A1C3B] rounded-full bg-white pl-11 pr-11 text-xs sm:text-sm font-body text-[#1C1917] placeholder-[#8C827A] focus:outline-none focus:ring-2 focus:ring-[#7A1C3B]/10 transition-all shadow-2xs"
+                  />
+                  {localSearch ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLocalSearch('');
+                        if (onSearchChange) onSearchChange('');
+                      }}
+                      className="absolute right-3.5 p-1 rounded-full text-[#8C827A] hover:text-[#1C1917] transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      aria-label="Filter or search"
+                      className="absolute right-2 w-8 h-8 rounded-full flex items-center justify-center text-[#8C827A] hover:text-[#7A1C3B] hover:bg-[#FAF7F2] transition-colors cursor-pointer"
+                    >
+                      <SlidersHorizontal className="w-3.5 h-3.5 stroke-[2]" />
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+          )}
 
-          {/* Category Quick Links (Desktop & Tablet) */}
-          <nav
-            aria-label="Desktop Categories"
-            className="hidden md:flex items-center justify-center gap-6 pt-3 overflow-x-auto scrollbar-none text-xs sm:text-sm font-semibold"
-          >
-            {navCategories.map((c) => {
-              const isSelected = selectedGroup === c.id || selectedGroup === c.groupKey || selectedGroup === c.slug;
-              return (
-                <Link
-                  key={c.id}
-                  href={`/category/${c.slug}`}
-                  className={`py-1 border-b-2 transition-all whitespace-nowrap cursor-pointer ${
-                    isSelected
-                      ? 'text-[#7a1c3b] border-[#7a1c3b] font-bold'
-                      : 'border-transparent text-[#231a1d] hover:text-[#7a1c3b]'
-                  }`}
-                >
-                  {c.name}
-                </Link>
-              );
-            })}
-          </nav>
+          {/* Category Quick Links (Desktop & Tablet - Only shown on storefront / discovery pages) */}
+          {shouldShowCategories && (
+            <nav
+              aria-label="Desktop Categories"
+              className="hidden md:flex items-center justify-center gap-6 pt-3 overflow-x-auto scrollbar-none text-xs sm:text-sm font-semibold"
+            >
+              {navCategories.map((c) => {
+                const isSelected = selectedGroup === c.id || selectedGroup === c.groupKey || selectedGroup === c.slug;
+                return (
+                  <Link
+                    key={c.id}
+                    href={`/category/${c.slug}`}
+                    className={`py-1 border-b-2 transition-all whitespace-nowrap cursor-pointer ${
+                      isSelected
+                        ? 'text-[#7a1c3b] border-[#7a1c3b] font-bold'
+                        : 'border-transparent text-[#231a1d] hover:text-[#7a1c3b]'
+                    }`}
+                  >
+                    {c.name}
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
         </div>
       </header>
 
