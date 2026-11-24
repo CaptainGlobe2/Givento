@@ -27,20 +27,80 @@ interface CategoryPageClientProps {
   slug: string;
 }
 
-const CATEGORY_BACKGROUND_IMAGES: Record<string, string> = {
-  frames: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85',
-  bouquets: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=1600&q=85',
-  'gift-hampers': 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=85',
-  hampers: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=85',
-  'stainless-steel-jewellery': 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85',
-  jewel: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85',
-  'resin-art': 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1600&q=85',
-  resin: 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1600&q=85',
-  'baby-kids': 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=1600&q=85',
-  crochet: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=1600&q=85',
-  'nikah-wedding': 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85',
-  wedding: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85',
-  all: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85',
+interface CategoryBannerInfo {
+  bgImage: string;
+  showcaseImage: string;
+  badge: string;
+  tagline?: string;
+}
+
+const CATEGORY_BANNERS: Record<string, CategoryBannerInfo> = {
+  frames: {
+    bgImage: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=600&q=80',
+    badge: '🖼️ Sacred Keepsakes & Nikah Plaques',
+    tagline: 'Gold-foiled Nikah celebration frames, custom photo plaques & Quranic calligraphy.',
+  },
+  bouquets: {
+    bgImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1591886960571-74d43a9d4166?auto=format&fit=crop&w=600&q=80',
+    badge: '🌻 Everlasting Paper & Satin Blooms',
+    tagline: 'Hand-rolled Italian crepe sunflowers, satin roses, and chocolate arrangements that never wilt.',
+  },
+  'gift-hampers': {
+    bgImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=600&q=80',
+    badge: '🎁 Curated Luxury Celebration Boxes',
+    tagline: 'Boutique hampers tied with double satin ribbon, wax-sealed card notes & luxury surprises.',
+  },
+  hampers: {
+    bgImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=600&q=80',
+    badge: '🎁 Curated Luxury Celebration Boxes',
+    tagline: 'Boutique hampers tied with double satin ribbon, wax-sealed card notes & luxury surprises.',
+  },
+  'stainless-steel-jewellery': {
+    bgImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
+    badge: '💍 18k Gold Waterproof & Anti-Tarnish',
+    tagline: 'Everyday anti-tarnish stainless steel chains, adjustable stone rings, and charm anklets.',
+  },
+  jewel: {
+    bgImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
+    badge: '💍 18k Gold Waterproof & Anti-Tarnish',
+    tagline: 'Everyday anti-tarnish stainless steel chains, adjustable stone rings, and charm anklets.',
+  },
+  'resin-art': {
+    bgImage: 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80',
+    badge: '✨ Botanical Resin Preservation',
+    tagline: 'High-clarity preserved floral epoxy clocks, ocean trays, and personalized gold-flake keychains.',
+  },
+  resin: {
+    bgImage: 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80',
+    badge: '✨ Botanical Resin Preservation',
+    tagline: 'High-clarity preserved floral epoxy clocks, ocean trays, and personalized gold-flake keychains.',
+  },
+  'hair-accessories': {
+    bgImage: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=600&q=80',
+    badge: '🌸 Handcrafted Hair Ornaments',
+    tagline: 'Crochet floral alligator clips, matte banana clutchers, and hibiscus blossom accessories.',
+  },
+  keychains: {
+    bgImage: 'https://images.unsplash.com/photo-1611591475155-4284ec28d351?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80',
+    badge: '🔑 Personalised Charm Keychains',
+    tagline: 'Arabic calligraphy letters, pressed flower charms, and kawaii keepsake bag trinkets.',
+  },
+  all: {
+    bgImage: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85',
+    showcaseImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80',
+    badge: '🌸 Complete Atelier Catalog',
+    tagline: 'Every handcrafted bloom, keepsake frame, resin artwork, and waterproof jewellery piece.',
+  },
 };
 
 export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
@@ -237,48 +297,66 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
           </div>
         </div>
 
-        {/* 3. Category Hero Banner with Atmospheric Background Image */}
+        {/* 3. Category Hero Banner with Atmospheric Background Image & Showcase Photo */}
         {(() => {
           const categoryKey = slug?.toLowerCase() || 'all';
-          const heroBgImage =
-            CATEGORY_BACKGROUND_IMAGES[categoryKey] ||
-            CATEGORY_BACKGROUND_IMAGES[currentCategory?.groupKey?.toLowerCase() || ''] ||
-            CATEGORY_BACKGROUND_IMAGES[currentCategory?.id?.toLowerCase() || ''] ||
-            'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85';
+          const bannerInfo =
+            CATEGORY_BANNERS[categoryKey] ||
+            CATEGORY_BANNERS[currentCategory?.groupKey?.toLowerCase() || ''] ||
+            CATEGORY_BANNERS[currentCategory?.id?.toLowerCase() || ''] ||
+            CATEGORY_BANNERS.all;
 
           return (
-            <div className="relative rounded-3xl p-6 sm:p-10 mb-8 shadow-md overflow-hidden min-h-[220px] sm:min-h-[270px] flex flex-col justify-end border border-white/20">
-              {/* Background Image */}
+            <div className="relative rounded-3xl p-6 sm:p-10 mb-8 shadow-md overflow-hidden min-h-[220px] sm:min-h-[270px] flex flex-col md:flex-row md:items-center justify-between gap-6 border border-white/20">
+              {/* Full-bleed Background Photo: clearly visible behind the category letter/title */}
               <img
-                src={heroBgImage}
+                src={bannerInfo.bgImage}
                 alt={categoryTitle}
-                className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.65] contrast-[1.08] transition-all duration-700 hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.1] transition-transform duration-700 hover:scale-105"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
                     'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=85';
                 }}
               />
 
-              {/* Premium Multi-layer Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30" />
+              {/* Rich Multi-stop Dark & Vignette Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/25" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
 
-              {/* Content on top */}
-              <div className="relative z-10 max-w-2xl space-y-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] sm:text-xs font-semibold text-white uppercase tracking-wider shadow-2xs">
-                  <span>{currentCategory?.icon || '✨'}</span>
-                  <span>Handcrafted Collection</span>
+              {/* Left Content Column */}
+              <div className="relative z-10 max-w-xl space-y-3">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] sm:text-xs font-semibold text-white uppercase tracking-wider shadow-2xs">
+                  <span>{bannerInfo.badge}</span>
                   <span className="text-white/60">•</span>
                   <span className="text-white/90 lowercase font-medium">{categoryProducts.length} items available</span>
                 </div>
 
-                <h1 className="font-heading font-medium text-3xl sm:text-4xl md:text-5xl text-white tracking-tight drop-shadow-md">
+                {/* Big Bold Category Title: 'Frames', 'Bouquets', etc. directly in front of the image */}
+                <h1 className="font-heading font-medium text-3xl sm:text-5xl md:text-6xl text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
                   {categoryTitle}
                 </h1>
 
-                <p className="text-xs sm:text-sm text-white/90 leading-relaxed max-w-xl font-body drop-shadow-sm">
+                <p className="text-xs sm:text-sm text-white/90 leading-relaxed font-body drop-shadow-sm max-w-lg">
                   {categoryDescription}
                 </p>
+              </div>
+
+              {/* Right Showcase Photo Preview */}
+              <div className="relative z-10 hidden sm:flex items-center justify-center shrink-0">
+                <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden border-2 border-white/60 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-300 bg-white">
+                  <img
+                    src={bannerInfo.showcaseImage}
+                    alt={`${categoryTitle} showcase`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = bannerInfo.bgImage;
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                  <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-[9px] font-bold text-white uppercase tracking-wider">
+                    {categoryTitle}
+                  </span>
+                </div>
               </div>
             </div>
           );
