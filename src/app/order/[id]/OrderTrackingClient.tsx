@@ -123,15 +123,17 @@ export default function OrderTrackingClient({
       <Navbar />
 
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-10 relative z-10 w-full">
-        {/* Breadcrumb */}
-        <div className="mb-6">
+        {/* Back to Orders Link */}
+        <div className="mb-6 flex items-center gap-2">
           <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#7A1C3B] hover:underline"
+            href="/track"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#EFE8E1] hover:border-[#7A1C3B] text-xs font-semibold text-[#7A1C3B] shadow-2xs transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to Givento.in Home</span>
+            <span>Back to Orders</span>
           </Link>
+          <span className="text-[#D5CCC3]">/</span>
+          <span className="text-xs text-[#8C827A]">Order #{order.id}</span>
         </div>
 
         {/* Tracking Card */}
