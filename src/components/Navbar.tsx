@@ -44,23 +44,10 @@ export default function Navbar({
   const router = useRouter();
   const pathname = usePathname();
 
-  // Hide search bar & category nav on order, cart, wishlist, about, faq, delivery, etc.
-  const isExcludedPage =
-    pathname?.startsWith('/cart') ||
-    pathname?.startsWith('/order') ||
-    pathname?.startsWith('/orders') ||
-    pathname?.startsWith('/track') ||
-    pathname?.startsWith('/wishlist') ||
-    pathname?.startsWith('/about') ||
-    pathname?.startsWith('/faq') ||
-    pathname?.startsWith('/delivery') ||
-    pathname?.startsWith('/custom-order') ||
-    pathname?.startsWith('/contact') ||
-    pathname?.startsWith('/admin') ||
-    pathname?.startsWith('/product');
-
-  const shouldShowSearch = showSearch !== undefined ? showSearch : !isExcludedPage;
-  const shouldShowCategories = showSearch !== undefined ? showSearch : !isExcludedPage;
+  // Only show search bar & quick category links on the Home storefront ('/') unless explicitly passed
+  const isHomePage = pathname === '/';
+  const shouldShowSearch = showSearch !== undefined ? showSearch : isHomePage;
+  const shouldShowCategories = showSearch !== undefined ? showSearch : isHomePage;
 
   const [localSearch, setLocalSearch] = useState(searchQuery);
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
