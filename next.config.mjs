@@ -1,10 +1,12 @@
-import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   devIndicators: false,
+
   images: {
     unoptimized: true,
   },
+
   experimental: {
     cpus: 1,
   },
