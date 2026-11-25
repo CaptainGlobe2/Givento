@@ -26,6 +26,8 @@
     "tailwind-merge": "^3.7.1"
   },
   "devDependencies": {
+    "@tailwindcss/oxide": "4.3.3",
+    "@tailwindcss/node": "4.3.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
