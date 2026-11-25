@@ -24,7 +24,7 @@ export default function HomePage() {
   };
 
   return (
-    <div id="top" className="min-h-screen flex flex-col bg-white text-[#231a1d] font-body selection:bg-[#f6e9ee] selection:text-[#7a1c3b] pb-20 md:pb-0">
+    <div id="top" className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-body selection:bg-[#f6e9ee] selection:text-[#7a1c3b] pb-24">
       {/* 1. Header with Rounded Pill Search Bar & Hamburger Menu */}
       <Navbar
         searchQuery={searchQuery}

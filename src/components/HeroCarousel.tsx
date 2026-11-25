@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -66,6 +66,7 @@ const SLIDES: Slide[] = [
 export default function HeroCarousel() {
   const [current, setCurrent] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
+  const touchStartXRef = useRef<number | null>(null);
 
   const nextSlide = useCallback(() => {
     setCurrent((prev) => (prev + 1) % SLIDES.length);
@@ -74,6 +75,25 @@ export default function HeroCarousel() {
   const prevSlide = useCallback(() => {
     setCurrent((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
   }, []);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0]?.clientX ?? null;
+    setIsPaused(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const startX = touchStartXRef.current;
+    touchStartXRef.current = null;
+    setIsPaused(false);
+    if (startX === null) return;
+    const endX = e.changedTouches[0]?.clientX ?? startX;
+    const deltaX = endX - startX;
+    if (deltaX <= -40) {
+      nextSlide();
+    } else if (deltaX >= 40) {
+      prevSlide();
+    }
+  };
 
   // Auto-rotation every 5 seconds
   useEffect(() => {
@@ -90,10 +110,12 @@ export default function HeroCarousel() {
       className="w-full bg-[#FAF7F2] pt-2 pb-4 px-3 sm:px-4"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <div className="max-w-[1180px] mx-auto">
         {/* Rounded Hero Banner Card - Full-bleed background image with crystal-clear overlay */}
-        <div className="relative w-full rounded-[32px] sm:rounded-[40px] overflow-hidden border border-[#EFE8E1] shadow-md bg-white">
+        <div className="relative w-full rounded-[32px] sm:rounded-[40px] overflow-hidden border border-[#EFE8E1] shadow-md bg-white touch-pan-y">
           {/* Slides Container */}
           <div className="relative min-h-[300px] sm:min-h-[350px] md:min-h-[400px] flex items-center">
             {SLIDES.map((slide, idx) => {
@@ -105,11 +127,18 @@ export default function HeroCarousel() {
                     isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
                   }`}
                 >
-                  {/* 1. Awesome High-Resolution Background Image covering entire card */}
+                  {/* 1. High-Resolution Background Image with Ambient Drift on Both Mobile & Desktop */}
                   <img
                     src={slide.image}
                     alt={`${slide.titleLine1} ${slide.titleLine2}`}
-                    className="absolute inset-0 w-full h-full object-cover object-right sm:object-center transform scale-100 hover:scale-105 transition-transform duration-1000 ease-out"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = '/images/sunflower-bouquet.svg';
+                    }}
+                    className={`absolute inset-0 w-full h-full object-cover object-right sm:object-center transition-transform duration-[5500ms] ease-out ${
+                      isActive ? 'scale-105' : 'scale-100'
+                    }`}
                   />
 
                   {/* 2. Soft Gradient Overlay on Left: Keeps text 100% readable while revealing full image on right */}
@@ -119,8 +148,12 @@ export default function HeroCarousel() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" />
 
                   {/* 4. Left Content: Badge + 2-Line Headline + Shop Now CTA */}
-                  <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] md:min-h-[400px] px-6 sm:px-10 md:px-14 py-8 sm:py-10 flex items-center z-10">
-                    <div className="max-w-[68%] sm:max-w-[55%] md:max-w-md space-y-3 sm:space-y-4 md:space-y-5 text-left">
+                  <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] md:min-h-[400px] px-5 sm:px-10 md:px-14 pt-7 pb-12 sm:py-10 flex items-center z-10">
+                    <div
+                      className={`max-w-[78%] sm:max-w-[55%] md:max-w-md space-y-3 sm:space-y-4 md:space-y-5 text-left transition-all duration-700 ease-out ${
+                        isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+                      }`}
+                    >
                       {/* Black Pill Badge */}
                       <div>
                         <span className="inline-flex items-center px-3.5 sm:px-4 py-1 rounded-full bg-[#1C1917] text-white text-[10px] sm:text-xs font-semibold tracking-wide shadow-2xs">
@@ -141,7 +174,7 @@ export default function HeroCarousel() {
                           className="inline-flex items-center gap-3.5 sm:gap-4 pl-5 sm:pl-6 pr-1.5 sm:pr-2 py-1.5 sm:py-2 rounded-full bg-[#1C1917] hover:bg-[#7A1C3B] text-white font-medium text-xs sm:text-base transition-all duration-300 shadow-md group cursor-pointer active:scale-95"
                         >
                           <span className="font-semibold tracking-tight">{slide.ctaText}</span>
-                          <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white text-[#1C1917] flex items-center justify-center group-hover:scale-105 group-hover:rotate-45 transition-transform duration-300 shadow-xs">
+                          <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white text-[#1C1917] flex items-center justify-center givento-arrow-nudge group-hover:scale-105 group-hover:rotate-45 transition-transform duration-300 shadow-xs">
                             <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.4]" />
                           </span>
                         </Link>
@@ -170,6 +203,26 @@ export default function HeroCarousel() {
           >
             <ChevronRight className="w-4 h-4" />
           </button>
+
+          {/* Mobile Compact Carousel Controls (bottom-right) */}
+          <div className="absolute bottom-2.5 right-3 z-20 flex sm:hidden items-center gap-1.5">
+            <button
+              type="button"
+              onClick={prevSlide}
+              aria-label="Previous slide"
+              className="w-7 h-7 rounded-full bg-white/90 text-[#1C1917] border border-[#EFE8E1] flex items-center justify-center shadow-xs active:scale-90 transition cursor-pointer"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={nextSlide}
+              aria-label="Next slide"
+              className="w-7 h-7 rounded-full bg-white/90 text-[#1C1917] border border-[#EFE8E1] flex items-center justify-center shadow-xs active:scale-90 transition cursor-pointer"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
 
           {/* Bottom Center White Notch with Indicator Pills */}
           <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 z-20">

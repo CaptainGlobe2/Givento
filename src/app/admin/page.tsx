@@ -1242,31 +1242,31 @@ export default function AdminDashboard() {
     stock: number;
     price?: number;
   }> = [
-    ...products.map((p) => ({
-      id: p.id,
-      name: p.name,
-      type: 'product' as const,
-      category: p.categoryName || p.realmName || 'Craft',
-      stock: p.stockQuantity ?? (p.inStock ? 15 : 0),
-      price: p.price ?? undefined,
-    })),
-    ...sheets.map((s) => ({
-      id: s.id,
-      name: `${s.name} (Wrapping Sheet)`,
-      type: 'wrapping_sheet' as const,
-      category: 'Bouquet Wrapping',
-      stock: s.stock,
-      price: s.price,
-    })),
-    ...decorations.map((d) => ({
-      id: d.id,
-      name: `${d.name} (Decoration)`,
-      type: 'decoration' as const,
-      category: 'Bouquet Decoration',
-      stock: d.stock ?? 25,
-      price: d.price,
-    })),
-  ];
+      ...products.map((p) => ({
+        id: p.id,
+        name: p.name,
+        type: 'product' as const,
+        category: p.categoryName || p.realmName || 'Craft',
+        stock: p.stockQuantity ?? (p.inStock ? 15 : 0),
+        price: p.price ?? undefined,
+      })),
+      ...sheets.map((s) => ({
+        id: s.id,
+        name: `${s.name} (Wrapping Sheet)`,
+        type: 'wrapping_sheet' as const,
+        category: 'Bouquet Wrapping',
+        stock: s.stock,
+        price: s.price,
+      })),
+      ...decorations.map((d) => ({
+        id: d.id,
+        name: `${d.name} (Decoration)`,
+        type: 'decoration' as const,
+        category: 'Bouquet Decoration',
+        stock: d.stock ?? 25,
+        price: d.price,
+      })),
+    ];
 
   const filteredInventory = allInventoryItems.filter((item) => {
     if (inventoryTypeFilter !== 'all' && item.type !== inventoryTypeFilter) return false;
@@ -1343,11 +1343,10 @@ export default function AdminDashboard() {
         <div className="flex gap-2 pb-3 mb-6 border-b border-[#EFE8E1] overflow-x-auto scrollbar-none flex-nowrap -mx-3 px-3 sm:mx-0 sm:px-0">
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'dashboard'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'dashboard'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <LayoutDashboard className="w-4 h-4" />
             <span>Dashboard</span>
@@ -1355,18 +1354,16 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('orders')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'orders'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'orders'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <ClipboardList className="w-4 h-4" />
             <span>Orders &amp; WhatsApp</span>
             <span
-              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                activeTab === 'orders' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
-              }`}
+              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'orders' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
+                }`}
             >
               {orders.length}
             </span>
@@ -1374,18 +1371,16 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('products')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'products'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'products'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <Package className="w-4 h-4" />
             <span>Products &amp; Crafts</span>
             <span
-              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                activeTab === 'products' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
-              }`}
+              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'products' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
+                }`}
             >
               {products.length}
             </span>
@@ -1393,11 +1388,10 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('realms')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'realms'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'realms'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <Layers className="w-4 h-4" />
             <span>Categories ({realms.length})</span>
@@ -1405,11 +1399,10 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('inventory')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'inventory'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'inventory'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <Boxes className="w-4 h-4" />
             <span>Inventory &amp; Stock</span>
@@ -1422,18 +1415,16 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('sheets')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'sheets'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'sheets'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <Sparkles className="w-4 h-4 text-[#C5A059]" />
             <span>Custom Studios</span>
             <span
-              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                activeTab === 'sheets' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
-              }`}
+              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'sheets' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
+                }`}
             >
               {sheets.length + custOptions.length}
             </span>
@@ -1441,18 +1432,16 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('requests')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'requests'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'requests'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <MessageSquare className="w-4 h-4" />
             <span>Bulk Requests</span>
             <span
-              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                activeTab === 'requests' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
-              }`}
+              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'requests' ? 'bg-[#FBF3E4] text-[#7A1C3B]' : 'bg-[#F3ECE2] text-[#6A5B60]'
+                }`}
             >
               {requests.length}
             </span>
@@ -1460,11 +1449,10 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('coupons')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'coupons'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'coupons'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <Tag className="w-4 h-4" />
             <span>Coupons</span>
@@ -1472,11 +1460,10 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('settings')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'settings'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'settings'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <Save className="w-4 h-4" />
             <span>Settings</span>
@@ -1484,11 +1471,10 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('analytics')}
-            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'analytics'
-                ? 'bg-[#7A1C3B] text-white shadow-xs'
-                : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
-            }`}
+            className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'analytics'
+              ? 'bg-[#7A1C3B] text-white shadow-xs'
+              : 'bg-white text-[#6A5B60] border border-[#EFE8E1] hover:bg-[#FAF7F2] hover:text-[#1C1917]'
+              }`}
           >
             <BarChart3 className="w-4 h-4" />
             <span>Profit &amp; Analytics</span>
@@ -1671,7 +1657,7 @@ export default function AdminDashboard() {
                       <span className="text-2xl font-bold font-heading text-[#1C1917] tabular-nums">
                         ₹{Math.round(
                           (orders.reduce((sum, o) => sum + (o.total || 0), 0) || 32450) /
-                            Math.max(1, orders.length || 168)
+                          Math.max(1, orders.length || 168)
                         ) || 193}
                       </span>
                     </div>
@@ -1715,33 +1701,30 @@ export default function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => setDashTrendPeriod('today')}
-                        className={`px-3 py-1 rounded-lg transition ${
-                          dashTrendPeriod === 'today'
-                            ? 'bg-[#EA580C] text-white shadow-2xs'
-                            : 'text-[#6A5B60] hover:text-[#1C1917]'
-                        }`}
+                        className={`px-3 py-1 rounded-lg transition ${dashTrendPeriod === 'today'
+                          ? 'bg-[#EA580C] text-white shadow-2xs'
+                          : 'text-[#6A5B60] hover:text-[#1C1917]'
+                          }`}
                       >
                         Today
                       </button>
                       <button
                         type="button"
                         onClick={() => setDashTrendPeriod('week')}
-                        className={`px-3 py-1 rounded-lg transition ${
-                          dashTrendPeriod === 'week'
-                            ? 'bg-[#EA580C] text-white shadow-2xs'
-                            : 'text-[#6A5B60] hover:text-[#1C1917]'
-                        }`}
+                        className={`px-3 py-1 rounded-lg transition ${dashTrendPeriod === 'week'
+                          ? 'bg-[#EA580C] text-white shadow-2xs'
+                          : 'text-[#6A5B60] hover:text-[#1C1917]'
+                          }`}
                       >
                         This Week
                       </button>
                       <button
                         type="button"
                         onClick={() => setDashTrendPeriod('month')}
-                        className={`px-3 py-1 rounded-lg transition ${
-                          dashTrendPeriod === 'month'
-                            ? 'bg-[#EA580C] text-white shadow-2xs'
-                            : 'text-[#6A5B60] hover:text-[#1C1917]'
-                        }`}
+                        className={`px-3 py-1 rounded-lg transition ${dashTrendPeriod === 'month'
+                          ? 'bg-[#EA580C] text-white shadow-2xs'
+                          : 'text-[#6A5B60] hover:text-[#1C1917]'
+                          }`}
                       >
                         This Month
                       </button>
@@ -2153,7 +2136,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Status Breakdown Pills */}
-                <div className="grid grid-cols-4 gap-2 text-center text-xs pt-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs pt-2">
                   <div className="bg-[#FAF7F2] p-2 rounded-xl">
                     <span className="text-[10px] font-bold text-emerald-600 block">64%</span>
                     <span className="font-bold text-[#1C1917] block">108</span>
@@ -2279,17 +2262,15 @@ export default function AdminDashboard() {
             {/* WhatsApp Notification Alert (Status update, Receipt, Cancellation) */}
             {orderAlertNotice && (
               <div
-                className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-xs animate-in fade-in ${
-                  orderAlertNotice.type === 'cancel'
-                    ? 'bg-rose-50 border-rose-300 text-rose-900'
-                    : 'bg-emerald-50 border-emerald-300 text-emerald-900'
-                }`}
+                className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-xs animate-in fade-in ${orderAlertNotice.type === 'cancel'
+                  ? 'bg-rose-50 border-rose-300 text-rose-900'
+                  : 'bg-emerald-50 border-emerald-300 text-emerald-900'
+                  }`}
               >
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2
-                    className={`w-5 h-5 shrink-0 ${
-                      orderAlertNotice.type === 'cancel' ? 'text-rose-600' : 'text-emerald-600'
-                    }`}
+                    className={`w-5 h-5 shrink-0 ${orderAlertNotice.type === 'cancel' ? 'text-rose-600' : 'text-emerald-600'
+                      }`}
                   />
                   <div>
                     <strong className="block font-semibold text-sm">{orderAlertNotice.message}</strong>
@@ -2303,11 +2284,10 @@ export default function AdminDashboard() {
                     href={orderAlertNotice.waUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`px-3.5 py-2 rounded-xl font-bold text-xs text-white flex items-center gap-1.5 transition shadow-xs ${
-                      orderAlertNotice.type === 'cancel'
-                        ? 'bg-rose-600 hover:bg-rose-700'
-                        : 'bg-emerald-600 hover:bg-emerald-700'
-                    }`}
+                    className={`px-3.5 py-2 rounded-xl font-bold text-xs text-white flex items-center gap-1.5 transition shadow-xs ${orderAlertNotice.type === 'cancel'
+                      ? 'bg-rose-600 hover:bg-rose-700'
+                      : 'bg-emerald-600 hover:bg-emerald-700'
+                      }`}
                   >
                     <MessageCircle className="w-4 h-4 fill-white text-white" />
                     <span>Open Customer WhatsApp</span>
@@ -2395,11 +2375,10 @@ export default function AdminDashboard() {
                   <button
                     key={ch.key}
                     onClick={() => setOrderChannelFilter(ch.key as any)}
-                    className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${
-                      orderChannelFilter === ch.key
-                        ? 'bg-[#7a1c3b] text-white shadow-xs'
-                        : 'bg-[#faf7f2] hover:bg-[#f5f5f4] text-[#44403c] border border-[#EFE8E1]'
-                    }`}
+                    className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${orderChannelFilter === ch.key
+                      ? 'bg-[#7a1c3b] text-white shadow-xs'
+                      : 'bg-[#faf7f2] hover:bg-[#f5f5f4] text-[#44403c] border border-[#EFE8E1]'
+                      }`}
                   >
                     {ch.label}
                   </button>
@@ -2422,11 +2401,10 @@ export default function AdminDashboard() {
                   <button
                     key={st.key}
                     onClick={() => setOrderStatusFilter(st.key as any)}
-                    className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${
-                      orderStatusFilter === st.key
-                        ? 'bg-[#7a1c3b] text-white shadow-xs'
-                        : 'bg-[#faf7f2] hover:bg-[#f5f5f4] text-[#44403c] border border-[#EFE8E1]'
-                    }`}
+                    className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${orderStatusFilter === st.key
+                      ? 'bg-[#7a1c3b] text-white shadow-xs'
+                      : 'bg-[#faf7f2] hover:bg-[#f5f5f4] text-[#44403c] border border-[#EFE8E1]'
+                      }`}
                   >
                     {st.label}
                   </button>
@@ -2457,23 +2435,22 @@ export default function AdminDashboard() {
 
                           {/* Channel Badge */}
                           <span
-                            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${
-                              channel === 'website'
-                                ? 'bg-sky-50 text-sky-800 border-sky-300'
-                                : channel === 'whatsapp'
+                            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${channel === 'website'
+                              ? 'bg-sky-50 text-sky-800 border-sky-300'
+                              : channel === 'whatsapp'
                                 ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                                 : channel === 'instagram'
-                                ? 'bg-pink-50 text-pink-800 border-pink-300'
-                                : 'bg-purple-50 text-purple-800 border-purple-300'
-                            }`}
+                                  ? 'bg-pink-50 text-pink-800 border-pink-300'
+                                  : 'bg-purple-50 text-purple-800 border-purple-300'
+                              }`}
                           >
                             {channel === 'website'
                               ? '🌐 Website'
                               : channel === 'whatsapp'
-                              ? '💬 Direct WhatsApp'
-                              : channel === 'instagram'
-                              ? '📸 Instagram DM'
-                              : '🎪 Expo Stall'}
+                                ? '💬 Direct WhatsApp'
+                                : channel === 'instagram'
+                                  ? '📸 Instagram DM'
+                                  : '🎪 Expo Stall'}
                           </span>
 
                           <span className="text-xs text-[#78716c] font-mono hidden sm:inline">
@@ -2495,17 +2472,16 @@ export default function AdminDashboard() {
 
                           {/* Payment Status Pill */}
                           <span
-                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
-                              order.paymentStatus === 'Fully Paid' || order.paymentStatus === 'Paid'
-                                ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                                : order.paymentStatus === 'Advance Paid'
+                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${order.paymentStatus === 'Fully Paid' || order.paymentStatus === 'Paid'
+                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                              : order.paymentStatus === 'Advance Paid'
                                 ? 'bg-amber-50 text-amber-800 border-amber-300'
                                 : order.paymentStatus === 'Cash on Delivery'
-                                ? 'bg-blue-50 text-blue-800 border-blue-300'
-                                : order.paymentStatus === 'Expo Cash / UPI'
-                                ? 'bg-purple-50 text-purple-800 border-purple-300'
-                                : 'bg-rose-50 text-rose-800 border-rose-300'
-                            }`}
+                                  ? 'bg-blue-50 text-blue-800 border-blue-300'
+                                  : order.paymentStatus === 'Expo Cash / UPI'
+                                    ? 'bg-purple-50 text-purple-800 border-purple-300'
+                                    : 'bg-rose-50 text-rose-800 border-rose-300'
+                              }`}
                           >
                             {order.paymentStatus || 'Unpaid'}
                           </span>
@@ -2889,11 +2865,10 @@ export default function AdminDashboard() {
 
                         <button
                           onClick={() => handleToggleProductStock(p.id, p.inStock)}
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border transition ${
-                            !isOut
-                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                              : 'bg-rose-50 text-rose-800 border-rose-300'
-                          }`}
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border transition ${!isOut
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : 'bg-rose-50 text-rose-800 border-rose-300'
+                            }`}
                           title="Click to toggle availability"
                         >
                           {!isOut ? 'Available' : 'Out of Stock'}
@@ -3101,11 +3076,10 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => handleToggleCategory(cat.id, cat.isActive !== false)}
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
-                            cat.isActive !== false
-                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                              : 'bg-rose-50 text-rose-800 border-rose-300'
-                          }`}
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${cat.isActive !== false
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : 'bg-rose-50 text-rose-800 border-rose-300'
+                            }`}
                         >
                           {cat.isActive !== false ? 'Active' : 'Hidden'}
                         </button>
@@ -3190,11 +3164,10 @@ export default function AdminDashboard() {
                               <button
                                 type="button"
                                 onClick={() => handleToggleSubcategory(sub.id, sub.isActive)}
-                                className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                                  sub.isActive
-                                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                                    : 'bg-rose-50 text-rose-800 border-rose-300'
-                                }`}
+                                className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${sub.isActive
+                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                                  : 'bg-rose-50 text-rose-800 border-rose-300'
+                                  }`}
                               >
                                 {sub.isActive ? 'Active' : 'Hidden'}
                               </button>
@@ -3422,11 +3395,10 @@ export default function AdminDashboard() {
                           <td className="p-3 capitalize text-[#78716c]">{tx.itemType.replace('_', ' ')}</td>
                           <td className="p-3 font-display font-bold text-sm tabular-nums">
                             <span
-                              className={`px-2 py-0.5 rounded text-xs ${
-                                tx.changeQuantity > 0
-                                  ? 'bg-emerald-50 text-emerald-800'
-                                  : 'bg-rose-50 text-rose-800'
-                              }`}
+                              className={`px-2 py-0.5 rounded text-xs ${tx.changeQuantity > 0
+                                ? 'bg-emerald-50 text-emerald-800'
+                                : 'bg-rose-50 text-rose-800'
+                                }`}
                             >
                               {tx.changeQuantity > 0 ? `+${tx.changeQuantity}` : tx.changeQuantity}
                             </span>
@@ -3569,11 +3541,10 @@ export default function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => handleToggleCoupon(c.code)}
-                        className={`text-xs font-semibold px-3 py-1 rounded-lg border transition cursor-pointer ${
-                          c.isActive
-                            ? 'text-amber-700 bg-amber-50 border-amber-200 hover:bg-amber-100'
-                            : 'text-emerald-700 bg-emerald-50 border-emerald-200 hover:bg-emerald-100'
-                        }`}
+                        className={`text-xs font-semibold px-3 py-1 rounded-lg border transition cursor-pointer ${c.isActive
+                          ? 'text-amber-700 bg-amber-50 border-amber-200 hover:bg-amber-100'
+                          : 'text-emerald-700 bg-emerald-50 border-emerald-200 hover:bg-emerald-100'
+                          }`}
                       >
                         {c.isActive ? 'Deactivate' : 'Activate'}
                       </button>
@@ -3762,11 +3733,10 @@ export default function AdminDashboard() {
                   key={f.id}
                   type="button"
                   onClick={() => setCustStudioFilter(f.id as any)}
-                  className={`px-3 py-1 rounded-full font-medium transition cursor-pointer ${
-                    custStudioFilter === f.id
-                      ? 'bg-[#7a1c3b] text-white font-bold shadow-xs'
-                      : 'bg-white border border-[#EFE8E1] text-[#44403c] hover:bg-[#faf7f2]'
-                  }`}
+                  className={`px-3 py-1 rounded-full font-medium transition cursor-pointer ${custStudioFilter === f.id
+                    ? 'bg-[#7a1c3b] text-white font-bold shadow-xs'
+                    : 'bg-white border border-[#EFE8E1] text-[#44403c] hover:bg-[#faf7f2]'
+                    }`}
                 >
                   {f.label}
                 </button>
@@ -3801,11 +3771,10 @@ export default function AdminDashboard() {
                         <span>Stock: <strong>{s.stock} units</strong></span>
                         <button
                           onClick={() => handleToggleSheetActive(s.id, s.active)}
-                          className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                            s.active
-                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                              : 'bg-rose-50 text-rose-800 border-rose-300'
-                          }`}
+                          className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${s.active
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : 'bg-rose-50 text-rose-800 border-rose-300'
+                            }`}
                         >
                           {s.active ? 'In Stock' : 'Hidden'}
                         </button>
@@ -3853,11 +3822,10 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => handleToggleSizeActive(sz.id, sz.isActive)}
-                          className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                            sz.isActive
-                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                              : 'bg-rose-50 text-rose-800 border-rose-300'
-                          }`}
+                          className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${sz.isActive
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : 'bg-rose-50 text-rose-800 border-rose-300'
+                            }`}
                         >
                           {sz.isActive ? 'Active' : 'Disabled'}
                         </button>
@@ -3908,11 +3876,10 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => handleToggleDecActive(dec.id, dec.isActive)}
-                          className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                            dec.isActive
-                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                              : 'bg-rose-50 text-rose-800 border-rose-300'
-                          }`}
+                          className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${dec.isActive
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : 'bg-rose-50 text-rose-800 border-rose-300'
+                            }`}
                         >
                           {dec.isActive ? 'Active' : 'Hidden'}
                         </button>
@@ -3987,11 +3954,10 @@ export default function AdminDashboard() {
                                 <button
                                   type="button"
                                   onClick={() => handleToggleCustOptionActive(opt.id, opt.isActive)}
-                                  className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                                    opt.isActive
-                                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                                      : 'bg-rose-50 text-rose-800 border-rose-300'
-                                  }`}
+                                  className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${opt.isActive
+                                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                                    : 'bg-rose-50 text-rose-800 border-rose-300'
+                                    }`}
                                 >
                                   {opt.isActive ? 'Active' : 'Disabled'}
                                 </button>
@@ -4137,11 +4103,10 @@ export default function AdminDashboard() {
                     key={range.id}
                     type="button"
                     onClick={() => handleFilterDateRange(range.id)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer whitespace-nowrap ${
-                      analyticsDateRange === range.id
-                        ? 'bg-[#7a1c3b] text-white font-semibold'
-                        : 'bg-[#faf7f2] text-[#44403c] hover:bg-[#f5eee6] border border-[#EFE8E1]'
-                    }`}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer whitespace-nowrap ${analyticsDateRange === range.id
+                      ? 'bg-[#7a1c3b] text-white font-semibold'
+                      : 'bg-[#faf7f2] text-[#44403c] hover:bg-[#f5eee6] border border-[#EFE8E1]'
+                      }`}
                   >
                     {range.label}
                   </button>
@@ -4447,11 +4412,10 @@ export default function AdminDashboard() {
                           </td>
                           <td className="py-2 px-3 text-center">
                             <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold tabular-nums ${
-                                po.grossMarginPercentage >= 50
-                                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                                  : 'bg-amber-50 text-amber-800 border border-amber-200'
-                              }`}
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold tabular-nums ${po.grossMarginPercentage >= 50
+                                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                                : 'bg-amber-50 text-amber-800 border border-amber-200'
+                                }`}
                             >
                               {po.grossMarginPercentage}%
                             </span>
@@ -4492,11 +4456,10 @@ export default function AdminDashboard() {
                       key={cf.id}
                       type="button"
                       onClick={() => setExpenseFilterCategory(cf.id)}
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium transition cursor-pointer ${
-                        expenseFilterCategory === cf.id
-                          ? 'bg-[#7a1c3b] text-white font-semibold'
-                          : 'bg-[#faf7f2] text-[#44403c] hover:bg-[#f5ece1]'
-                      }`}
+                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium transition cursor-pointer ${expenseFilterCategory === cf.id
+                        ? 'bg-[#7a1c3b] text-white font-semibold'
+                        : 'bg-[#faf7f2] text-[#44403c] hover:bg-[#f5ece1]'
+                        }`}
                     >
                       {cf.label}
                     </button>
@@ -4522,8 +4485,8 @@ export default function AdminDashboard() {
                         expenseFilterCategory === 'all'
                           ? true
                           : e.category === expenseFilterCategory ||
-                            (expenseFilterCategory === 'marketing_ads' && (e.category === 'marketing' as any)) ||
-                            (expenseFilterCategory === 'shipping_courier' && (e.category === 'courier_dispatch' as any))
+                          (expenseFilterCategory === 'marketing_ads' && (e.category === 'marketing' as any)) ||
+                          (expenseFilterCategory === 'shipping_courier' && (e.category === 'courier_dispatch' as any))
                       )
                       .length === 0 ? (
                       <tr>
@@ -4537,8 +4500,8 @@ export default function AdminDashboard() {
                           expenseFilterCategory === 'all'
                             ? true
                             : e.category === expenseFilterCategory ||
-                              (expenseFilterCategory === 'marketing_ads' && (e.category === 'marketing' as any)) ||
-                              (expenseFilterCategory === 'shipping_courier' && (e.category === 'courier_dispatch' as any))
+                            (expenseFilterCategory === 'marketing_ads' && (e.category === 'marketing' as any)) ||
+                            (expenseFilterCategory === 'shipping_courier' && (e.category === 'courier_dispatch' as any))
                         )
                         .map((exp) => (
                           <tr key={exp.id} className="hover:bg-[#fffdfa] transition">
@@ -5367,23 +5330,22 @@ export default function AdminDashboard() {
                 </span>
 
                 <span
-                  className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                    selectedOrderDetail.channel === 'website'
-                      ? 'bg-sky-50 text-sky-800 border-sky-300'
-                      : selectedOrderDetail.channel === 'whatsapp'
+                  className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${selectedOrderDetail.channel === 'website'
+                    ? 'bg-sky-50 text-sky-800 border-sky-300'
+                    : selectedOrderDetail.channel === 'whatsapp'
                       ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                       : selectedOrderDetail.channel === 'instagram'
-                      ? 'bg-pink-50 text-pink-800 border-pink-300'
-                      : 'bg-purple-50 text-purple-800 border-purple-300'
-                  }`}
+                        ? 'bg-pink-50 text-pink-800 border-pink-300'
+                        : 'bg-purple-50 text-purple-800 border-purple-300'
+                    }`}
                 >
                   {selectedOrderDetail.channel === 'website'
                     ? '🌐 Website'
                     : selectedOrderDetail.channel === 'whatsapp'
-                    ? '💬 Direct WhatsApp'
-                    : selectedOrderDetail.channel === 'instagram'
-                    ? '📸 Instagram DM'
-                    : '🎪 Expo Stall'}
+                      ? '💬 Direct WhatsApp'
+                      : selectedOrderDetail.channel === 'instagram'
+                        ? '📸 Instagram DM'
+                        : '🎪 Expo Stall'}
                 </span>
 
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#fbf3e4] text-[#7a1c3b] border border-[#c5a059]/30">
@@ -5419,11 +5381,10 @@ export default function AdminDashboard() {
                   <button
                     key={st}
                     onClick={() => handleUpdateStatusInDetail(st)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition ${
-                      selectedOrderDetail.status === st
-                        ? 'bg-[#7a1c3b] text-white shadow-xs'
-                        : 'bg-white hover:bg-[#f5f5f4] text-[#44403c] border border-[#EFE8E1]'
-                    }`}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition ${selectedOrderDetail.status === st
+                      ? 'bg-[#7a1c3b] text-white shadow-xs'
+                      : 'bg-white hover:bg-[#f5f5f4] text-[#44403c] border border-[#EFE8E1]'
+                      }`}
                   >
                     {st}
                   </button>
@@ -5859,22 +5820,20 @@ export default function AdminDashboard() {
               <button
                 type="button"
                 onClick={() => setPackingSlipFilter('active')}
-                className={`px-3 py-1 rounded-lg transition ${
-                  packingSlipFilter === 'active'
-                    ? 'bg-[#7a1c3b] text-white font-semibold'
-                    : 'bg-[#faf7f2] text-[#44403c] border border-[#EFE8E1]'
-                }`}
+                className={`px-3 py-1 rounded-lg transition ${packingSlipFilter === 'active'
+                  ? 'bg-[#7a1c3b] text-white font-semibold'
+                  : 'bg-[#faf7f2] text-[#44403c] border border-[#EFE8E1]'
+                  }`}
               >
                 Active Workshop Orders (Received / Crafting / Packed)
               </button>
               <button
                 type="button"
                 onClick={() => setPackingSlipFilter('all')}
-                className={`px-3 py-1 rounded-lg transition ${
-                  packingSlipFilter === 'all'
-                    ? 'bg-[#7a1c3b] text-white font-semibold'
-                    : 'bg-[#faf7f2] text-[#44403c] border border-[#EFE8E1]'
-                }`}
+                className={`px-3 py-1 rounded-lg transition ${packingSlipFilter === 'all'
+                  ? 'bg-[#7a1c3b] text-white font-semibold'
+                  : 'bg-[#faf7f2] text-[#44403c] border border-[#EFE8E1]'
+                  }`}
               >
                 All Orders ({orders.length})
               </button>
@@ -5958,7 +5917,7 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Items List */}
-                    <div>
+                    <div className="overflow-x-auto">
                       <span className="text-[10px] uppercase font-bold text-[#78716c] tracking-wider block mb-1.5">
                         Items for Parcel Assembly
                       </span>

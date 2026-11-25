@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Heart,
   Star,
@@ -73,12 +74,12 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
     };
   }, []);
 
-  // Sync search query from URL parameter if it changes
-  useEffect(() => {
-    if (initialSearch) {
-      setSearchQuery(initialSearch);
-    }
-  }, [initialSearch]);
+  const [prevInitialSearch, setPrevInitialSearch] = useState<string>(initialSearch);
+
+  if (initialSearch !== prevInitialSearch) {
+    setPrevInitialSearch(initialSearch);
+    setSearchQuery(initialSearch);
+  }
 
   // Active categories list
   const activeCategories = useMemo(() => {
@@ -188,46 +189,59 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-24 md:pb-0">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-28">
       <Navbar />
 
       <main className="flex-1 max-w-[1240px] mx-auto px-3.5 sm:px-6 py-3 sm:py-5 w-full">
-        {/* 1. Category Switcher Bar (Smooth Horizontal Scrollable Strip) */}
-        <div className="mb-3.5 overflow-x-auto scrollbar-none -mx-3.5 px-3.5 sm:mx-0 sm:px-0">
-          <div className="flex items-center gap-2 min-w-max pb-1">
-            <Link
-              href="/category/all"
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                isAll
-                  ? 'bg-[#7A1C3B] text-white shadow-xs'
-                  : 'bg-white text-[#6A5B60] hover:text-[#1C1917] border border-[#EFE8E1] hover:bg-[#FAF7F2]'
-              }`}
-            >
-              All Pieces
-            </Link>
+        {/* 1. Pinned Back to Home Pill + Horizontal Category Switcher Bar */}
+        <div className="flex items-center gap-2 mb-3.5">
+          <Link
+            href="/"
+            aria-label="Back to Home"
+            className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E4DAD0] hover:border-[#7A1C3B]/40 text-xs font-semibold text-[#1C1917] hover:text-[#7A1C3B] shadow-2xs transition-all active:scale-95"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-[#7A1C3B]" />
+            <span>Home</span>
+          </Link>
 
-            {activeCategories.map((c) => {
-              const active = !isAll && (c.slug === slug || c.id === slug || c.groupKey === slug);
-              return (
-                <Link
-                  key={c.id}
-                  href={`/category/${c.slug}`}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                    active
-                      ? 'bg-[#7A1C3B] text-white shadow-xs'
-                      : 'bg-white text-[#6A5B60] hover:text-[#1C1917] border border-[#EFE8E1] hover:bg-[#FAF7F2]'
-                  }`}
-                >
-                  <span>{c.icon || '✨'}</span>
-                  <span>{c.name}</span>
-                </Link>
-              );
-            })}
+          <div className="h-4 w-px bg-[#E4DAD0] shrink-0" />
+
+          <div className="flex-1 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-2 min-w-max py-0.5">
+              <Link
+                href="/category/all"
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95 ${
+                  isAll
+                    ? 'bg-[#7A1C3B] text-white shadow-xs'
+                    : 'bg-white text-[#6A5B60] hover:text-[#1C1917] border border-[#EFE8E1] hover:bg-[#FAF7F2]'
+                }`}
+              >
+                All Pieces
+              </Link>
+
+              {activeCategories.map((c) => {
+                const active = !isAll && (c.slug === slug || c.id === slug || c.groupKey === slug);
+                return (
+                  <Link
+                    key={c.id}
+                    href={`/category/${c.slug}`}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95 flex items-center gap-1.5 ${
+                      active
+                        ? 'bg-[#7A1C3B] text-white shadow-xs'
+                        : 'bg-white text-[#6A5B60] hover:text-[#1C1917] border border-[#EFE8E1] hover:bg-[#FAF7F2]'
+                    }`}
+                  >
+                    <span>{c.icon || '✨'}</span>
+                    <span>{c.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* 2. Unified Toolbar: Title & Count on Left, Search & Sort on Right */}
-        <div className="flex items-center justify-between gap-3 mb-4 pb-2.5 border-b border-[#EFE8E1]">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 mb-4 pb-2.5 border-b border-[#EFE8E1]">
           {/* Title & Count */}
           <div className="flex items-baseline gap-2 min-w-0">
             <h1 className="font-heading font-medium text-xl sm:text-2xl text-[#1C1917] tracking-tight truncate">
@@ -239,16 +253,16 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
           </div>
 
           {/* Search & Sort */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto max-w-full">
             {/* Search Input - Sleek Pill */}
-            <div className="relative w-36 sm:w-48">
+            <div className="relative flex-1 min-w-[130px] sm:flex-initial sm:w-48">
               <Search className="w-3.5 h-3.5 text-[#8C827A] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-8 pl-7.5 pr-6 bg-white border border-[#E4DAD0] rounded-full text-xs text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B] focus:ring-1 focus:ring-[#7A1C3B]/20 shadow-2xs transition-all"
+                className="w-full h-8 pl-8 pr-6 bg-white border border-[#E4DAD0] rounded-full text-xs text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B] focus:ring-1 focus:ring-[#7A1C3B]/20 shadow-2xs transition-all"
               />
               {searchQuery && (
                 <button
@@ -289,39 +303,47 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
               </button>
 
               {/* Floating Menu */}
-              {isSortOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-[#EFE8E1] py-1.5 z-40 animate-in fade-in zoom-in-95 duration-150">
-                  <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#8C827A] border-b border-[#F5EFE8] mb-1">
-                    Sort Collection
-                  </div>
-                  {[
-                    { id: 'featured', label: 'Featured' },
-                    { id: 'price-asc', label: 'Price: Low to High' },
-                    { id: 'price-desc', label: 'Price: High to Low' },
-                    { id: 'rating', label: 'Top Rated' },
-                  ].map((option) => {
-                    const isSelected = sortBy === option.id;
-                    return (
-                      <button
-                        key={option.id}
-                        type="button"
-                        onClick={() => {
-                          setSortBy(option.id as any);
-                          setIsSortOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-left transition-colors cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#FAF7F2] text-[#7A1C3B] font-semibold'
-                            : 'text-[#1C1917] hover:bg-[#FAF7F2] hover:text-[#7A1C3B]'
-                        }`}
-                      >
-                        <span>{option.label}</span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-[#7A1C3B]" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+              <AnimatePresence>
+                {isSortOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.94, y: -6 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -4 }}
+                    transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-[#EFE8E1] py-1.5 z-40 origin-top-right"
+                  >
+                    <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#8C827A] border-b border-[#F5EFE8] mb-1">
+                      Sort Collection
+                    </div>
+                    {([
+                      { id: 'featured', label: 'Featured' },
+                      { id: 'price-asc', label: 'Price: Low to High' },
+                      { id: 'price-desc', label: 'Price: High to Low' },
+                      { id: 'rating', label: 'Top Rated' },
+                    ] as const).map((option) => {
+                      const isSelected = sortBy === option.id;
+                      return (
+                        <button
+                          key={option.id}
+                          type="button"
+                          onClick={() => {
+                            setSortBy(option.id);
+                            setIsSortOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-left active:bg-[#FAF7F2] transition-colors cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#FAF7F2] text-[#7A1C3B] font-semibold'
+                              : 'text-[#1C1917] hover:bg-[#FAF7F2] hover:text-[#7A1C3B]'
+                          }`}
+                        >
+                          <span>{option.label}</span>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-[#7A1C3B]" />}
+                        </button>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -332,7 +354,7 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
             <button
               type="button"
               onClick={() => setSelectedSubcategory('all')}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all active:scale-95 cursor-pointer ${
                 selectedSubcategory === 'all'
                   ? 'bg-[#1C1917] text-white shadow-xs'
                   : 'bg-white text-[#6A5B60] hover:bg-[#FAF7F2] border border-[#EFE8E1]'
@@ -345,7 +367,7 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
                 key={sub.id}
                 type="button"
                 onClick={() => setSelectedSubcategory(sub.id)}
-                className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all active:scale-95 cursor-pointer ${
                   selectedSubcategory === sub.id
                     ? 'bg-[#1C1917] text-white shadow-xs'
                     : 'bg-white text-[#6A5B60] hover:bg-[#FAF7F2] border border-[#EFE8E1]'
@@ -385,7 +407,7 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 mb-12">
-            {sortedProducts.map((p) => {
+            {sortedProducts.map((p, idx) => {
               const inWish = isInWishlist(p.id);
               const isAdded = addedProductId === p.id;
               const hasPrice = p.price !== undefined && p.price !== null;
@@ -400,7 +422,8 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
               return (
                 <div
                   key={p.id}
-                  className="group bg-white rounded-2xl sm:rounded-3xl border border-[#EFE8E1] overflow-hidden hover:border-[#DFD5CB] hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                  style={{ animationDelay: `${Math.min(idx, 10) * 35}ms` }}
+                  className="group bg-white rounded-2xl sm:rounded-3xl border border-[#EFE8E1] overflow-hidden hover:border-[#DFD5CB] hover:shadow-md transition-all duration-300 flex flex-col justify-between animate-card-rise"
                 >
                   <div>
                     {/* Image Container with Floating Action Badges */}
@@ -443,7 +466,7 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
                           toggleWishlist(p);
                         }}
                         aria-label={inWish ? 'Remove from wishlist' : 'Add to wishlist'}
-                        className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all z-10 cursor-pointer ${
+                        className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-all z-10 cursor-pointer ${
                           inWish
                             ? 'bg-[#7A1C3B] text-white shadow-xs scale-105'
                             : 'bg-white/95 text-[#78716C] hover:text-[#7A1C3B] hover:bg-white shadow-2xs'
@@ -504,7 +527,7 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
                     <button
                       type="button"
                       onClick={(e) => handleAddToCart(p, e)}
-                      className={`w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      className={`w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer ${
                         isAdded
                           ? 'bg-[#7A1C3B] text-white shadow-2xs'
                           : 'bg-[#7A1C3B] hover:bg-[#5a1230] text-white shadow-xs'

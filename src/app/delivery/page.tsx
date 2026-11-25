@@ -19,7 +19,7 @@ import {
 
 export default function DeliveryPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B]">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-28">
       <Navbar />
 
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-14 space-y-12">
@@ -65,7 +65,7 @@ export default function DeliveryPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Step 1 */}
-            <div className="bg-white rounded-2xl p-5 border border-[#EFE8E1] space-y-3 hover:border-[#7A1C3B]/30 transition group">
+            <div style={{ animationDelay: '0ms' }} className="bg-white rounded-2xl p-5 border border-[#EFE8E1] space-y-3 hover:border-[#7A1C3B]/30 active:scale-[0.98] transition group animate-card-rise">
               <div className="w-10 h-10 rounded-xl bg-[#F6E9EE] text-[#7A1C3B] flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">
                 01
               </div>
@@ -78,7 +78,7 @@ export default function DeliveryPage() {
             </div>
 
             {/* Step 2 */}
-            <div className="bg-white rounded-2xl p-5 border border-[#EFE8E1] space-y-3 hover:border-[#7A1C3B]/30 transition group">
+            <div style={{ animationDelay: '60ms' }} className="bg-white rounded-2xl p-5 border border-[#EFE8E1] space-y-3 hover:border-[#7A1C3B]/30 active:scale-[0.98] transition group animate-card-rise">
               <div className="w-10 h-10 rounded-xl bg-[#F6E9EE] text-[#7A1C3B] flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">
                 02
               </div>
@@ -91,7 +91,7 @@ export default function DeliveryPage() {
             </div>
 
             {/* Step 3 */}
-            <div className="bg-white rounded-2xl p-5 border border-[#EFE8E1] space-y-3 hover:border-[#7A1C3B]/30 transition group">
+            <div style={{ animationDelay: '120ms' }} className="bg-white rounded-2xl p-5 border border-[#EFE8E1] space-y-3 hover:border-[#7A1C3B]/30 active:scale-[0.98] transition group animate-card-rise">
               <div className="w-10 h-10 rounded-xl bg-[#F6E9EE] text-[#7A1C3B] flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">
                 03
               </div>
@@ -104,7 +104,7 @@ export default function DeliveryPage() {
             </div>
 
             {/* Step 4 */}
-            <div className="bg-white rounded-2xl p-5 border border-[#EFE8E1] space-y-3 hover:border-[#7A1C3B]/30 transition group">
+            <div style={{ animationDelay: '180ms' }} className="bg-white rounded-2xl p-5 border border-[#EFE8E1] space-y-3 hover:border-[#7A1C3B]/30 active:scale-[0.98] transition group animate-card-rise">
               <div className="w-10 h-10 rounded-xl bg-[#F6E9EE] text-[#7A1C3B] flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">
                 04
               </div>
@@ -130,34 +130,34 @@ export default function DeliveryPage() {
           </div>
 
           <div className="divide-y divide-[#EFE8E1] text-xs sm:text-sm">
-            <div className="py-3.5 flex items-center justify-between">
-              <div>
+            <div className="py-3.5 flex items-center justify-between gap-3">
+              <div className="min-w-0">
                 <b className="text-[#1C1917] block font-medium">Adirampattinam Local Studio Pickup</b>
                 <span className="text-[#8C827A] text-xs">East Coast Road, Adirampattinam</span>
               </div>
-              <div className="text-right">
+              <div className="text-right shrink-0">
                 <span className="font-bold text-[#7A1C3B]">FREE</span>
                 <span className="block text-[11px] text-[#8C827A]">Ready in 24 hrs</span>
               </div>
             </div>
 
-            <div className="py-3.5 flex items-center justify-between">
-              <div>
+            <div className="py-3.5 flex items-center justify-between gap-3">
+              <div className="min-w-0">
                 <b className="text-[#1C1917] block font-medium">Tamil Nadu Express</b>
                 <span className="text-[#8C827A] text-xs">Chennai, Coimbatore, Madurai, Trichy, Salem, etc.</span>
               </div>
-              <div className="text-right">
+              <div className="text-right shrink-0">
                 <span className="font-bold text-[#1C1917]">₹50 <span className="text-[10px] text-[#8C827A] font-normal">(Free over ₹899)</span></span>
                 <span className="block text-[11px] text-[#8C827A]">2 – 3 business days</span>
               </div>
             </div>
 
-            <div className="py-3.5 flex items-center justify-between">
-              <div>
+            <div className="py-3.5 flex items-center justify-between gap-3">
+              <div className="min-w-0">
                 <b className="text-[#1C1917] block font-medium">Rest of India</b>
                 <span className="text-[#8C827A] text-xs">Bangalore, Mumbai, Delhi, Hyderabad, Kolkata, etc.</span>
               </div>
-              <div className="text-right">
+              <div className="text-right shrink-0">
                 <span className="font-bold text-[#1C1917]">₹70 <span className="text-[10px] text-[#8C827A] font-normal">(Free over ₹999)</span></span>
                 <span className="block text-[11px] text-[#8C827A]">4 – 6 business days</span>
               </div>
@@ -190,14 +190,14 @@ export default function DeliveryPage() {
               href="https://wa.me/919344013255"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#7A1C3B] hover:bg-[#5A1230] text-white text-xs font-bold transition shadow-xs"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#7A1C3B] hover:bg-[#5A1230] text-white text-xs font-bold active:scale-95 transition shadow-xs"
             >
               <MessageCircle className="w-4 h-4" />
               <span>Contact Delivery Desk</span>
             </a>
             <Link
               href="/track"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-[#EFE8E1] text-[#1C1917] text-xs font-semibold hover:border-[#7A1C3B] transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-[#EFE8E1] text-[#1C1917] text-xs font-semibold hover:border-[#7A1C3B] active:scale-95 transition"
             >
               <span>Track Existing Order</span>
             </Link>

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { AnimatePresence, motion } from 'framer-motion';
 import { X, User, Phone, MapPin, Building2, Hash, FileText, CheckCircle2, Sparkles } from 'lucide-react';
 import { AdminOrder } from '../lib/database';
 import { ParticleButton } from '@/components/ui/particle-button';
@@ -48,8 +49,6 @@ export default function OrderInfoModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [preparedWaUrl, setPreparedWaUrl] = useState('');
   const [createdOrder, setCreatedOrder] = useState<AdminOrder | null>(null);
-
-  if (!isOpen) return null;
 
   const validate = (): boolean => {
     const e: Partial<OrderInfoData> = {};
@@ -110,22 +109,37 @@ export default function OrderInfoModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl border border-[#EFE8E1] shadow-2xl max-h-[92vh] overflow-y-auto">
-        {/* Header */}
-        <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-[#EFE8E1] px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
-          <div>
-            <h2 className="font-display font-normal text-xl text-[#1C1917] tracking-tight">Delivery &amp; Order Details</h2>
-            <p className="text-xs text-[#78716C] mt-0.5">Enter delivery contact &amp; address for doorstep delivery</p>
-          </div>
-          <button
-            type="button"
-            onClick={handleClose}
-            className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#EFE8E1] flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] transition-colors cursor-pointer"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 36 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 24 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+            className="relative bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl border border-[#EFE8E1] shadow-2xl max-h-[92dvh] overflow-y-auto safe-bottom"
           >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+            {/* Header */}
+            <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-[#EFE8E1] px-4 sm:px-6 py-4 flex items-center justify-between gap-3 rounded-t-3xl z-10">
+              <div className="min-w-0">
+                <h2 className="font-display font-normal text-xl text-[#1C1917] tracking-tight">Delivery &amp; Order Details</h2>
+                <p className="text-xs text-[#78716C] mt-0.5">Enter delivery contact &amp; address for doorstep delivery</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleClose}
+                aria-label="Close modal"
+                className="shrink-0 w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#EFE8E1] flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] active:scale-90 transition-all cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
         {submitted ? (
           /* Order Confirmed Success Screen */
@@ -209,6 +223,7 @@ export default function OrderInfoModal({
             <div className="w-full space-y-2 pt-2">
               <Link
                 href="/track"
+                onClick={handleClose}
                 className="w-full py-3.5 px-5 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
               >
                 <span>Go to Orders Page (View Complete Details)</span>
@@ -218,6 +233,7 @@ export default function OrderInfoModal({
               {createdOrder?.id && (
                 <Link
                   href={`/order/${createdOrder.id}`}
+                  onClick={handleClose}
                   className="w-full py-2.5 px-4 rounded-xl border border-[#7A1C3B]/20 bg-[#FAF7F2] hover:bg-[#F6E9EE] text-[#7A1C3B] font-semibold text-xs flex items-center justify-center gap-2 cursor-pointer transition"
                 >
                   <Sparkles className="w-4 h-4" />
@@ -235,7 +251,7 @@ export default function OrderInfoModal({
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
             {/* Informational banner */}
             <div className="p-3.5 bg-[#FAF7F2] border border-[#EFE8E1] rounded-2xl text-xs text-[#6A5B60] flex items-start gap-2.5">
               <span className="text-base leading-none">🌸</span>
@@ -278,7 +294,7 @@ export default function OrderInfoModal({
                   value={form.phone}
                   onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value.replace(/\D/g, '') }))}
                   placeholder="9876543210"
-                  className={`flex-1 px-3.5 py-2.5 bg-[#FAF7F2]/60 focus:bg-white border rounded-r-xl text-xs sm:text-sm text-[#1C1917] placeholder:text-[#A89F91] focus:outline-none transition ${errors.phone ? 'border-[#B3261E]' : 'border-[#EFE8E1] focus:border-[#7A1C3B] focus:ring-2 focus:ring-[#7A1C3B]/20'}`}
+                  className={`flex-1 min-w-0 px-3.5 py-2.5 bg-[#FAF7F2]/60 focus:bg-white border rounded-r-xl text-xs sm:text-sm text-[#1C1917] placeholder:text-[#A89F91] focus:outline-none transition ${errors.phone ? 'border-[#B3261E]' : 'border-[#EFE8E1] focus:border-[#7A1C3B] focus:ring-2 focus:ring-[#7A1C3B]/20'}`}
                 />
               </div>
               <p className="text-[10px] text-[#8C827A]">Courier tracking details will reach this WhatsApp number automatically.</p>
@@ -302,7 +318,7 @@ export default function OrderInfoModal({
             </div>
 
             {/* City + Pincode */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
                 <label className="flex items-center gap-1.5 text-xs font-semibold text-[#1C1917]">
                   <Building2 className="w-3.5 h-3.5 text-[#7A1C3B]" />
@@ -361,7 +377,9 @@ export default function OrderInfoModal({
             </ParticleButton>
           </form>
         )}
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

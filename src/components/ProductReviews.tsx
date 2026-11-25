@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
-import { Star, Upload, CheckCircle2, MessageSquare, Sparkles } from 'lucide-react';
+import { Star, Upload, CheckCircle2, MessageSquare } from 'lucide-react';
 
 interface ReviewItem {
   id: string;
@@ -21,7 +20,7 @@ const INITIAL_PRODUCT_REVIEWS: ReviewItem[] = [
     city: 'Kozhikode',
     rating: 5,
     comment:
-      'The Arabic calligraphy was so delicate and clean! My sister actually teared up when she saw her name in gold flakes. The packaging felt like opening a warm letter from a friend 🥺✨',
+      'The Arabic calligraphy was so delicate and clean. My sister actually teared up when she saw her name in gold flakes, and the packaging felt so thoughtful.',
     date: '3 days ago',
     photoUrl: '/images/resin-keychain.svg',
   },
@@ -31,7 +30,7 @@ const INITIAL_PRODUCT_REVIEWS: ReviewItem[] = [
     city: 'Bengaluru',
     rating: 5,
     comment:
-      'The Nikah frame was the talk of our stage setup! The gold foil and Quranic verse were framed with such precision.',
+      'The Nikah frame was the highlight of our stage setup. The gold foil and Quranic verse were framed with precision and packed very safely.',
     date: '1 week ago',
     photoUrl: '/images/nikah-frame.svg',
   },
@@ -58,10 +57,10 @@ export default function ProductReviews({ productName }: { productName: string })
     e.preventDefault();
     const newRev: ReviewItem = {
       id: `rev-${Date.now()}`,
-      author: author || 'Anonymous Giver',
-      city: city || 'India',
+      author: author.trim() || 'Guest Customer',
+      city: city.trim() || 'India',
       rating,
-      comment,
+      comment: comment.trim(),
       date: 'Just now',
       photoUrl: photoPreview || undefined,
     };
@@ -76,27 +75,27 @@ export default function ProductReviews({ productName }: { productName: string })
   };
 
   return (
-    <div className="mt-14 pt-8 border-t-2 border-[#2D1527]/20 space-y-6">
-      
+    <section className="pt-8 border-t border-[#EFE8E1] space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2">
-            <h3 className="font-heading text-2xl text-[#2D1527]">
-              Customer Love &amp; Unboxing Notes
+          <div className="flex items-baseline gap-2">
+            <h3 className="font-heading font-normal text-xl sm:text-2xl text-[#1C1917]">
+              Customer Reviews
             </h3>
-            <span className="font-handwriting text-sm text-[#7A1C30] font-bold">
-              ({reviews.length} reviews)
+            <span className="text-xs font-semibold text-[#7A1C3B]">
+              ({reviews.length})
             </span>
           </div>
-          <p className="font-body text-xs text-[#5E3C57]">
-            Real feedback from girls and givers who ordered {productName}.
+          <p className="font-sans text-xs text-[#78716C] mt-0.5">
+            Feedback and unboxing notes from customers who ordered {productName}.
           </p>
         </div>
 
         <button
+          type="button"
           onClick={() => setShowForm(!showForm)}
-          className="btn-ink px-4 py-2 bg-white hover:bg-[#FDEBF0] text-[#7A1C30] rounded-xl font-heading text-xs flex items-center gap-1.5"
+          className="px-4 py-2 bg-white hover:bg-[#FAF7F2] text-[#7A1C3B] border border-[#EFE8E1] hover:border-[#7A1C3B]/40 rounded-full font-semibold text-xs flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
         >
           <MessageSquare className="w-3.5 h-3.5" />
           <span>{showForm ? 'Close Form' : 'Write a Review'}</span>
@@ -104,9 +103,9 @@ export default function ProductReviews({ productName }: { productName: string })
       </div>
 
       {submittedMessage && (
-        <div className="p-3 bg-[#FDF0F3] border-2 border-[#FADDE3] rounded-xl font-handwriting text-sm font-bold text-[#7A1C3B] flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-[#7A1C3B]" />
-          <span>Thank you! Your review has been submitted to our studio for approval. It will appear once verified by our maker 💌</span>
+        <div className="p-3.5 bg-[#FDF0F3] border border-[#FADDE3] rounded-2xl text-xs font-semibold text-[#7A1C3B] flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-[#7A1C3B] shrink-0" />
+          <span>Thank you! Your review has been added for {productName}.</span>
         </div>
       )}
 
@@ -114,83 +113,84 @@ export default function ProductReviews({ productName }: { productName: string })
       {showForm && (
         <form
           onSubmit={handleReviewSubmit}
-          className="bg-white border-2 border-[#2D1527] rounded-2xl p-5 shadow-ink space-y-4"
+          className="bg-white border border-[#EFE8E1] rounded-3xl p-5 sm:p-6 shadow-xs space-y-4 animate-in fade-in duration-200"
         >
-          <div className="font-heading text-sm text-[#2D1527] border-b border-[#2D1527]/15 pb-2">
+          <div className="font-heading font-medium text-base text-[#1C1917] border-b border-[#EFE8E1] pb-2.5">
             Share Your Experience with {productName}
           </div>
 
-          <div className="space-y-1">
-            <label className="block text-xs font-bold text-[#2D1527]">Rating:</label>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-[#1C1917]">Rating:</label>
             <div className="flex items-center gap-1">
               {[1, 2, 3, 4, 5].map((s) => (
                 <button
                   key={s}
                   type="button"
                   onClick={() => setRating(s)}
-                  className="p-1 hover:scale-110 transition"
+                  className="p-1 hover:scale-110 transition cursor-pointer"
+                  aria-label={`Rate ${s} stars`}
                 >
                   <Star
                     className={`w-5 h-5 ${
-                      s <= rating ? 'text-[#D4AF37] fill-[#D4AF37]' : 'text-gray-300'
+                      s <= rating ? 'text-amber-500 fill-amber-500' : 'text-[#D5CCC3]'
                     }`}
                   />
                 </button>
               ))}
-              <span className="font-handwriting text-xs text-[#7A1C30] font-bold ml-2">
-                {rating === 5 ? 'Loved it completely! ♥' : `${rating} out of 5 stars`}
+              <span className="text-xs text-[#7A1C3B] font-semibold ml-2">
+                {rating} out of 5 stars
               </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-body">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans">
             <div className="space-y-1">
-              <label className="block font-bold text-[#2D1527]">Your Name:</label>
+              <label className="block font-semibold text-[#1C1917]">Your Name:</label>
               <input
                 type="text"
                 required
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
                 placeholder="e.g. Fatima Z."
-                className="w-full px-3 py-2 bg-[#FFF9F6] border border-[#2D1527] rounded-xl"
+                className="w-full px-3.5 py-2.5 bg-[#FAF7F2]/60 focus:bg-white border border-[#EFE8E1] rounded-xl text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B]"
               />
             </div>
             <div className="space-y-1">
-              <label className="block font-bold text-[#2D1527]">City / State:</label>
+              <label className="block font-semibold text-[#1C1917]">City / State:</label>
               <input
                 type="text"
                 required
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="e.g. Hyderabad"
-                className="w-full px-3 py-2 bg-[#FFF9F6] border border-[#2D1527] rounded-xl"
+                placeholder="e.g. Chennai"
+                className="w-full px-3.5 py-2.5 bg-[#FAF7F2]/60 focus:bg-white border border-[#EFE8E1] rounded-xl text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B]"
               />
             </div>
           </div>
 
-          <div className="space-y-1 text-xs font-body">
-            <label className="block font-bold text-[#2D1527]">Your Review Note:</label>
+          <div className="space-y-1 text-xs font-sans">
+            <label className="block font-semibold text-[#1C1917]">Your Review:</label>
             <textarea
               rows={3}
               required
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="How did the parcel feel when you opened it? What did the recipient say?"
-              className="w-full px-3 py-2 bg-[#FFF9F6] border border-[#2D1527] rounded-xl font-handwriting text-sm"
+              placeholder="How did the parcel look when you opened it?"
+              className="w-full px-3.5 py-2.5 bg-[#FAF7F2]/60 focus:bg-white border border-[#EFE8E1] rounded-xl text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#7A1C3B] resize-none"
             />
           </div>
 
           {/* Photo upload */}
-          <div className="space-y-1 text-xs font-body">
-            <label className="block font-bold text-[#2D1527]">Add Unboxing Photo (Optional):</label>
-            <label className="flex items-center gap-2 p-2 bg-[#FAF2EC] border border-dashed border-[#2D1527] rounded-xl cursor-pointer hover:bg-[#FDEBF0] text-[#5E3C57] text-xs">
-              <Upload className="w-3.5 h-3.5 text-[#7A1C30]" />
-              <span>Choose photo from your phone/camera</span>
+          <div className="space-y-1.5 text-xs font-sans">
+            <label className="block font-semibold text-[#1C1917]">Add Unboxing Photo (Optional):</label>
+            <label className="flex items-center gap-2 p-3 bg-[#FAF7F2]/60 border border-dashed border-[#DFD5CB] rounded-xl cursor-pointer hover:border-[#7A1C3B] text-[#78716C] text-xs transition">
+              <Upload className="w-4 h-4 text-[#7A1C3B]" />
+              <span>Choose photo from your device</span>
               <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
             </label>
             {photoPreview && (
-              <div className="mt-2 w-16 h-16 relative rounded-lg overflow-hidden border border-[#2D1527]">
-                <Image src={photoPreview} alt="Review attachment" fill className="object-cover" />
+              <div className="mt-2 w-16 h-16 relative rounded-xl overflow-hidden border border-[#EFE8E1] bg-[#FAF7F2]">
+                <img src={photoPreview} alt="Review attachment" className="w-full h-full object-cover" />
               </div>
             )}
           </div>
@@ -199,13 +199,13 @@ export default function ProductReviews({ productName }: { productName: string })
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-3 py-1.5 text-xs font-body text-[#5E3C57]"
+              className="px-4 py-2 text-xs font-medium text-[#78716C] hover:text-[#1C1917] cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="btn-ink px-4 py-2 bg-[#7A1C30] text-[#FEF08A] rounded-xl font-heading text-xs"
+              className="px-5 py-2.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-full font-bold text-xs shadow-xs transition cursor-pointer"
             >
               Post Review
             </button>
@@ -218,39 +218,38 @@ export default function ProductReviews({ productName }: { productName: string })
         {reviews.map((rev) => (
           <div
             key={rev.id}
-            className="bg-[#FAF2EC] border-2 border-[#2D1527] rounded-2xl p-4 shadow-ink space-y-3 relative flex flex-col justify-between"
+            className="bg-white border border-[#EFE8E1] rounded-3xl p-5 shadow-2xs space-y-3 flex flex-col justify-between"
           >
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1 text-[#D4AF37]">
+                <div className="flex items-center gap-0.5 text-amber-500">
                   {[...Array(rev.rating)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 fill-[#D4AF37]" />
+                    <Star key={i} className="w-3.5 h-3.5 fill-amber-500" />
                   ))}
                 </div>
-                <span className="font-handwriting text-xs text-[#5E3C57]">{rev.date}</span>
+                <span className="text-[11px] text-[#8C827A]">{rev.date}</span>
               </div>
 
-              <p className="font-handwriting text-base text-[#2D1527] leading-snug">
+              <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
                 &ldquo;{rev.comment}&rdquo;
               </p>
             </div>
 
-            <div className="pt-2 border-t border-[#2D1527]/15 flex items-center justify-between">
+            <div className="pt-3 border-t border-[#FAF7F2] flex items-center justify-between gap-2">
               <div>
-                <span className="font-heading text-xs text-[#2D1527]">{rev.author}</span>
-                <span className="text-[10px] text-[#5E3C57] ml-1.5">({rev.city})</span>
+                <span className="font-heading font-medium text-xs sm:text-sm text-[#1C1917]">{rev.author}</span>
+                <span className="text-[11px] text-[#8C827A] ml-1.5">· {rev.city}</span>
               </div>
 
               {rev.photoUrl && (
-                <div className="w-8 h-8 relative rounded-lg border border-[#2D1527] overflow-hidden flex-shrink-0">
-                  <Image src={rev.photoUrl} alt="Attached photo" fill className="object-cover" />
+                <div className="w-9 h-9 relative rounded-xl border border-[#EFE8E1] bg-[#FAF7F2] overflow-hidden shrink-0">
+                  <img src={rev.photoUrl} alt="Customer photo" className="w-full h-full object-cover" />
                 </div>
               )}
             </div>
           </div>
         ))}
       </div>
-
-    </div>
+    </section>
   );
 }

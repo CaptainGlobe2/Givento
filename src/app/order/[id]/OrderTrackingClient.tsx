@@ -51,7 +51,7 @@ export default function OrderTrackingClient({
 
   if (!order) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans">
+      <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans pb-28">
         <Navbar />
         <main className="flex-1 max-w-lg mx-auto px-4 py-16 flex flex-col items-center justify-center text-center">
           <div className="w-16 h-16 rounded-full bg-[#FDF0F3] text-[#7A1C3B] border border-[#FADDE3] flex items-center justify-center text-2xl mb-4">
@@ -61,18 +61,18 @@ export default function OrderTrackingClient({
             Order Not Found
           </h1>
           <p className="text-xs sm:text-sm text-[#78716C] max-w-sm mb-6 leading-relaxed">
-            We couldn&apos;t find an order matching <span className="font-mono font-bold text-[#1C1917]">#{orderId}</span>. Please verify your order number or search with your mobile number.
+            We couldn&apos;t find an order matching <span className="font-mono font-bold text-[#1C1917] break-all">#{orderId}</span>. Please verify your order number or search with your mobile number.
           </p>
           <div className="w-full space-y-2.5">
             <Link
               href="/track"
-              className="w-full py-3.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition"
+              className="w-full py-3.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs active:scale-95 transition"
             >
               <span>Search by WhatsApp Phone / Order ID</span>
             </Link>
             <Link
               href="/"
-              className="w-full py-3 bg-white border border-[#EFE8E1] hover:bg-[#FAF7F2] text-[#1C1917] rounded-xl font-semibold text-xs flex items-center justify-center transition"
+              className="w-full py-3 bg-white border border-[#EFE8E1] hover:bg-[#FAF7F2] text-[#1C1917] rounded-xl font-semibold text-xs flex items-center justify-center active:scale-95 transition"
             >
               Back to Storefront
             </Link>
@@ -119,7 +119,7 @@ export default function OrderTrackingClient({
   const isCancelled = order.status === 'Cancelled';
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-[#F6E9EE] selection:text-[#7A1C3B] font-sans pb-20 md:pb-0">
+    <div className="relative min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-[#F6E9EE] selection:text-[#7A1C3B] font-sans pb-28">
       <Navbar />
 
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-10 relative z-10 w-full">
@@ -149,7 +149,7 @@ export default function OrderTrackingClient({
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>Status: {order.status}</span>
               </div>
-              <h1 className="font-display font-normal text-2xl sm:text-3xl md:text-4xl text-[#1C1917] tracking-tight">
+              <h1 className="font-display font-normal text-2xl sm:text-3xl md:text-4xl text-[#1C1917] tracking-tight break-words">
                 Order Tracking #{order.id}
               </h1>
               <p className="font-sans text-xs text-[#78716C] mt-1">
@@ -229,7 +229,7 @@ export default function OrderTrackingClient({
                   Dispatched via {order.trackingCourier || 'Courier Service'} 🚚
                 </span>
                 {order.trackingNumber && (
-                  <div className="font-mono text-sm font-bold text-[#1C1917]">
+                  <div className="font-mono text-sm font-bold text-[#1C1917] break-all">
                     AWB Tracking Number: {order.trackingNumber}
                   </div>
                 )}

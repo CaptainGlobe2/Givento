@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export interface CircularCategoryItem {
   id: string;
@@ -83,16 +84,23 @@ export default function CircularCategories({
           </h2>
         )}
 
-        {/* Circular Categories Row: Horizontal Scrolling (Matching Reference Screenshot Top Bar) */}
+        {/* Circular Categories Row: Horizontal Scrolling */}
         <div className="flex items-center gap-4 sm:gap-7 overflow-x-auto scrollbar-none pb-2 justify-start sm:justify-center">
-          {CIRCULAR_CATEGORIES.map((item) => {
+          {CIRCULAR_CATEGORIES.map((item, idx) => {
             const isSelected = selectedGroup === item.groupKey || selectedGroup === item.id;
             return (
-              <Link
+              <motion.div
                 key={item.id}
-                href={`/category/${item.groupKey}`}
-                className="group flex flex-col items-center shrink-0 focus:outline-none cursor-pointer w-[68px] sm:w-[84px]"
+                initial={{ opacity: 0, y: 10, scale: 0.94 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.32, delay: idx * 0.045, ease: [0.22, 1, 0.36, 1] }}
+                whileTap={{ scale: 0.93 }}
+                className="shrink-0"
               >
+                <Link
+                  href={`/category/${item.groupKey}`}
+                  className="group flex flex-col items-center shrink-0 focus:outline-none cursor-pointer w-[68px] sm:w-[84px]"
+                >
                 {/* Circular Avatar Container */}
                 <div
                   className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-[#FAF7F2] p-0.5 transition-all duration-300 relative flex items-center justify-center ${
@@ -124,7 +132,8 @@ export default function CircularCategories({
                 >
                   {item.name}
                 </span>
-              </Link>
+                </Link>
+              </motion.div>
             );
           })}
         </div>

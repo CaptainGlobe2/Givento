@@ -14,16 +14,13 @@ export interface ParticleButtonProps extends ButtonProps {
 
 const PARTICLE_COLORS = ["#7A1C3B", "#D4AF37", "#E07A5F", "#81B29A", "#F4A261", "#B56576"];
 
-function SuccessParticles({
-  buttonRef,
-}: {
-  buttonRef: React.RefObject<HTMLButtonElement | null>;
-}) {
-  const rect = buttonRef.current?.getBoundingClientRect();
-  if (!rect) return null;
+interface ParticleCoords {
+  x: number;
+  y: number;
+}
 
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
+function SuccessParticles({ coords }: { coords: ParticleCoords | null }) {
+  if (!coords) return null;
 
   return (
     <AnimatePresence>
@@ -38,7 +35,7 @@ function SuccessParticles({
           <motion.div
             key={i}
             className="fixed w-2 h-2 rounded-full pointer-events-none z-[9999] shadow-xs"
-            style={{ left: centerX, top: centerY, backgroundColor: color }}
+            style={{ left: coords.x, top: coords.y, backgroundColor: color }}
             initial={{
               scale: 0,
               x: 0,
@@ -76,11 +73,29 @@ const ParticleButton = React.forwardRef<HTMLButtonElement, ParticleButtonProps>(
     forwardedRef
   ) => {
     const [showParticles, setShowParticles] = useState(false);
+    const [particleCoords, setParticleCoords] = useState<ParticleCoords | null>(null);
     const innerRef = useRef<HTMLButtonElement>(null);
-    const resolvedRef = (forwardedRef as React.RefObject<HTMLButtonElement | null>) || innerRef;
 
-    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const setRefs = React.useCallback(
+      (node: HTMLButtonElement | null) => {
+        innerRef.current = node;
+        if (typeof forwardedRef === "function") {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          (forwardedRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
+        }
+      },
+      [forwardedRef]
+    );
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setParticleCoords({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      });
       setShowParticles(true);
+
       if (onClick) {
         onClick(e);
       }
@@ -95,9 +110,9 @@ const ParticleButton = React.forwardRef<HTMLButtonElement, ParticleButtonProps>(
 
     return (
       <>
-        {showParticles && <SuccessParticles buttonRef={resolvedRef} />}
+        {showParticles && <SuccessParticles coords={particleCoords} />}
         <Button
-          ref={resolvedRef}
+          ref={setRefs}
           onClick={handleClick}
           className={cn(
             "relative select-none",

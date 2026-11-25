@@ -386,7 +386,7 @@ export default function BasketDrawer() {
 
                           {/* Stepper & Remove */}
                           <div className="flex items-center justify-between pt-0.5">
-                            <div className="inline-flex items-center bg-[#F6E9EE] rounded-full px-2 py-0.5 gap-2.5 text-xs font-semibold text-[#1C1917]">
+                            <div className="inline-flex items-center bg-[#F6E9EE] rounded-full px-2 py-0.5 gap-2 text-xs font-semibold text-[#1C1917]">
                               <button
                                 type="button"
                                 onClick={() => {
@@ -397,7 +397,7 @@ export default function BasketDrawer() {
                                   }
                                 }}
                                 aria-label="Decrease quantity"
-                                className="w-4 h-4 flex items-center justify-center text-xs leading-none text-[#1C1917] hover:text-[#7A1C3B] active:scale-125 transition-transform cursor-pointer"
+                                className="w-6 h-6 flex items-center justify-center text-xs leading-none text-[#1C1917] hover:text-[#7A1C3B] active:scale-90 transition-transform cursor-pointer"
                               >
                                 −
                               </button>
@@ -408,7 +408,7 @@ export default function BasketDrawer() {
                                 type="button"
                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                 aria-label="Increase quantity"
-                                className="w-4 h-4 flex items-center justify-center text-xs leading-none text-[#1C1917] hover:text-[#7A1C3B] active:scale-125 transition-transform cursor-pointer"
+                                className="w-6 h-6 flex items-center justify-center text-xs leading-none text-[#1C1917] hover:text-[#7A1C3B] active:scale-90 transition-transform cursor-pointer"
                               >
                                 +
                               </button>
@@ -466,7 +466,11 @@ export default function BasketDrawer() {
                     <select
                       id="cRegion"
                       value={shippingRegion}
-                      onChange={(e) => setShippingRegion(e.target.value as any)}
+                      onChange={(e) =>
+                        setShippingRegion(
+                          e.target.value as 'local_adiram' | 'tamil_nadu' | 'interstate' | 'pickup'
+                        )
+                      }
                       disabled={isSubmitting}
                       className="w-full rounded-xl border border-[#e8dcdc] bg-white px-3 py-2 text-sm text-[#1c1917] focus:outline-none focus:ring-2 focus:ring-[#7a1c3b]/20"
                     >

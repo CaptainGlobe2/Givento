@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { MapPin, Calendar, Sparkles, MessageCircle, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { MapPin, Calendar, ArrowRight } from 'lucide-react';
 import { InstagramIcon } from './Icons';
 
 export default function ExpoSection() {
@@ -41,9 +41,15 @@ export default function ExpoSection() {
         {/* 2 Expo Feature Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Card 1: Upcoming Stall */}
-          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#EFE8E1] hover:border-[#7A1C3B]/30 shadow-2xs space-y-4 flex flex-col justify-between transition">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.08 }}
+            transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-white rounded-3xl p-6 sm:p-7 border border-[#EFE8E1] hover:border-[#7A1C3B]/30 shadow-2xs space-y-4 flex flex-col justify-between transition"
+          >
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="px-3 py-1 rounded-full bg-[#F6E9EE] text-[#7A1C3B] text-[10px] font-bold tracking-wider uppercase">
                   Upcoming Pop-Up
                 </span>
@@ -62,7 +68,7 @@ export default function ExpoSection() {
               </p>
             </div>
 
-            <div className="pt-3 border-t border-[#FAF7F2] flex items-center justify-between text-xs text-[#8C827A]">
+            <div className="pt-3 border-t border-[#FAF7F2] flex flex-wrap items-center justify-between gap-2 text-xs text-[#8C827A]">
               <div className="flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-[#7A1C3B]" />
                 <span>Adirampattinam, Tamil Nadu</span>
@@ -71,17 +77,23 @@ export default function ExpoSection() {
                 href="https://wa.me/919344013255?text=Hi%20Givento!%20When%20is%20your%20next%20expo%20stall?"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-bold text-[#7A1C3B] hover:underline"
+                className="font-bold text-[#7A1C3B] hover:underline active:scale-95 transition-transform"
               >
                 Inquire Stall Dates →
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 2: Studio Workshop Desk */}
-          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#EFE8E1] hover:border-[#7A1C3B]/30 shadow-2xs space-y-4 flex flex-col justify-between transition">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.08 }}
+            transition={{ duration: 0.38, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-white rounded-3xl p-6 sm:p-7 border border-[#EFE8E1] hover:border-[#7A1C3B]/30 shadow-2xs space-y-4 flex flex-col justify-between transition"
+          >
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="px-3 py-1 rounded-full bg-[#F3ECE2] text-[#8C827A] text-[10px] font-bold tracking-wider uppercase">
                   Permanent Workshop
                 </span>
@@ -100,18 +112,18 @@ export default function ExpoSection() {
               </p>
             </div>
 
-            <div className="pt-3 border-t border-[#FAF7F2] flex items-center justify-between text-xs text-[#8C827A]">
+            <div className="pt-3 border-t border-[#FAF7F2] flex flex-wrap items-center justify-between gap-2 text-xs text-[#8C827A]">
               <span className="text-[#8C827A]">
                 East Coast Road, Adirampattinam
               </span>
               <a
                 href="tel:9344013255"
-                className="font-bold text-[#7A1C3B] hover:underline"
+                className="font-bold text-[#7A1C3B] hover:underline active:scale-95 transition-transform"
               >
                 Call Studio Desk →
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

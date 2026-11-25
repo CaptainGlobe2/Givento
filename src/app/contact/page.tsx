@@ -25,7 +25,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans pb-20 md:pb-0">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans pb-28">
       <Navbar />
 
       {/* Hero Header */}
@@ -53,7 +53,7 @@ export default function ContactPage() {
       {/* Main Content */}
       <main className="flex-1 max-w-xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 relative z-20 w-full space-y-4 pb-12">
         {/* Back Link */}
-        <div className="flex items-center justify-between pb-1">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-1">
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#7A1C3B] hover:text-[#5A1230] transition-colors"

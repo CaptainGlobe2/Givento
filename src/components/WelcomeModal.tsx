@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { X, Sparkles, Heart } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { X, Sparkles } from 'lucide-react';
 
 interface WelcomeModalProps {
   forceOpen?: boolean;
@@ -11,16 +11,12 @@ interface WelcomeModalProps {
 
 export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
     const handleCustomOpen = () => setIsOpen(true);
     window.addEventListener('open-welcome-modal', handleCustomOpen);
 
     if (forceOpen !== undefined) {
-      setIsOpen(forceOpen);
       return () => {
         window.removeEventListener('open-welcome-modal', handleCustomOpen);
       };
@@ -47,6 +43,8 @@ export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) 
     };
   }, [forceOpen]);
 
+  const effectiveOpen = forceOpen !== undefined ? forceOpen : isOpen;
+
   const handleDismiss = () => {
     setIsOpen(false);
     try {
@@ -57,17 +55,27 @@ export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) 
     if (onClose) onClose();
   };
 
-  if (!mounted || !isOpen) return null;
-
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Welcome to Givento Studio"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
-    >
-      {/* Modal Container matching Image 4 layout and brand styling */}
-      <div className="relative w-full max-w-sm sm:max-w-md bg-[#FAF7F2] rounded-[36px] overflow-hidden border border-[#EFE8E1] shadow-2xl flex flex-col p-6 sm:p-8 animate-in zoom-in-95 duration-300 text-center select-none">
+    <AnimatePresence>
+      {effectiveOpen && (
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Welcome to Givento Studio"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm"
+        >
+          {/* Modal Container matching layout and brand styling */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 8 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+            className="relative w-full max-w-sm sm:max-w-md max-h-[92dvh] overflow-y-auto bg-[#FAF7F2] rounded-[32px] sm:rounded-[36px] border border-[#EFE8E1] shadow-2xl flex flex-col p-5 sm:p-8 text-center select-none"
+          >
         {/* Artistic minimalist doodle background lines */}
         <div className="absolute top-4 left-4 w-24 h-24 opacity-30 pointer-events-none">
           <svg viewBox="0 0 100 100" fill="none" className="stroke-[#7A1C3B]">
@@ -106,6 +114,11 @@ export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) 
             <img
               src="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=400&q=80"
               alt="Handmade flower bouquet"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = '/images/sunflower-bouquet.svg';
+              }}
               className="w-full h-full object-cover"
             />
             <div className="absolute bottom-0 inset-x-0 p-1.5 bg-gradient-to-t from-black/60 to-transparent text-white text-[9px] font-bold text-center">
@@ -118,6 +131,11 @@ export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) 
             <img
               src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=500&q=80"
               alt="Luxury bespoke gift hamper"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = '/images/gift-for-her.svg';
+              }}
               className="w-full h-full object-cover"
             />
             <div className="absolute bottom-0 inset-x-0 p-2 bg-gradient-to-t from-black/60 to-transparent text-white text-[10px] font-bold text-center">
@@ -130,6 +148,11 @@ export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) 
             <img
               src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=400&q=80"
               alt="Anti-tarnish jewellery & keepsakes"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = '/images/starlight-chain.svg';
+              }}
               className="w-full h-full object-cover"
             />
             <div className="absolute bottom-0 inset-x-0 p-1.5 bg-gradient-to-t from-black/60 to-transparent text-white text-[9px] font-bold text-center">
@@ -187,7 +210,9 @@ export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) 
         <p className="text-[10px] text-[#A39992] mt-1">
           Hand-packed with love · Pan-India delivery 🌸
         </p>
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

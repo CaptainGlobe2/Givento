@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Search,
   Menu,
@@ -14,6 +15,9 @@ import {
   ChevronRight,
   Package,
   SlidersHorizontal,
+  HelpCircle,
+  Truck,
+  MessageCircle,
 } from 'lucide-react';
 import { useBasket } from '../context/BasketContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -21,6 +25,7 @@ import { Category } from '../types';
 import { CATEGORIES as DEFAULT_CATEGORIES } from '../data/sampleData';
 import { db } from '../lib/database';
 import ProfileDrawer from './ProfileDrawer';
+import BrandWordmark from './BrandWordmark';
 
 interface NavbarProps {
   searchQuery?: string;
@@ -50,9 +55,15 @@ export default function Navbar({
   const shouldShowCategories = showSearch !== undefined ? showSearch : isHomePage;
 
   const [localSearch, setLocalSearch] = useState(searchQuery);
+  const [prevSearchProp, setPrevSearchProp] = useState(searchQuery);
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  if (searchQuery !== prevSearchProp) {
+    setPrevSearchProp(searchQuery);
+    setLocalSearch(searchQuery);
+  }
 
   useEffect(() => {
     let active = true;
@@ -66,17 +77,15 @@ export default function Navbar({
     };
   }, []);
 
-  // Keep local search input synced with prop
-  useEffect(() => {
-    setLocalSearch(searchQuery);
-  }, [searchQuery]);
-
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (localSearch.trim()) {
       router.push(`/category/all?q=${encodeURIComponent(localSearch.trim())}`);
     } else if (onSearchChange) {
-      onSearchChange(localSearch);
+      onSearchChange('');
+      router.push('/category/all');
+    } else {
+      router.push('/category/all');
     }
   };
 
@@ -107,35 +116,55 @@ export default function Navbar({
           <div className="relative flex items-center justify-between h-10 sm:h-12">
             {/* Left: Clean Hamburger Menu Button */}
             <div className="flex items-center">
-              <button
+              <motion.button
                 type="button"
                 onClick={() => setIsMenuOpen(true)}
                 aria-label="Open main menu"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                aria-expanded={isMenuOpen}
+                whileHover={{ scale: 1.07 }}
+                whileTap={{ scale: 0.86 }}
+                animate={
+                  isMenuOpen
+                    ? { scale: 0.94, backgroundColor: 'rgba(255,255,255,0.18)' }
+                    : { scale: 1, backgroundColor: 'rgba(255,255,255,0)' }
+                }
+                transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer"
               >
                 <Menu className="w-5 h-5 stroke-[2]" />
-              </button>
+              </motion.button>
             </div>
 
-            {/* Center: Clean Givento.in Brand Identity */}
+            {/* Center: Bespoke Givento.in Brand Wordmark */}
             <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center text-center">
-              <Link href="/" className="group inline-flex items-center no-underline">
-                <span className="font-heading font-medium text-xl sm:text-2xl leading-none text-white tracking-wide group-hover:text-[#F8EED6] transition-colors">
-                  Givento.in
-                </span>
+              <Link
+                href="/"
+                aria-label="Givento.in Home"
+                className="inline-flex items-center no-underline"
+              >
+                <BrandWordmark variant="light" size="md" />
               </Link>
             </div>
 
             {/* Right: Profile Action */}
             <div className="flex items-center text-white">
-              <button
+              <motion.button
                 type="button"
                 onClick={handleProfileClick}
                 aria-label="Open profile and studio account"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                aria-expanded={isProfileOpen}
+                whileHover={{ scale: 1.07 }}
+                whileTap={{ scale: 0.86 }}
+                animate={
+                  isProfileOpen
+                    ? { rotate: 12, scale: 0.94, backgroundColor: 'rgba(255,255,255,0.18)' }
+                    : { rotate: 0, scale: 1, backgroundColor: 'rgba(255,255,255,0)' }
+                }
+                transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer"
               >
                 <User className="w-5 h-5 stroke-[2]" />
-              </button>
+              </motion.button>
             </div>
           </div>
 
@@ -209,28 +238,38 @@ export default function Navbar({
       </header>
 
       {/* 3. Slide-out Hamburger Menu Drawer (Mobile & Desktop) */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-50 flex">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-300"
-            onClick={() => setIsMenuOpen(false)}
-            aria-hidden="true"
-          />
+      <AnimatePresence>
+        {isMenuOpen && (
+          <div className="fixed inset-0 z-50 flex">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+              onClick={() => setIsMenuOpen(false)}
+              aria-hidden="true"
+            />
 
-          {/* Drawer Panel */}
-          <aside
-            className="relative w-full max-w-xs bg-white h-full shadow-2xl flex flex-col z-10 overflow-y-auto animate-in slide-in-from-left duration-300"
-            aria-label="Navigation Menu"
-          >
+            {/* Drawer Panel */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 32, stiffness: 360 }}
+              className="relative w-[85vw] sm:w-full max-w-xs rounded-r-3xl sm:rounded-none bg-white h-full shadow-2xl flex flex-col z-10 overflow-y-auto"
+              aria-label="Navigation Menu"
+            >
             {/* Header */}
             <div className="p-4 border-b border-[#EFE8E1] flex items-center justify-between bg-[#FAF7F2]">
               <Link
                 href="/"
+                aria-label="Givento.in Home"
                 onClick={() => setIsMenuOpen(false)}
-                className="font-heading text-2xl text-[#7A1C3B]"
+                className="inline-flex items-center no-underline"
               >
-                Givento.in
+                <BrandWordmark variant="dark" size="sm" />
               </Link>
               <button
                 type="button"
@@ -272,8 +311,56 @@ export default function Navbar({
                 className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
               >
                 <span className="flex items-center gap-2">
-                  <Package className="w-4 h-4 text-[#6a5b60]" />
+                  <Package className="w-4 h-4 text-[#7A1C3B]" />
                   Track Order
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
+              </Link>
+
+              <Link
+                href="/wishlist"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <Heart className="w-4 h-4 text-[#7A1C3B]" />
+                  My Wishlist
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
+              </Link>
+
+              <Link
+                href="/custom-order"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#7A1C3B]" />
+                  Custom Bulk Orders
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
+              </Link>
+
+              <Link
+                href="/delivery"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <Truck className="w-4 h-4 text-[#6a5b60]" />
+                  Delivery &amp; Shipping
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
+              </Link>
+
+              <Link
+                href="/faq"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4 text-[#6a5b60]" />
+                  Help &amp; FAQs
                 </span>
                 <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
               </Link>
@@ -292,7 +379,10 @@ export default function Navbar({
                 onClick={() => setIsMenuOpen(false)}
                 className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
               >
-                <span>Contact &amp; Support</span>
+                <span className="flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4 text-[#6a5b60]" />
+                  Contact &amp; Support
+                </span>
                 <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
               </Link>
             </div>
@@ -303,9 +393,10 @@ export default function Navbar({
                 Handcrafted with love in Adirampattinam, Tamil Nadu
               </p>
             </div>
-          </aside>
-        </div>
-      )}
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* 4. Profile / Sign In Drawer */}
       <ProfileDrawer

@@ -4,9 +4,9 @@ import Providers from "./providers";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://givento.in"),
-  title: "Givento.in ✨ Handcrafted Gifts, Bouquets & Custom Keepsakes",
+  title: "Givento.in — Handcrafted Gifts, Bouquets & Custom Keepsakes",
   description:
-    "Storybook gift shop for handmade sunflower bouquets, personalised nikah frames, resin name keychains, gift hampers, and stainless steel jewellery. Hand-packed with love in India.",
+    "Boutique gift studio for handmade everlasting bouquets, personalised Nikah frames, resin keepsakes, curated hampers, and anti-tarnish stainless steel jewellery. Hand-packed with love in Adirampattinam.",
   keywords: [
     "handmade gifts",
     "sunflower bouquet",
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
     apple: "/apple-icon.png",
   },
   openGraph: {
-    title: "Givento.in ✨ Storybook Gift Shop",
-    description: "Handcrafted gifts, bouquets, personalised frames & hampers made with soul.",
+    title: "Givento.in — Handcrafted Keepsake Studio",
+    description: "Handcrafted gifts, everlasting bouquets, personalised frames & jewellery made with devotion.",
     url: "https://givento.in",
     siteName: "Givento.in",
     images: [
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Givento.in ✨ Storybook Gift Shop",
-    description: "Handcrafted gifts, bouquets, personalised frames & hampers made with soul.",
+    title: "Givento.in — Handcrafted Keepsake Studio",
+    description: "Handcrafted gifts, everlasting bouquets, personalised frames & jewellery made with devotion.",
     images: ["/images/givento-logo.png"],
   },
 };
@@ -53,7 +53,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#FFF7F4",
+  themeColor: "#7A1C3B",
 };
 
 export default function RootLayout({
@@ -91,12 +91,12 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&family=Caprasimo&family=Caveat:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&family=Caprasimo&family=Caveat:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&display=swap"
           rel="stylesheet"
         />
         <script
@@ -104,7 +104,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#FFF7F4] text-[#2D1527] font-body selection:bg-[#FDEBF0] selection:text-[#7A1C30]">
+      <body className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-body selection:bg-[#F6E9EE] selection:text-[#7A1C3B]">
         <Providers>
           {children}
         </Providers>

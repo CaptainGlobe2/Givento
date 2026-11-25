@@ -6,6 +6,7 @@
     --display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
     --body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
     --font-heading: 'DM Serif Display', Georgia, serif;
+    --font-brand: 'Playfair Display', Georgia, serif;
     --font-body: 'Manrope', system-ui, sans-serif;
     --font-handwriting: 'Caveat', cursive;
 
@@ -47,7 +48,7 @@
   html,
   body {
     max-width: 100vw;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
@@ -58,6 +59,13 @@
     background-size: 20px 20px;
     -webkit-font-smoothing: antialiased;
   }
+
+  a,
+  button,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
 }
 
 /* Custom typography utilities */
@@ -67,6 +75,128 @@
 
 .font-heading {
   font-family: var(--font-heading);
+}
+
+.font-brand {
+  font-family: var(--font-brand);
+}
+
+/* Signature luxury foil shimmer for BrandWordmark text */
+@keyframes giventoFoilSweep {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes giventoStarTwinkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scale(1.16) rotate(22deg);
+    opacity: 1;
+  }
+}
+
+.givento-star-twinkle {
+  animation: giventoStarTwinkle 3.8s ease-in-out infinite;
+}
+
+@keyframes giventoRibbonBreathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.88;
+  }
+  50% {
+    transform: translateY(-0.5px) scale(1.07);
+    opacity: 1;
+  }
+}
+
+.givento-ribbon-breathe {
+  animation: giventoRibbonBreathe 4.2s ease-in-out infinite;
+}
+
+@keyframes giventoArrowNudge {
+  0%,
+  75%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  85% {
+    transform: translate(1.5px, -1.5px) rotate(12deg);
+  }
+  92% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+.givento-arrow-nudge {
+  animation: giventoArrowNudge 3.4s ease-in-out infinite;
+}
+
+@keyframes giventoCardRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-card-rise {
+  animation: giventoCardRise 0.36s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.givento-foil-light {
+  color: #ffffff;
+}
+
+.givento-foil-dark {
+  color: #7a1c3b;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .givento-foil-light {
+    background-image: linear-gradient(
+      115deg,
+      #ffffff 0%,
+      #ffffff 38%,
+      #f8e6b0 50%,
+      #ffffff 62%,
+      #ffffff 100%
+    );
+    background-size: 240% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: giventoFoilSweep 6s ease-in-out infinite;
+  }
+
+  .givento-foil-dark {
+    background-image: linear-gradient(
+      115deg,
+      #7a1c3b 0%,
+      #7a1c3b 38%,
+      #b98a2e 50%,
+      #7a1c3b 62%,
+      #7a1c3b 100%
+    );
+    background-size: 240% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: giventoFoilSweep 6s ease-in-out infinite;
+  }
 }
 
 .font-handwriting {
@@ -246,13 +376,77 @@ input:focus-visible, textarea:focus-visible {
 /* Prevent auto-zooming on iOS Safari when tapping form inputs */
 @media (max-width: 640px) {
   input[type="text"],
+  input[type="search"],
+  input[type="password"],
   input[type="tel"],
   input[type="email"],
   input[type="number"],
+  input:not([type]),
   select,
   textarea {
     font-size: 16px !important;
   }
+}
+
+/* Smooth route entrance animation (no forwards fill so sticky nav transform never lingers) */
+@keyframes giventoPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-enter {
+  animation: giventoPageEnter 0.28s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Lightweight replacements for animate-in utilities across mobile drawers & modals */
+@keyframes giventoAnimateIn {
+  from {
+    opacity: var(--givento-enter-opacity, 1);
+    transform: translate3d(var(--givento-enter-x, 0), var(--givento-enter-y, 0), 0)
+      scale(var(--givento-enter-scale, 1));
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.animate-in {
+  animation: giventoAnimateIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.animate-in.duration-150 {
+  animation-duration: 150ms;
+}
+
+.animate-in.duration-200 {
+  animation-duration: 200ms;
+}
+
+.animate-in.duration-300 {
+  animation-duration: 300ms;
+}
+
+.fade-in {
+  --givento-enter-opacity: 0;
+}
+
+.zoom-in-95 {
+  --givento-enter-scale: 0.95;
+}
+
+.slide-in-from-left {
+  --givento-enter-x: -100%;
+}
+
+.slide-in-from-right {
+  --givento-enter-x: 100%;
 }
 
 /* Respect reduced motion preference */

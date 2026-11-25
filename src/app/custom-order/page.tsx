@@ -93,7 +93,7 @@ export default function CustomOrderPage() {
   )}`;
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans pb-20 md:pb-0">
+    <div className="relative min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans pb-28">
       <Navbar />
 
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-10 relative z-10 w-full">
@@ -158,7 +158,7 @@ export default function CustomOrderPage() {
             </div>
           </div>
         ) : (
-          <div className="bg-white border border-[#EFE8E1] rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-xs relative overflow-hidden space-y-8">
+          <div className="bg-white border border-[#EFE8E1] rounded-2xl sm:rounded-3xl p-4 sm:p-10 shadow-xs relative overflow-hidden space-y-6 sm:space-y-8">
             <div className="text-center max-w-2xl mx-auto space-y-3 pt-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3ECE2] border border-[#E5DACD] text-[10px] font-semibold uppercase tracking-wider text-[#8C827A]">
                 <Sparkles className="w-3.5 h-3.5 text-[#7A1C3B]" />
@@ -174,7 +174,7 @@ export default function CustomOrderPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Contact Info */}
-              <div className="bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl p-5 sm:p-6 space-y-4">
+              <div className="bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl p-4 sm:p-6 space-y-4">
                 <h3 className="font-heading font-normal text-lg text-[#1C1917] border-b border-[#EFE8E1] pb-2">
                   1. Your Contact Details
                 </h3>
@@ -224,7 +224,7 @@ export default function CustomOrderPage() {
               </div>
 
               {/* Event & Craft Specifications */}
-              <div className="bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl p-5 sm:p-6 space-y-4">
+              <div className="bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl p-4 sm:p-6 space-y-4">
                 <h3 className="font-heading font-normal text-lg text-[#1C1917] border-b border-[#EFE8E1] pb-2">
                   2. Event &amp; Gift Vision
                 </h3>
@@ -333,8 +333,8 @@ export default function CustomOrderPage() {
               </div>
 
               {/* 3. Photo Upload / Inspiration Reference */}
-              <div className="bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl p-5 sm:p-6 space-y-4">
-                <div className="flex items-center justify-between border-b border-[#EFE8E1] pb-2">
+              <div className="bg-[#FAF7F2]/60 border border-[#EFE8E1] rounded-2xl p-4 sm:p-6 space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EFE8E1] pb-2">
                   <h3 className="font-heading font-normal text-lg text-[#1C1917] flex items-center gap-2">
                     <Upload className="w-4 h-4 text-[#7A1C3B]" />
                     <span>3. Reference Photo &amp; Inspiration</span>
@@ -347,17 +347,17 @@ export default function CustomOrderPage() {
                 </p>
 
                 {photoPreview ? (
-                  <div className="flex items-center justify-between gap-4 p-4 bg-white border border-[#EFE8E1] rounded-2xl">
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between gap-3 p-3.5 sm:p-4 bg-white border border-[#EFE8E1] rounded-2xl">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="w-16 h-16 rounded-xl overflow-hidden border border-[#EFE8E1] bg-[#FAF7F2] flex-shrink-0">
                         <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
                       </div>
-                      <div className="space-y-0.5">
+                      <div className="space-y-0.5 min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 text-xs font-bold text-[#7A1C3B]">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#7A1C3B]" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#7A1C3B] shrink-0" />
                           <span>Photo Attached</span>
                         </div>
-                        <p className="text-xs text-[#78716C] truncate max-w-[200px] sm:max-w-xs">{photoName}</p>
+                        <p className="text-xs text-[#78716C] truncate">{photoName}</p>
                         <p className="text-[10px] text-[#8C827A]">Ready to submit with custom request</p>
                       </div>
                     </div>
@@ -365,7 +365,7 @@ export default function CustomOrderPage() {
                     <button
                       type="button"
                       onClick={handleRemovePhoto}
-                      className="p-2 rounded-xl text-[#B3261E] hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
+                      className="p-2 rounded-xl text-[#B3261E] hover:bg-rose-50 border border-transparent hover:border-rose-200 active:scale-90 transition cursor-pointer shrink-0"
                       title="Remove uploaded photo"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -398,7 +398,7 @@ export default function CustomOrderPage() {
                   href={waRequestUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-6 py-3.5 bg-white border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5 font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-2 transition"
+                  className="w-full sm:w-auto px-6 py-3.5 bg-white border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5 font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-2 active:scale-95 transition"
                 >
                   <MessageCircle className="w-4 h-4 fill-[#25D366]" />
                   <span>Send via WhatsApp First</span>
@@ -406,7 +406,7 @@ export default function CustomOrderPage() {
 
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-7 py-3.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-2 shadow-xs transition cursor-pointer"
+                  className="w-full sm:w-auto px-7 py-3.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-2 shadow-xs active:scale-95 transition cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
                   <span>Submit Custom Request</span>

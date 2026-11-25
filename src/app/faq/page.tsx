@@ -81,7 +81,7 @@ export default function FaqPage() {
     : FAQ_ITEMS.filter((item) => item.category === selectedCategory);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B]">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-28">
       <Navbar />
 
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-14 space-y-10">
@@ -130,7 +130,7 @@ export default function FaqPage() {
                 setSelectedCategory(cat.id);
                 setOpenIndex(null);
               }}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-xs font-medium active:scale-95 transition cursor-pointer ${
                 selectedCategory === cat.id
                   ? 'bg-[#7A1C3B] text-white shadow-xs'
                   : 'bg-white border border-[#EFE8E1] text-[#57534E] hover:border-[#7A1C3B]/40'
@@ -192,7 +192,7 @@ export default function FaqPage() {
             href="https://wa.me/919344013255?text=Hello%20Givento!%20I%20have%20a%20question%20about%20an%20order."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#7A1C3B] hover:bg-[#5A1230] text-white text-xs font-bold transition shadow-xs shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#7A1C3B] hover:bg-[#5A1230] text-white text-xs font-bold active:scale-95 transition shadow-xs shrink-0"
           >
             <MessageCircle className="w-4 h-4" />
             <span>Chat on WhatsApp</span>

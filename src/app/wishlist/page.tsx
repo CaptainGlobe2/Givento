@@ -1,18 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useWishlist } from '../../context/WishlistContext';
 import { useBasket } from '../../context/BasketContext';
 import Navbar from '../../components/Navbar';
-import { Heart, ShoppingBag, Trash2, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Heart, ShoppingBag, Trash2, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export default function WishlistPage() {
   const { wishlist, removeFromWishlist } = useWishlist();
   const { addToBasket } = useBasket();
+  const [movedProductName, setMovedProductName] = useState<string | null>(null);
+
+  const handleMoveToBag = (product: (typeof wishlist)[number]) => {
+    addToBasket(product);
+    removeFromWishlist(product.id);
+    setMovedProductName(product.name);
+    setTimeout(() => {
+      setMovedProductName((prev) => (prev === product.name ? null : prev));
+    }, 2500);
+  };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] pb-20 md:pb-0 font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B]">
+    <div className="relative min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] pb-28 font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B]">
       <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 relative z-10 w-full space-y-8">
@@ -26,7 +36,7 @@ export default function WishlistPage() {
             <span>Storefront</span>
           </Link>
           <span className="text-[#D5CCC3]">/</span>
-          <span>Saved Keepsakes</span>
+          <span>Wishlist</span>
         </div>
 
         {/* Section Header */}
@@ -36,10 +46,10 @@ export default function WishlistPage() {
               Personal Collection
             </span>
             <h1 className="font-heading font-normal text-3xl sm:text-4xl text-[#1C1917] tracking-tight">
-              Saved Keepsakes
+              My Wishlist
             </h1>
             <p className="font-sans text-xs sm:text-sm text-[#78716C] mt-1">
-              Items you&apos;ve bookmarked from our Adirampattinam studio collection.
+              Items you&apos;ve saved to your wishlist from our Adirampattinam studio.
             </p>
           </div>
 
@@ -47,6 +57,18 @@ export default function WishlistPage() {
             {wishlist.length} {wishlist.length === 1 ? 'item saved' : 'items saved'}
           </span>
         </div>
+
+        {movedProductName && (
+          <div className="p-3.5 bg-[#FDF0F3] border border-[#FADDE3] rounded-2xl flex items-center justify-between gap-3 text-xs text-[#7A1C3B] font-semibold animate-in fade-in duration-200">
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <span>Moved &ldquo;{movedProductName}&rdquo; to your shopping bag.</span>
+            </span>
+            <Link href="/cart" className="underline font-bold shrink-0">
+              View Bag →
+            </Link>
+          </div>
+        )}
 
         {/* Empty State */}
         {wishlist.length === 0 ? (
@@ -65,7 +87,7 @@ export default function WishlistPage() {
             <div className="pt-2">
               <Link
                 href="/category/all"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-full font-bold text-xs uppercase tracking-wider transition-colors shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-full font-bold text-xs uppercase tracking-wider active:scale-95 transition-all shadow-xs cursor-pointer"
               >
                 <span>Browse Creations</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -75,7 +97,7 @@ export default function WishlistPage() {
         ) : (
           /* Wishlist Grid */
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5">
-            {wishlist.map((product) => {
+            {wishlist.map((product, idx) => {
               const priceText =
                 typeof product.price === 'number'
                   ? `₹${product.price.toLocaleString('en-IN')}`
@@ -90,7 +112,8 @@ export default function WishlistPage() {
               return (
                 <div
                   key={product.id}
-                  className="group bg-white rounded-2xl border border-[#EFE8E1] p-3 sm:p-3.5 hover:shadow-xs hover:border-[#DFD5CB] transition-all duration-300 flex flex-col justify-between"
+                  style={{ animationDelay: `${Math.min(idx, 10) * 40}ms` }}
+                  className="group bg-white rounded-2xl border border-[#EFE8E1] p-3 sm:p-3.5 hover:shadow-xs hover:border-[#DFD5CB] transition-all duration-300 flex flex-col justify-between animate-card-rise"
                 >
                   <div>
                     {/* Square Image Container */}
@@ -100,6 +123,11 @@ export default function WishlistPage() {
                           src={mainImage}
                           alt={product.name}
                           loading="lazy"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = '/images/sunflower-bouquet.svg';
+                          }}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                         />
                       </Link>
@@ -107,7 +135,7 @@ export default function WishlistPage() {
                       <button
                         type="button"
                         onClick={() => removeFromWishlist(product.id)}
-                        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur-xs text-[#78716C] hover:text-[#B3261E] hover:bg-white flex items-center justify-center shadow-xs transition-colors cursor-pointer z-10"
+                        className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs text-[#78716C] hover:text-[#B3261E] hover:bg-white flex items-center justify-center shadow-xs active:scale-90 transition cursor-pointer z-10"
                         title="Remove from wishlist"
                         aria-label={`Remove ${product.name} from wishlist`}
                       >
@@ -137,11 +165,8 @@ export default function WishlistPage() {
                   <div className="pt-2 border-t border-[#FAF7F2] flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => {
-                        addToBasket(product);
-                        removeFromWishlist(product.id);
-                      }}
-                      className="flex-1 py-2 px-3 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+                      onClick={() => handleMoveToBag(product)}
+                      className="flex-1 py-2 px-3 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs active:scale-95 transition-all cursor-pointer"
                     >
                       <ShoppingBag className="w-3.5 h-3.5" />
                       <span>Move to Bag</span>
@@ -149,7 +174,7 @@ export default function WishlistPage() {
 
                     <Link
                       href={`/product/${product.slug}`}
-                      className="p-2 rounded-xl border border-[#EFE8E1] bg-white hover:bg-[#FAF7F2] text-[#1C1917] transition-colors flex items-center justify-center"
+                      className="p-2 rounded-xl border border-[#EFE8E1] bg-white hover:bg-[#FAF7F2] text-[#1C1917] active:scale-95 transition-all flex items-center justify-center"
                       title="View details"
                     >
                       <ArrowRight className="w-3.5 h-3.5" />

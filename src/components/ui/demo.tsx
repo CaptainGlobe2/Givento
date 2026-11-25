@@ -1,5 +1,4 @@
 import { ParticleButton } from "@/components/ui/particle-button"
-import { Button } from "@/components/ui/button"
 
 function ParticleButtonDemo() {
   return (

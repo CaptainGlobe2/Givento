@@ -36,20 +36,21 @@ export default function OrdersTrackPage() {
   const [showLookupBox, setShowLookupBox] = useState(false);
 
   // Load orders for this customer / device
-  const loadOrders = async () => {
-    setLoading(true);
-    try {
-      const userOrders = await db.getUserOrders();
-      setOrders(userOrders);
-    } catch (err) {
-      console.error('Failed to load user orders', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    loadOrders();
+    let active = true;
+    db.getUserOrders()
+      .then((userOrders) => {
+        if (active) setOrders(userOrders);
+      })
+      .catch((err) => {
+        console.error('Failed to load user orders', err);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleCopyId = (id: string) => {
@@ -192,7 +193,7 @@ export default function OrdersTrackPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-24 md:pb-12">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-28">
       <Navbar />
 
       <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-10 w-full space-y-6">
@@ -222,7 +223,7 @@ export default function OrdersTrackPage() {
             <button
               type="button"
               onClick={() => setShowLookupBox(!showLookupBox)}
-              className="px-3.5 py-2 rounded-full bg-white border border-[#EFE8E1] hover:border-[#7A1C3B] text-xs font-semibold text-[#1C1917] flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
+              className="px-3.5 py-2 rounded-full bg-white border border-[#EFE8E1] hover:border-[#7A1C3B] text-xs font-semibold text-[#1C1917] flex items-center gap-1.5 shadow-2xs active:scale-95 transition cursor-pointer"
             >
               <Search className="w-3.5 h-3.5 text-[#7A1C3B]" />
               <span>{showLookupBox ? 'Hide Lookup' : 'Search by Phone / ID'}</span>
@@ -282,7 +283,7 @@ export default function OrdersTrackPage() {
               <button
                 type="submit"
                 disabled={isSearching}
-                className="w-full sm:w-auto px-6 py-2.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
+                className="w-full sm:w-auto px-6 py-2.5 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-xl text-xs font-bold active:scale-95 transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
               >
                 <Search className="w-3.5 h-3.5" />
                 <span>{isSearching ? 'Searching...' : 'Find Order'}</span>
@@ -314,14 +315,14 @@ export default function OrdersTrackPage() {
             <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/category/all"
-                className="px-6 py-3 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-full font-bold text-xs sm:text-sm shadow-xs transition cursor-pointer"
+                className="px-6 py-3 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-full font-bold text-xs sm:text-sm shadow-xs active:scale-95 transition cursor-pointer"
               >
                 Explore Collection 🌻
               </Link>
               <button
                 type="button"
                 onClick={() => setShowLookupBox(true)}
-                className="px-5 py-3 bg-white border border-[#EFE8E1] hover:bg-[#FAF7F2] text-[#1C1917] rounded-full font-semibold text-xs sm:text-sm transition cursor-pointer"
+                className="px-5 py-3 bg-white border border-[#EFE8E1] hover:bg-[#FAF7F2] text-[#1C1917] rounded-full font-semibold text-xs sm:text-sm active:scale-95 transition cursor-pointer"
               >
                 Track by Mobile Number
               </button>
@@ -525,7 +526,7 @@ export default function OrdersTrackPage() {
                     <div className="pt-1">
                       <Link
                         href={`/order/${order.id}`}
-                        className="w-full py-3 px-4 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition cursor-pointer"
+                        className="w-full py-3 px-4 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs active:scale-[0.98] transition cursor-pointer"
                       >
                         <Package className="w-4 h-4" />
                         <span>View Live Tracking &amp; Fulfillment Timeline</span>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Plus, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../types';
 import { PRODUCTS as DEFAULT_PRODUCTS } from '../data/sampleData';
@@ -61,18 +62,18 @@ export default function NewArrivalsSection() {
           <div className="flex items-center gap-3">
             <Link
               href="/category/all"
-              className="text-xs sm:text-sm font-medium text-[#78716C] hover:text-[#1C1917] transition-colors font-sans"
+              className="text-xs sm:text-sm font-medium text-[#78716C] hover:text-[#1C1917] active:scale-95 transition-all font-sans"
             >
               See all
             </Link>
 
-            {/* Desktop Carousel Arrow Controls */}
-            <div className="hidden sm:flex items-center gap-1.5 ml-1">
+            {/* Carousel Arrow Controls (Visible on Mobile & Desktop) */}
+            <div className="flex items-center gap-1.5 ml-1">
               <button
                 type="button"
                 onClick={() => scroll('left')}
                 aria-label="Scroll left"
-                className="w-8 h-8 rounded-full border border-[#E7E5E4] hover:bg-[#FAF7F2] text-[#1C1917] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#E7E5E4] hover:bg-[#FAF7F2] text-[#1C1917] flex items-center justify-center active:scale-90 transition cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -80,7 +81,7 @@ export default function NewArrivalsSection() {
                 type="button"
                 onClick={() => scroll('right')}
                 aria-label="Scroll right"
-                className="w-8 h-8 rounded-full border border-[#E7E5E4] hover:bg-[#FAF7F2] text-[#1C1917] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#E7E5E4] hover:bg-[#FAF7F2] text-[#1C1917] flex items-center justify-center active:scale-90 transition cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -93,7 +94,7 @@ export default function NewArrivalsSection() {
           ref={scrollContainerRef}
           className="flex gap-3.5 sm:gap-5 overflow-x-auto pb-4 pt-1 scrollbar-none snap-x snap-mandatory scroll-smooth"
         >
-          {products.map((p) => {
+          {products.map((p, idx) => {
             const isAdded = !!addedIds[p.id];
             const priceDisplay =
               typeof p.price === 'number'
@@ -107,8 +108,13 @@ export default function NewArrivalsSection() {
               'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80';
 
             return (
-              <div
+              <motion.div
                 key={p.id}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.08 }}
+                transition={{ duration: 0.35, delay: Math.min(idx, 5) * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                whileTap={{ scale: 0.97 }}
                 className="group flex flex-col w-[155px] sm:w-[195px] md:w-[220px] shrink-0 snap-start select-none"
               >
                 {/* Image Card Container with Rounded Corners & Floating "+" Button */}
@@ -156,7 +162,7 @@ export default function NewArrivalsSection() {
                     {priceDisplay}
                   </div>
                 </Link>
-              </div>
+              </motion.div>
             );
           })}
         </div>

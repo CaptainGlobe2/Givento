@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 
 interface CollectionItem {
   id: string;
@@ -97,49 +98,67 @@ export default function FeaturedCollections({ onSelectCollection }: FeaturedColl
 
         {/* 4 Aesthetic Category Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
-          {COLLECTIONS.map((col) => (
-            <Link
-              key={col.id}
-              href="/category/stainless-steel-jewellery"
-              onClick={(e) => handleClick(col, e)}
-              className="group relative block rounded-2xl sm:rounded-3xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1] hover:border-[#7A1C3B]/40 hover:shadow-md transition-all duration-300"
-            >
-              {/* Image with Aesthetic Overlay */}
-              <div className="relative h-44 sm:h-56 md:h-64 w-full overflow-hidden bg-[#F2EAE1]">
-                <img
-                  src={col.image}
-                  alt={col.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-                />
+          {COLLECTIONS.map((col, idx) => {
+            const targetHref = col.searchTerm
+              ? `/category/${col.categoryGroup}?q=${encodeURIComponent(col.searchTerm)}`
+              : `/category/${col.categoryGroup}`;
+            return (
+              <motion.div
+                key={col.id}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.08 }}
+                transition={{ duration: 0.38, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Link
+                  href={targetHref}
+                  onClick={(e) => handleClick(col, e)}
+                  className="group relative block rounded-2xl sm:rounded-3xl overflow-hidden bg-[#FAF7F2] border border-[#EFE8E1] hover:border-[#7A1C3B]/40 hover:shadow-md transition-all duration-300"
+                >
+                {/* Image with Aesthetic Overlay */}
+                <div className="relative h-44 sm:h-56 md:h-64 w-full overflow-hidden bg-[#F2EAE1]">
+                  <img
+                    src={col.image}
+                    alt={col.title}
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = '/images/starlight-chain.svg';
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                  />
 
-                {/* Subtle Multi-stage Gradient for Perfect Readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/5 group-hover:from-black/85 transition-colors" />
+                  {/* Subtle Multi-stage Gradient for Perfect Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/5 group-hover:from-black/85 transition-colors" />
 
-                {/* Top Floating Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold tracking-wider text-[#1C1917] uppercase shadow-xs">
-                    {col.tag}
-                  </span>
+                  {/* Top Floating Badge */}
+                  <div className="absolute top-3 left-3 z-10">
+                    <span className="px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold tracking-wider text-[#1C1917] uppercase shadow-xs">
+                      {col.tag}
+                    </span>
+                  </div>
+
+                  {/* Top Right Arrow Pill */}
+                  <div className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-[#1C1917] opacity-80 group-hover:opacity-100 group-hover:bg-[#7A1C3B] group-hover:text-white transition-all shadow-xs">
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </div>
+
+                  {/* Bottom Card Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 text-white z-10 space-y-0.5">
+                    <h3 className="font-heading font-medium text-base sm:text-lg leading-tight tracking-tight text-white group-hover:text-[#F8EED6] transition-colors">
+                      {col.title}
+                    </h3>
+                    <p className="text-[11px] sm:text-xs text-white/80 font-light truncate">
+                      {col.subtitle}
+                    </p>
+                  </div>
                 </div>
-
-                {/* Top Right Arrow Pill */}
-                <div className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-[#1C1917] opacity-80 group-hover:opacity-100 group-hover:bg-[#7A1C3B] group-hover:text-white transition-all shadow-xs">
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </div>
-
-                {/* Bottom Card Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 text-white z-10 space-y-0.5">
-                  <h3 className="font-heading font-medium text-base sm:text-lg leading-tight tracking-tight text-white group-hover:text-[#F8EED6] transition-colors">
-                    {col.title}
-                  </h3>
-                  <p className="text-[11px] sm:text-xs text-white/80 font-light truncate">
-                    {col.subtitle}
-                  </p>
-                </div>
-              </div>
-            </Link>
-          ))}
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { notFound, useRouter } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Product } from '../../../types';
 import { PRODUCTS as DEFAULT_PRODUCTS } from '../../../data/sampleData';
 import { db } from '../../../lib/database';
@@ -13,7 +13,6 @@ import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import ProductReviews from '../../../components/ProductReviews';
 import { CategoryArt } from '../../../components/PrototypeArt';
-import OrderInfoModal from '../../../components/OrderInfoModal';
 import {
   ArrowLeft,
   Share2,
@@ -26,7 +25,6 @@ import {
   ZoomIn,
   X,
   Upload,
-  Check,
 } from 'lucide-react';
 
 export default function ProductDetailClient({ slug }: { slug: string }) {
@@ -40,7 +38,18 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
   );
 
   const [quantity, setQuantity] = useState(1);
-  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>(() => {
+    const initial: Record<string, string> = {};
+    const defaultProd = DEFAULT_PRODUCTS.find((p) => p.slug === slug);
+    if (defaultProd?.variants && defaultProd.variants.length > 0) {
+      defaultProd.variants.forEach((v) => {
+        if (v.options && v.options.length > 0) {
+          initial[v.name] = v.options[0];
+        }
+      });
+    }
+    return initial;
+  });
   const [personalisationData, setPersonalisationData] = useState<Record<string, string>>({});
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
@@ -48,10 +57,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
   const [copiedLink, setCopiedLink] = useState(false);
   const [addedNotice, setAddedNotice] = useState(false);
   const [showPersonalisation, setShowPersonalisation] = useState(false);
-
-  // Order modal state
-  const [waModalOpen, setWaModalOpen] = useState(false);
-  const [waModalMode, setWaModalMode] = useState<'order' | 'bag'>('order');
+  const touchStartXRef = useRef<number | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -60,7 +66,20 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
       if (list && list.length > 0) {
         setAllProducts(list);
         const current = list.find((p) => p.slug === slug);
-        if (current) setProduct(current);
+        if (current) {
+          setProduct(current);
+          if (current.variants && current.variants.length > 0) {
+            setSelectedVariants((prev) => {
+              const next = { ...prev };
+              current.variants?.forEach((v) => {
+                if (!next[v.name] && v.options && v.options.length > 0) {
+                  next[v.name] = v.options[0];
+                }
+              });
+              return next;
+            });
+          }
+        }
       }
     });
     return () => {
@@ -71,19 +90,6 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
   if (!product) {
     notFound();
   }
-
-  // Pre-select first variant if available
-  useEffect(() => {
-    if (product.variants && product.variants.length > 0) {
-      const initial: Record<string, string> = {};
-      product.variants.forEach((v) => {
-        if (v.options && v.options.length > 0) {
-          initial[v.name] = v.options[0];
-        }
-      });
-      setSelectedVariants(initial);
-    }
-  }, [product]);
 
   // Related products from the same category
   const relatedProducts = allProducts
@@ -158,14 +164,37 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
       (!product.images[0].endsWith('.svg') && product.images[0] !== '/images/sunflower-bouquet.svg'));
 
   const currentImage = product.images?.[activeImageIndex] || product.images?.[0];
+  const imageCount = product.images?.length || 0;
+
+  const handleGalleryTouchStart = (e: React.TouchEvent) => {
+    if (imageCount <= 1) return;
+    touchStartXRef.current = e.touches[0]?.clientX ?? null;
+  };
+
+  const handleGalleryTouchEnd = (e: React.TouchEvent) => {
+    if (imageCount <= 1 || touchStartXRef.current === null) return;
+    const startX = touchStartXRef.current;
+    touchStartXRef.current = null;
+    const endX = e.changedTouches[0]?.clientX ?? startX;
+    const deltaX = endX - startX;
+    if (deltaX <= -40) {
+      setActiveImageIndex((prev) => (prev + 1) % imageCount);
+    } else if (deltaX >= 40) {
+      setActiveImageIndex((prev) => (prev - 1 + imageCount) % imageCount);
+    }
+  };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-24 md:pb-12">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-28">
       <Navbar />
 
       <main className="flex-1 max-w-xl mx-auto w-full px-0 sm:px-4 sm:py-6">
-        {/* Top Product Hero Showcase (Matching Reference Photo Top Half) */}
-        <div className="relative w-full bg-[#F2ECE6] sm:rounded-3xl overflow-hidden aspect-[4/4.5] sm:aspect-square flex items-center justify-center">
+        {/* Top Product Hero Showcase */}
+        <div
+          onTouchStart={handleGalleryTouchStart}
+          onTouchEnd={handleGalleryTouchEnd}
+          className="relative w-full bg-[#F2ECE6] sm:rounded-3xl overflow-hidden aspect-[4/4.5] sm:aspect-square flex items-center justify-center touch-pan-y"
+        >
           {/* Floating Top Navigation Header Buttons */}
           <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
             {/* Back Button */}
@@ -198,8 +227,8 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
           {/* Badge */}
           {product.badge && (
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
-              <span className="inline-block px-3.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#7A1C3B] text-xs font-bold border border-[#FADDE3] shadow-xs">
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 max-w-[calc(100%-8.5rem)]">
+              <span className="inline-block max-w-full truncate px-3 sm:px-3.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#7A1C3B] text-[11px] sm:text-xs font-bold border border-[#FADDE3] shadow-xs">
                 {product.badge}
               </span>
             </div>
@@ -214,6 +243,11 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
               <img
                 src={currentImage}
                 alt={product.name}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = '/images/sunflower-bouquet.svg';
+                }}
                 className="max-w-full max-h-full object-contain drop-shadow-md transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
@@ -227,7 +261,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
           <button
             type="button"
             onClick={() => setIsZoomOpen(true)}
-            className="absolute bottom-10 right-4 z-10 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-[#EFE8E1] text-[#1C1917] hover:text-[#7A1C3B] text-xs font-medium flex items-center gap-1.5 shadow-xs cursor-pointer"
+            className="absolute bottom-10 right-4 z-10 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-[#EFE8E1] text-[#1C1917] hover:text-[#7A1C3B] text-xs font-medium flex items-center gap-1.5 shadow-xs active:scale-95 transition-all cursor-pointer"
           >
             <ZoomIn className="w-3.5 h-3.5" />
             <span>Zoom</span>
@@ -308,9 +342,9 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                           key={option}
                           type="button"
                           onClick={() => handleVariantSelect(variant.name, option)}
-                          className={`flex-1 min-w-[120px] py-3 px-4 rounded-2xl text-xs sm:text-sm font-semibold flex items-center justify-between transition-all cursor-pointer ${
+                          className={`flex-1 min-w-[120px] py-3 px-4 rounded-2xl text-xs sm:text-sm font-semibold flex items-center justify-between active:scale-95 transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-[#F6E9EE] border-1.5 border-[#7A1C3B] text-[#7A1C3B] shadow-xs'
+                              ? 'bg-[#F6E9EE] border-[1.5px] border-[#7A1C3B] text-[#7A1C3B] shadow-xs'
                               : 'bg-[#FAF7F2] border border-[#EFE8E1] text-[#1C1917] hover:border-[#DFD5CB]'
                           }`}
                         >
@@ -428,7 +462,8 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
               <button
                 type="button"
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-[#1C1917] hover:bg-[#F6E9EE] transition cursor-pointer shadow-2xs"
+                aria-label="Decrease quantity"
+                className="w-9 h-9 rounded-full bg-white flex items-center justify-center font-bold text-[#1C1917] hover:bg-[#F6E9EE] active:scale-90 transition cursor-pointer shadow-2xs"
               >
                 -
               </button>
@@ -438,7 +473,8 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
               <button
                 type="button"
                 onClick={() => setQuantity(quantity + 1)}
-                className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-[#1C1917] hover:bg-[#F6E9EE] transition cursor-pointer shadow-2xs"
+                aria-label="Increase quantity"
+                className="w-9 h-9 rounded-full bg-white flex items-center justify-center font-bold text-[#1C1917] hover:bg-[#F6E9EE] active:scale-90 transition cursor-pointer shadow-2xs"
               >
                 +
               </button>
@@ -532,18 +568,23 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                 </Link>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {relatedProducts.map((rel) => (
                   <Link
                     key={rel.id}
                     href={`/product/${rel.slug}`}
-                    className="bg-white border border-[#EFE8E1] rounded-2xl p-2.5 sm:p-3 hover:border-[#DFD5CB] hover:shadow-xs transition-all block group"
+                    className="bg-white border border-[#EFE8E1] rounded-2xl p-2.5 sm:p-3 hover:border-[#DFD5CB] hover:shadow-xs active:scale-[0.98] transition-all block group"
                   >
                     <div className="relative w-full aspect-square rounded-xl bg-[#FAF7F2] mb-2 flex items-center justify-center overflow-hidden">
                       {rel.images?.[0] ? (
                         <img
                           src={rel.images[0]}
                           alt={rel.name}
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = '/images/sunflower-bouquet.svg';
+                          }}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
                       ) : (
@@ -572,36 +613,58 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
       <Footer />
 
       {/* Image Zoom Modal */}
-      {isZoomOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-          <div className="relative bg-white border border-[#EFE8E1] rounded-3xl p-6 max-w-lg w-full shadow-2xl flex flex-col items-center">
-            <button
-              type="button"
-              onClick={() => setIsZoomOpen(false)}
-              className="absolute top-4 right-4 w-9 h-9 rounded-full border border-[#EFE8E1] bg-[#FAF7F2] flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] transition cursor-pointer"
+      <AnimatePresence>
+        {isZoomOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setIsZoomOpen(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-white border border-[#EFE8E1] rounded-3xl p-5 sm:p-6 max-w-lg w-full max-h-[90dvh] overflow-y-auto shadow-2xl flex flex-col items-center"
             >
-              <X className="w-4 h-4" />
-            </button>
-            <h4 className="font-heading text-xl text-[#1C1917] mb-4 text-center">
-              {product.name}
-            </h4>
-            <div className="relative w-72 h-72 flex items-center justify-center">
-              {hasUploadedPhoto && currentImage ? (
-                <img
-                  src={currentImage}
-                  alt={product.name}
-                  className="max-w-full max-h-full object-contain rounded-2xl"
-                />
-              ) : (
-                <CategoryArt k={product.artCategory || 'bouquet'} colors={palette} className="w-full h-full" />
-              )}
-            </div>
-            <p className="text-xs text-[#8C827A] mt-4 font-medium">
-              Givento Studio · Handcrafted with love
-            </p>
-          </div>
-        </div>
-      )}
+              <button
+                type="button"
+                onClick={() => setIsZoomOpen(false)}
+                aria-label="Close zoom preview"
+                className="absolute top-3.5 right-3.5 w-9 h-9 rounded-full border border-[#EFE8E1] bg-[#FAF7F2] flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] active:scale-90 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <h4 className="font-heading text-lg sm:text-xl text-[#1C1917] mb-4 px-8 text-center">
+                {product.name}
+              </h4>
+              <div className="relative w-full max-w-[260px] sm:max-w-[300px] aspect-square flex items-center justify-center">
+                {hasUploadedPhoto && currentImage ? (
+                  <img
+                    src={currentImage}
+                    alt={product.name}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = '/images/sunflower-bouquet.svg';
+                    }}
+                    className="max-w-full max-h-full object-contain rounded-2xl"
+                  />
+                ) : (
+                  <CategoryArt k={product.artCategory || 'bouquet'} colors={palette} className="w-full h-full" />
+                )}
+              </div>
+              <p className="text-xs text-[#8C827A] mt-4 font-medium">
+                Givento Studio · Handcrafted with love
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

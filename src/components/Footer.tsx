@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BrandLogoSvg } from './PrototypeArt';
+import BrandWordmark from './BrandWordmark';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -15,16 +15,14 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#5a1230] text-[#e9d6dd] mt-12 pt-12 pb-8 border-t border-[#7A1C3B]">
+    <footer className="bg-[#5a1230] text-[#e9d6dd] mt-12 pt-12 pb-28 sm:pb-24 border-t border-[#7A1C3B]">
       <div className="max-w-[1180px] mx-auto px-4 sm:px-6">
         {/* 4 Column Footer Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] gap-8">
           {/* Brand Info */}
           <div className="space-y-3">
-            <Link href="/" className="inline-flex items-center gap-2 text-inherit no-underline">
-              <span className="font-heading font-normal text-2xl text-white leading-none block">
-                Givento.in
-              </span>
+            <Link href="/" aria-label="Givento.in Home" className="inline-flex items-center gap-2 text-inherit no-underline">
+              <BrandWordmark variant="light" size="md" />
             </Link>
             <p className="font-body text-xs sm:text-sm text-[#e9d6dd]/90 leading-relaxed max-w-sm">
               Bouquets, frames, hampers, resin keepsakes and jewellery, handcrafted with devotion in Adirampattinam, Tamil Nadu.
@@ -59,6 +57,12 @@ export default function Footer() {
             <div className="flex flex-col gap-1.5 text-xs sm:text-sm">
               <Link href="/about" className="hover:text-white hover:underline transition-colors py-0.5">
                 About our studio
+              </Link>
+              <Link href="/faq" className="hover:text-white hover:underline transition-colors py-0.5">
+                Help &amp; FAQs
+              </Link>
+              <Link href="/delivery" className="hover:text-white hover:underline transition-colors py-0.5">
+                Delivery &amp; Shipping
               </Link>
               <Link href="/track" className="hover:text-white hover:underline transition-colors py-0.5">
                 Track your parcel

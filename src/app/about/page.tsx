@@ -293,7 +293,7 @@ export default function AboutPage() {
             {/* Phone */}
             <a
               href="tel:9344013255"
-              className="p-4 bg-white rounded-2xl border border-[#EFE8E1] hover:border-[#7A1C3B] transition flex items-center gap-3 group"
+              className="p-4 bg-white rounded-2xl border border-[#EFE8E1] hover:border-[#7A1C3B] active:scale-95 transition flex items-center gap-3 group"
             >
               <div className="w-9 h-9 rounded-xl bg-[#FDF0F3] text-[#7A1C3B] flex items-center justify-center shrink-0 group-hover:bg-[#7A1C3B] group-hover:text-white transition-colors">
                 <Phone className="w-4 h-4" />
@@ -309,7 +309,7 @@ export default function AboutPage() {
               href="https://wa.me/919344013255"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-4 bg-white rounded-2xl border border-[#EFE8E1] hover:border-[#25D366] transition flex items-center gap-3 group"
+              className="p-4 bg-white rounded-2xl border border-[#EFE8E1] hover:border-[#25D366] active:scale-95 transition flex items-center gap-3 group"
             >
               <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-[#25D366] group-hover:text-white transition-colors">
                 <MessageCircle className="w-4 h-4" />
@@ -323,7 +323,7 @@ export default function AboutPage() {
             {/* Email */}
             <a
               href="mailto:hello@givento.in"
-              className="p-4 bg-white rounded-2xl border border-[#EFE8E1] hover:border-[#7A1C3B] transition flex items-center gap-3 group"
+              className="p-4 bg-white rounded-2xl border border-[#EFE8E1] hover:border-[#7A1C3B] active:scale-95 transition flex items-center gap-3 group"
             >
               <div className="w-9 h-9 rounded-xl bg-[#FDF0F3] text-[#7A1C3B] flex items-center justify-center shrink-0 group-hover:bg-[#7A1C3B] group-hover:text-white transition-colors">
                 <Mail className="w-4 h-4" />
@@ -339,7 +339,7 @@ export default function AboutPage() {
               href="https://instagram.com/givento.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-4 bg-white rounded-2xl border border-[#EFE8E1] hover:border-[#7A1C3B] transition flex items-center gap-3 group"
+              className="p-4 bg-white rounded-2xl border border-[#EFE8E1] hover:border-[#7A1C3B] active:scale-95 transition flex items-center gap-3 group"
             >
               <div className="w-9 h-9 rounded-xl bg-[#FDF0F3] text-[#7A1C3B] flex items-center justify-center shrink-0 group-hover:bg-[#7A1C3B] group-hover:text-white transition-colors">
                 <InstagramIcon className="w-4 h-4" />

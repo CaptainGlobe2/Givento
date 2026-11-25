@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useBasket } from '../../context/BasketContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { Product } from '../../types';
 import { db, Coupon } from '../../lib/database';
+import Navbar from '../../components/Navbar';
 import OrderInfoModal from '../../components/OrderInfoModal';
 import {
   ArrowLeft,
@@ -89,14 +89,13 @@ export default function CartPage() {
     addToBasket,
   } = useBasket();
 
-  const { addToWishlist, wishlist } = useWishlist();
+  const { addToWishlist } = useWishlist();
 
   // Order modal state
   const [orderModalOpen, setOrderModalOpen] = useState(false);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState('');
-  const [availableCoupons, setAvailableCoupons] = useState<Coupon[]>([]);
   const [appliedCoupon, setAppliedCoupon] = useState<{
     code: string;
     discount: number;
@@ -109,20 +108,6 @@ export default function CartPage() {
   const [couponSuccess, setCouponSuccess] = useState('');
   const [savedAllNotice, setSavedAllNotice] = useState(false);
   const [addedAddonIds, setAddedAddonIds] = useState<Record<string, boolean>>({});
-
-  // Load active coupons from database / localStorage
-  const loadCoupons = async () => {
-    try {
-      const list = await db.getCoupons();
-      setAvailableCoupons(list.filter((c) => c.isActive));
-    } catch {
-      // ignore
-    }
-  };
-
-  useEffect(() => {
-    loadCoupons();
-  }, []);
 
   // Free delivery threshold
   const FREE_SHIPPING_THRESHOLD = 899;
@@ -325,8 +310,8 @@ export default function CartPage() {
           const full = raw.startsWith('http')
             ? raw
             : typeof window !== 'undefined'
-            ? `${window.location.origin}${raw.startsWith('/') ? '' : '/'}${raw}`
-            : `https://givento.in/${raw}`;
+              ? `${window.location.origin}${raw.startsWith('/') ? '' : '/'}${raw}`
+              : `https://givento.in/${raw}`;
           imageNote = `\n   🖼️ Product Image: ${full}`;
         }
         return `${idx + 1}. *${it.isCustomBouquet ? 'Custom Bouquet' : it.product.name}* (x${it.quantity}) — ₹${itemPrice * it.quantity}${imageNote}`;
@@ -339,47 +324,34 @@ export default function CartPage() {
     `*Grand Total: ₹${finalTotal}*`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-24 sm:pb-12">
-      {/* 1. Header Bar Matching Reference Photo Layout */}
-      <header className="sticky top-0 z-30 bg-[#FAF7F2]/95 backdrop-blur-md px-4 pt-3.5 pb-2.5 border-b border-[#EFE8E1]/60">
-        <div className="max-w-xl mx-auto flex items-center justify-between">
-          {/* Back Button */}
-          <Link
-            href="/"
-            aria-label="Back to home"
-            className="w-10 h-10 rounded-full bg-white border border-[#EFE8E1] flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] shadow-2xs transition-all active:scale-90 cursor-pointer"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-
-          {/* Center Shopping Bag Header */}
-          <div className="text-center">
-            <h1 className="font-heading font-normal text-lg sm:text-xl text-[#1C1917] tracking-tight">
-              Shopping Bag
-            </h1>
-            <p className="text-[11px] text-[#8C827A]">
-              {itemCount} {itemCount === 1 ? 'item' : 'items'} in your bag
-            </p>
-          </div>
-
-          {/* Right Action (Wishlist shortcut) */}
-          <Link
-            href="/wishlist"
-            aria-label="View wishlist"
-            className="relative w-10 h-10 rounded-full bg-white border border-[#EFE8E1] flex items-center justify-center text-[#1C1917] hover:text-[#7A1C3B] shadow-2xs transition-all active:scale-90 cursor-pointer"
-          >
-            <Heart className="w-5 h-5" />
-            {wishlist.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#7A1C3B] text-white text-[9px] font-bold flex items-center justify-center shadow-xs">
-                {wishlist.length}
-              </span>
-            )}
-          </Link>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-28">
+      <Navbar />
 
       {/* Main Cart Body Container */}
-      <main className="flex-1 max-w-xl mx-auto px-4 py-3 w-full space-y-4">
+      <main className="flex-1 max-w-xl mx-auto px-4 py-5 sm:py-7 w-full space-y-4">
+        {/* 1. Page Header Matching Other Storefront Pages */}
+        <div className="flex items-end justify-between gap-3 pb-3 border-b border-[#EFE8E1]">
+          <div>
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#8C827A] mb-1">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1 text-[#7A1C3B] hover:underline"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Storefront</span>
+              </Link>
+              <span className="text-[#D5CCC3]">/</span>
+              <span>Shopping Bag</span>
+            </div>
+            <h1 className="font-heading font-normal text-2xl sm:text-3xl text-[#1C1917] tracking-tight">
+              Shopping Bag
+            </h1>
+          </div>
+
+          <span className="bg-white border border-[#EFE8E1] px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#1C1917] shadow-2xs shrink-0">
+            {itemCount} {itemCount === 1 ? 'item' : 'items'}
+          </span>
+        </div>
         {/* 2. Free Delivery & Packaging Progress Card */}
         <section
           aria-label="Free packaging and delivery progress"
@@ -452,7 +424,7 @@ export default function CartPage() {
             </p>
             <Link
               href="/category/all"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-full font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#7A1C3B] hover:bg-[#5A1230] text-white rounded-full font-bold text-xs sm:text-sm shadow-xs active:scale-95 transition-all cursor-pointer"
             >
               <span>Explore Collection 🌻</span>
             </Link>
@@ -468,7 +440,7 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={handleSaveAllToWishlist}
-                  className="font-semibold text-[#8C827A] hover:text-[#7A1C3B] flex items-center gap-1 transition cursor-pointer"
+                  className="font-semibold text-[#8C827A] hover:text-[#7A1C3B] flex items-center gap-1 active:scale-95 transition cursor-pointer"
                 >
                   <Heart className="w-3.5 h-3.5" />
                   <span>{savedAllNotice ? 'Saved!' : 'Save all'}</span>
@@ -477,7 +449,7 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={clearBasket}
-                  className="font-medium text-[#B3261E] hover:underline flex items-center gap-1 transition cursor-pointer"
+                  className="font-medium text-[#B3261E] hover:underline flex items-center gap-1 active:scale-95 transition cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Clear</span>
@@ -486,7 +458,7 @@ export default function CartPage() {
             </div>
 
             {/* List of Item Cards - Matching Reference Layout Exactly */}
-            {items.map((item) => {
+            {items.map((item, idx) => {
               const isCustom = item.isCustomBouquet && item.customBouquet;
               const price = isCustom
                 ? item.customBouquet?.totalPrice || 0
@@ -511,22 +483,54 @@ export default function CartPage() {
               return (
                 <div
                   key={item.id}
-                  className="bg-white rounded-3xl p-3.5 sm:p-4 border border-[#EFE8E1] shadow-xs flex items-center gap-3.5"
+                  style={{ animationDelay: `${Math.min(idx, 8) * 40}ms` }}
+                  className="bg-white rounded-3xl p-3.5 sm:p-4 border border-[#EFE8E1] shadow-xs flex items-center gap-3.5 animate-card-rise"
                 >
                   {/* Left: Square/Rounded Thumbnail */}
-                  <div className="relative w-20 h-20 sm:w-22 sm:h-22 rounded-2xl overflow-hidden bg-[#FAF7F2] shrink-0 border border-[#EFE8E1] flex items-center justify-center p-1">
-                    <img
-                      src={imageSrc}
-                      alt={item.product.name}
-                      className="w-full h-full object-cover rounded-xl"
-                    />
-                  </div>
+                  {item.isCustomBouquet ? (
+                    <div className="relative w-20 h-20 sm:w-22 sm:h-22 rounded-2xl overflow-hidden bg-[#FAF7F2] shrink-0 border border-[#EFE8E1] flex items-center justify-center p-1">
+                      <img
+                        src={imageSrc}
+                        alt={item.product.name}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = '/images/sunflower-bouquet.svg';
+                        }}
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+                    </div>
+                  ) : (
+                    <Link
+                      href={`/product/${item.product.slug}`}
+                      className="relative w-20 h-20 sm:w-22 sm:h-22 rounded-2xl overflow-hidden bg-[#FAF7F2] shrink-0 border border-[#EFE8E1] flex items-center justify-center p-1 hover:border-[#7A1C3B]/40 transition-colors"
+                    >
+                      <img
+                        src={imageSrc}
+                        alt={item.product.name}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = '/images/sunflower-bouquet.svg';
+                        }}
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+                    </Link>
+                  )}
 
                   {/* Middle Column: Name, Variant Subtitle, Bold Price */}
                   <div className="flex-1 min-w-0 pr-1 space-y-1">
-                    <h3 className="font-heading font-medium text-sm sm:text-base text-[#1C1917] line-clamp-1 leading-snug">
-                      {item.isCustomBouquet ? 'Custom Bouquet' : item.product.name}
-                    </h3>
+                    {item.isCustomBouquet ? (
+                      <h3 className="font-heading font-medium text-sm sm:text-base text-[#1C1917] line-clamp-1 leading-snug">
+                        Custom Bouquet
+                      </h3>
+                    ) : (
+                      <Link href={`/product/${item.product.slug}`} className="block group">
+                        <h3 className="font-heading font-medium text-sm sm:text-base text-[#1C1917] group-hover:text-[#7A1C3B] transition-colors line-clamp-1 leading-snug">
+                          {item.product.name}
+                        </h3>
+                      </Link>
+                    )}
                     <p className="text-xs text-[#8C827A] line-clamp-1">
                       {subtitle}
                     </p>
@@ -542,7 +546,7 @@ export default function CartPage() {
                       type="button"
                       onClick={() => removeFromBasket(item.id)}
                       aria-label="Remove item"
-                      className="w-6 h-6 rounded-full flex items-center justify-center text-[#A39992] hover:text-[#B3261E] hover:bg-[#FAF7F2] transition cursor-pointer"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-[#A39992] hover:text-[#B3261E] hover:bg-[#FAF7F2] active:scale-90 transition cursor-pointer"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -559,7 +563,7 @@ export default function CartPage() {
                           }
                         }}
                         aria-label="Decrease quantity"
-                        className="w-6 h-6 rounded-full border border-[#D5CCC3] hover:border-[#7A1C3B] hover:text-[#7A1C3B] flex items-center justify-center text-[#1C1917] active:scale-95 transition cursor-pointer bg-white"
+                        className="w-7 h-7 rounded-full border border-[#D5CCC3] hover:border-[#7A1C3B] hover:text-[#7A1C3B] flex items-center justify-center text-[#1C1917] active:scale-90 transition cursor-pointer bg-white"
                       >
                         <Minus className="w-3 h-3" />
                       </button>
@@ -570,7 +574,7 @@ export default function CartPage() {
                         type="button"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         aria-label="Increase quantity"
-                        className="w-6 h-6 rounded-full bg-[#1C1917] hover:bg-[#7A1C3B] text-white flex items-center justify-center active:scale-95 transition cursor-pointer"
+                        className="w-7 h-7 rounded-full bg-[#1C1917] hover:bg-[#7A1C3B] text-white flex items-center justify-center active:scale-90 transition cursor-pointer"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
@@ -606,14 +610,14 @@ export default function CartPage() {
                 </div>
               ) : (
                 <div className="space-y-1.5">
-                  <form onSubmit={handleApplyCoupon} className="flex items-center bg-[#FAF7F2] rounded-full p-1 pl-4 border border-[#EFE8E1] focus-within:border-[#7A1C3B] focus-within:ring-2 focus-within:ring-[#7A1C3B]/10 transition-all">
+                  <form onSubmit={handleApplyCoupon} className="flex items-center gap-2 bg-[#FAF7F2] rounded-full p-1 pl-4 border border-[#EFE8E1] focus-within:border-[#7A1C3B] focus-within:ring-2 focus-within:ring-[#7A1C3B]/10 transition-all">
                     <input
                       type="text"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                       placeholder="Promo Code"
                       style={{ outline: 'none', boxShadow: 'none' }}
-                      className="flex-1 bg-transparent text-xs sm:text-sm uppercase font-semibold tracking-wider text-[#1C1917] placeholder:normal-case placeholder:font-normal placeholder-[#A39992] border-0 outline-none focus:outline-none focus:ring-0 focus:border-0 shadow-none ring-0"
+                      className="flex-1 min-w-0 bg-transparent text-xs sm:text-sm uppercase font-semibold tracking-wider text-[#1C1917] placeholder:normal-case placeholder:font-normal placeholder-[#A39992] border-0 outline-none focus:outline-none focus:ring-0 focus:border-0 shadow-none ring-0"
                     />
                     <button
                       type="submit"
@@ -632,7 +636,7 @@ export default function CartPage() {
               )}
             </div>
 
-            
+
           </section>
         )}
 
@@ -663,14 +667,12 @@ export default function CartPage() {
                 role="switch"
                 aria-checked={giftWrap}
                 onClick={() => setGiftWrap(!giftWrap)}
-                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                  giftWrap ? 'bg-[#7A1C3B]' : 'bg-[#E5DCD4]'
-                }`}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${giftWrap ? 'bg-[#7A1C3B]' : 'bg-[#E5DCD4]'
+                  }`}
               >
                 <span
-                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
-                    giftWrap ? 'translate-x-5' : 'translate-x-0'
-                  }`}
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${giftWrap ? 'translate-x-5' : 'translate-x-0'
+                    }`}
                 />
               </button>
             </div>
@@ -708,7 +710,7 @@ export default function CartPage() {
                     maxLength={150}
                     value={giftNote}
                     onChange={(e) => setGiftNote(e.target.value)}
-                    placeholder="Happy Birthday Mia! Hope this brings joy ✨ With love, Sophie"
+                    placeholder="Write a personal note for our studio card (e.g. Happy Nikah! Wishing you endless joy ✨)"
                     className="w-full text-xs p-3 rounded-2xl border border-[#EFE8E1] bg-[#FAF7F2] focus:outline-none focus:ring-2 focus:ring-[#7A1C3B]/20 text-[#1C1917] resize-none leading-relaxed placeholder-[#A39992]"
                   />
                 </div>
@@ -730,17 +732,23 @@ export default function CartPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-              {FINISHING_TOUCHES.map((touch) => {
+              {FINISHING_TOUCHES.map((touch, idx) => {
                 const isAdded = addedAddonIds[touch.id];
                 return (
                   <div
                     key={touch.id}
-                    className="bg-white rounded-3xl p-3 border border-[#EFE8E1] shadow-xs flex flex-col justify-between hover:border-[#DFD5CB] transition-all"
+                    style={{ animationDelay: `${idx * 45}ms` }}
+                    className="bg-white rounded-3xl p-3 border border-[#EFE8E1] shadow-xs flex flex-col justify-between hover:border-[#DFD5CB] active:scale-[0.98] transition-all animate-card-rise"
                   >
                     <div className="relative aspect-4/3 w-full rounded-2xl overflow-hidden bg-[#FAF7F2] mb-2 border border-[#EFE8E1]">
                       <img
                         src={touch.image}
                         alt={touch.name}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = '/images/gift-for-her.svg';
+                        }}
                         className="w-full h-full object-cover"
                       />
                       <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-white/95 text-[9px] font-bold text-[#7A1C3B] shadow-2xs">
@@ -765,11 +773,10 @@ export default function CartPage() {
                       <button
                         type="button"
                         onClick={() => handleAddFinishingTouch(touch)}
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                          isAdded
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${isAdded
                             ? 'bg-[#7A1C3B] text-white shadow-2xs'
                             : 'bg-[#F6E9EE] text-[#7A1C3B] hover:bg-[#7A1C3B] hover:text-white active:scale-95'
-                        }`}
+                          }`}
                       >
                         {isAdded ? (
                           <>
