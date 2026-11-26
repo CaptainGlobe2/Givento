@@ -151,9 +151,10 @@ export async function POST(request: Request) {
       decorations: validatedDecorations,
       items: validatedItems,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { valid: false, error: 'Server validation error: ' + error.message },
+      { valid: false, error: 'Server validation error: ' + msg },
       { status: 500 }
     );
   }

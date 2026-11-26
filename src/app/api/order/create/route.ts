@@ -77,10 +77,17 @@ export async function POST(request: Request) {
     ]);
 
     // 2. Server re-computes all items, checks stock & creates immutable snapshots
+    const FINISHING_TOUCHES_PRICES: Record<string, { name: string; price: number }> = {
+      'addon-pouch': { name: 'Velvet Jewellery Pouch', price: 49 },
+      'addon-polaroid': { name: 'Mini Polaroid Memory Print', price: 39 },
+      'addon-clip': { name: 'Crochet Flower Hair Clip', price: 79 },
+      'addon-charm': { name: 'Resin Gold Flake Charm', price: 99 },
+    };
+
     let calculatedSubtotal = 0;
     let hasPriceOnRequest = false;
     const validatedOrderItems: AdminOrderItem[] = [];
-    const stockDecrements: Array<() => Promise<any>> = [];
+    const stockDecrements: Array<() => Promise<unknown>> = [];
 
     for (const item of items) {
       const q = Math.max(1, Number(item.quantity) || 1);
@@ -173,13 +180,28 @@ export async function POST(request: Request) {
         stockDecrements.push(async () => {
           await db.decrementBouquetStock(
             sheet.id,
-            (b.items || []).map((x: any) => ({
+            ((b.items || []) as Array<{ id: string; quantity?: number }>).map((x) => ({
               id: x.id,
               quantity: (Number(x.quantity) || 1) * q,
             }))
           );
         });
       } else {
+        const rawPid = String(item.productId || item.product?.id || '');
+        const addonMeta = FINISHING_TOUCHES_PRICES[rawPid];
+        if (addonMeta) {
+          calculatedSubtotal += addonMeta.price * q;
+          validatedOrderItems.push({
+            productId: rawPid,
+            productName: addonMeta.name,
+            quantity: q,
+            price: addonMeta.price,
+            variants: item.selectedVariants || item.variants,
+            personalisation: item.personalisationData || item.personalisation,
+          });
+          continue;
+        }
+
         // Standard Product
         const p = dbProducts.find((x) => x.id === item.productId || x.id === item.product?.id || x.slug === item.product?.slug);
         if (!p) {
@@ -215,12 +237,19 @@ export async function POST(request: Request) {
         const lineTotal = unitPrice * q;
         calculatedSubtotal += lineTotal;
 
+        const mergedPersonalisation = {
+          ...(item.personalisationData || item.personalisation || {}),
+          ...(item.photoUrl ? { 'Uploaded Photo': String(item.photoUrl) } : {}),
+        };
+
         validatedOrderItems.push({
+          productId: p.id,
           productName: p.name,
           quantity: q,
           price: unitPrice,
+          image: p.images?.[0],
           variants: item.selectedVariants || item.variants,
-          personalisation: item.personalisationData || item.personalisation,
+          personalisation: Object.keys(mergedPersonalisation).length > 0 ? mergedPersonalisation : undefined,
         });
 
         // Queue stock decrement
@@ -310,6 +339,7 @@ export async function POST(request: Request) {
       paymentMethod: 'whatsapp',
       paymentStatus: 'Pending',
       subtotal: calculatedSubtotal,
+      discount: discountAmount,
       giftWrap: !!giftWrap,
       giftNote: giftNote?.trim() || undefined,
       sendAsGift: !!sendAsGift,
@@ -378,6 +408,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       orderId,
+      order: savedOrder,
       status: 'Pending WhatsApp Confirmation',
       subtotal: calculatedSubtotal,
       discount: discountAmount,
@@ -389,10 +420,11 @@ export async function POST(request: Request) {
       orderText: orderMsg,
       trackingUrl: `/order/${orderId}`,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Server error processing order checkout.';
     console.error('Checkout error:', error);
     return NextResponse.json(
-      { success: false, error: error.message || 'Server error processing order checkout.' },
+      { success: false, error: msg },
       { status: 500 }
     );
   }

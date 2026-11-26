@@ -2,20 +2,29 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const orderData = await request.json();
+    const orderData = (await request.json()) as {
+      id?: string;
+      customerName?: string;
+      customerPhone?: string;
+      customerEmail?: string;
+    };
 
-    // Format email confirmation log / mock
-    console.log(`[Order Confirmation] Order #${orderData.id} placed by ${orderData.customerName} (${orderData.customerPhone})`);
-    console.log(`[Notification Email Dispatched] To: ${orderData.customerEmail || 'no-email@givento.in'} and studio: orders@givento.in`);
+    console.log(
+      `[Order Confirmation] Order #${orderData.id || 'unknown'} placed by ${orderData.customerName || 'Guest'} (${orderData.customerPhone || 'N/A'})`
+    );
+    console.log(
+      `[Notification Email Dispatched] To: ${orderData.customerEmail || 'no-email@givento.in'} and studio: orders@givento.in`
+    );
 
     return NextResponse.json({
       success: true,
       message: 'Order confirmation logged and dispatched',
       orderId: orderData.id,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Notification error';
     return NextResponse.json(
-      { success: false, error: error.message || 'Notification error' },
+      { success: false, error: msg },
       { status: 500 }
     );
   }

@@ -38,7 +38,7 @@ export default function BouquetBuilder() {
   const [lastAdded, setLastAdded] = useState<string | null>(null);
 
   // Price animation state
-  const [lastTotal, setLastTotal] = useState<number | null>(null);
+  const prevTotalRef = useRef<number | null>(null);
   const [deltaChip, setDeltaChip] = useState<{ text: string; isNeg: boolean } | null>(null);
   const [isBumping, setIsBumping] = useState(false);
   const [addedBtnText, setAddedBtnText] = useState('Add to bag');
@@ -52,10 +52,15 @@ export default function BouquetBuilder() {
   const [calm, setCalm] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-      setCalm(media.matches);
-    }
+    if (typeof window === 'undefined') return;
+    let active = true;
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    Promise.resolve().then(() => {
+      if (active) setCalm(media.matches);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   // Fetch dynamic data from database
@@ -109,7 +114,7 @@ export default function BouquetBuilder() {
             price: i.price,
             stock: i.stock,
             group: i.group,
-            shape: (i.shape as any) || 'rose',
+            shape: (i.shape as PrototypeBouquetItem['shape']) || 'rose',
             color: i.color || '#e0607e',
           }));
           setItems(activeItems);
@@ -230,22 +235,28 @@ export default function BouquetBuilder() {
 
   // Price animation bump & delta chip
   useEffect(() => {
-    if (lastTotal !== null && bouquetDetails.total !== lastTotal) {
-      const diff = bouquetDetails.total - lastTotal;
-      setDeltaChip({
-        text: (diff > 0 ? '+' : '−') + '₹' + Math.abs(diff),
-        isNeg: diff < 0,
-      });
-      setIsBumping(true);
-      const bTimer = setTimeout(() => setIsBumping(false), 450);
-      const cTimer = setTimeout(() => setDeltaChip(null), 1000);
+    const prev = prevTotalRef.current;
+    prevTotalRef.current = bouquetDetails.total;
+    if (prev !== null && bouquetDetails.total !== prev) {
+      const diff = bouquetDetails.total - prev;
+      let bTimer: ReturnType<typeof setTimeout> | undefined;
+      let cTimer: ReturnType<typeof setTimeout> | undefined;
+      const startTimer = setTimeout(() => {
+        setDeltaChip({
+          text: (diff > 0 ? '+' : '−') + '₹' + Math.abs(diff),
+          isNeg: diff < 0,
+        });
+        setIsBumping(true);
+        bTimer = setTimeout(() => setIsBumping(false), 450);
+        cTimer = setTimeout(() => setDeltaChip(null), 1000);
+      }, 0);
       return () => {
-        clearTimeout(bTimer);
-        clearTimeout(cTimer);
+        clearTimeout(startTimer);
+        if (bTimer) clearTimeout(bTimer);
+        if (cTimer) clearTimeout(cTimer);
       };
     }
-    setLastTotal(bouquetDetails.total);
-  }, [bouquetDetails.total, lastTotal]);
+  }, [bouquetDetails.total]);
 
   // Minibar Intersection Observer
   useEffect(() => {

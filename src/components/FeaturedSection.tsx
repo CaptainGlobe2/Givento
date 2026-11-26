@@ -206,7 +206,7 @@ export default function FeaturedSection({
             <select
               id="shop-sort"
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as 'featured' | 'asc' | 'desc')}
               className="h-9 border border-[#e8dcdc] rounded-lg px-2.5 bg-white text-[#231a1d] text-xs sm:text-sm focus:border-[#7a1c3b] focus:outline-none"
             >
               <option value="featured">Featured Picks</option>

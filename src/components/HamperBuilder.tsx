@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBasket } from '../context/BasketContext';
 import { db } from '../lib/database';
@@ -103,7 +103,7 @@ export default function HamperBuilder() {
   const [recipientName, setRecipientName] = useState<string>('Amina');
 
   // Price animation
-  const [lastTotal, setLastTotal] = useState<number | null>(null);
+  const prevTotalRef = useRef<number | null>(null);
   const [deltaChip, setDeltaChip] = useState<{ text: string; isNeg: boolean } | null>(null);
   const [isBumping, setIsBumping] = useState(false);
   const [btnText, setBtnText] = useState('Add to bag');
@@ -163,22 +163,28 @@ export default function HamperBuilder() {
 
   // Price animation bump
   useEffect(() => {
-    if (lastTotal !== null && calculatedTotal !== lastTotal) {
-      const diff = calculatedTotal - lastTotal;
-      setDeltaChip({
-        text: (diff > 0 ? '+' : '−') + '₹' + Math.abs(diff),
-        isNeg: diff < 0,
-      });
-      setIsBumping(true);
-      const bTimer = setTimeout(() => setIsBumping(false), 450);
-      const cTimer = setTimeout(() => setDeltaChip(null), 1000);
+    const prev = prevTotalRef.current;
+    prevTotalRef.current = calculatedTotal;
+    if (prev !== null && calculatedTotal !== prev) {
+      const diff = calculatedTotal - prev;
+      let bTimer: ReturnType<typeof setTimeout> | undefined;
+      let cTimer: ReturnType<typeof setTimeout> | undefined;
+      const startTimer = setTimeout(() => {
+        setDeltaChip({
+          text: (diff > 0 ? '+' : '−') + '₹' + Math.abs(diff),
+          isNeg: diff < 0,
+        });
+        setIsBumping(true);
+        bTimer = setTimeout(() => setIsBumping(false), 450);
+        cTimer = setTimeout(() => setDeltaChip(null), 1000);
+      }, 0);
       return () => {
-        clearTimeout(bTimer);
-        clearTimeout(cTimer);
+        clearTimeout(startTimer);
+        if (bTimer) clearTimeout(bTimer);
+        if (cTimer) clearTimeout(cTimer);
       };
     }
-    setLastTotal(calculatedTotal);
-  }, [calculatedTotal, lastTotal]);
+  }, [calculatedTotal]);
 
   // Item toggle / stepper
   const handleToggleItem = (id: string) => {

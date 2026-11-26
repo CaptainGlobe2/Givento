@@ -249,7 +249,7 @@ export default function CartPage() {
   }, [appliedCoupon, subtotal]);
   const finalTotal = Math.max(0, subtotal + packagingFee + deliveryCharge - couponDiscount);
 
-  // Save cart order to admin database
+  // Save cart order via authoritative server checkout route (with client history sync)
   const handleCartOrderSubmit = async (customerData: {
     name: string;
     phone: string;
@@ -258,7 +258,60 @@ export default function CartPage() {
     pincode: string;
     instructions: string;
   }) => {
-    const newOrder = await db.createOrder({
+    try {
+      const res = await fetch('/api/order/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: {
+            name: customerData.name,
+            phone: customerData.phone,
+            address: customerData.address,
+            city: customerData.city,
+            pincode: customerData.pincode,
+          },
+          giftWrap,
+          giftNote,
+          couponCode: appliedCoupon?.code,
+          channel: 'website',
+          items: items.map((it) => ({
+            productId: it.product.id,
+            product: it.product,
+            quantity: it.quantity,
+            selectedVariants: it.selectedVariants,
+            personalisationData: {
+              ...(it.personalisationData || {}),
+              ...(customerData.instructions ? { 'Special Notes': customerData.instructions } : {}),
+            },
+            photoUrl: it.photoUrl,
+            isCustomBouquet: it.isCustomBouquet,
+            customBouquet: it.customBouquet,
+          })),
+        }),
+      });
+
+      const payload = (await res.json()) as { success?: boolean; order?: import('../../lib/database').AdminOrder };
+      if (res.ok && payload.success && payload.order) {
+        if (typeof window !== 'undefined') {
+          try {
+            const raw = localStorage.getItem('givento_user_orders');
+            const existing = raw ? JSON.parse(raw) : [];
+            const nextList = Array.isArray(existing)
+              ? [payload.order, ...existing.filter((o: { id?: string }) => o.id !== payload.order?.id)]
+              : [payload.order];
+            localStorage.setItem('givento_user_orders', JSON.stringify(nextList));
+          } catch {
+            // ignore storage errors
+          }
+        }
+        clearBasket();
+        return payload.order;
+      }
+    } catch {
+      // Fallback to local db order creation if API unreachable
+    }
+
+    const fallbackOrder = await db.createOrder({
       customerName: customerData.name,
       customerPhone: customerData.phone,
       address: customerData.address,
@@ -289,11 +342,14 @@ export default function CartPage() {
           it.product.images?.[0] ||
           'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=400&q=80',
         variants: it.selectedVariants,
-        personalisation: it.personalisationData,
+        personalisation: {
+          ...(it.personalisationData || {}),
+          ...(it.photoUrl ? { 'Uploaded Photo': it.photoUrl } : {}),
+        },
       })),
     });
     clearBasket();
-    return newOrder;
+    return fallbackOrder;
   };
 
   // WhatsApp message template
@@ -534,6 +590,14 @@ export default function CartPage() {
                     <p className="text-xs text-[#8C827A] line-clamp-1">
                       {subtitle}
                     </p>
+                    {item.photoUrl && (
+                      <div className="flex items-center gap-1.5 text-[10px] font-semibold text-[#7A1C3B]">
+                        <span className="inline-block w-4 h-4 rounded overflow-hidden border border-[#FADDE3] shrink-0">
+                          <img src={item.photoUrl} alt="Reference" className="w-full h-full object-cover" />
+                        </span>
+                        <span>Custom photo attached</span>
+                      </div>
+                    )}
                     <div className="font-bold text-sm sm:text-base text-[#1C1917] pt-0.5 tabular-nums">
                       ₹{price.toLocaleString('en-IN')}
                     </div>

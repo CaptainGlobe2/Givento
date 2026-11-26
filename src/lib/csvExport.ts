@@ -1,7 +1,7 @@
 import { AdminOrder } from './database';
-import { Expense } from '../types';
+import { Expense, ProfitSummary } from '../types';
 
-function escapeCsvCell(val: any): string {
+function escapeCsvCell(val: unknown): string {
   if (val === null || val === undefined) return '';
   const str = String(val);
   if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
@@ -100,7 +100,7 @@ export function generateExpensesCsv(expenses: Expense[]): string {
 /**
  * Generates CSV content for Comprehensive Profit Summary
  */
-export function generateProfitSummaryCsv(summary: any): string {
+export function generateProfitSummaryCsv(summary: ProfitSummary): string {
   const lines: string[] = [];
 
   lines.push('--- GIVENTO.IN STUDIO FINANCIAL & PROFIT SUMMARY ---');
@@ -122,7 +122,7 @@ export function generateProfitSummaryCsv(summary: any): string {
   lines.push('SALES PERFORMANCE BY CHANNEL');
   lines.push('Channel,Order Count,Gross Revenue (INR),Revenue Share (%)');
   if (summary.revenueByChannel) {
-    Object.entries(summary.revenueByChannel).forEach(([ch, val]: [string, any]) => {
+    Object.entries(summary.revenueByChannel).forEach(([ch, val]: [string, { revenue: number; orderCount?: number; percentage?: number } | number]) => {
       const rev = typeof val === 'object' ? val.revenue : val;
       const count = typeof val === 'object' ? val.orderCount : '';
       const pct = typeof val === 'object' ? val.percentage : (summary.grossRevenue > 0 ? Math.round((rev / summary.grossRevenue) * 100) : 0);
@@ -143,7 +143,7 @@ export function generateProfitSummaryCsv(summary: any): string {
   if (summary.perOrderProfits && summary.perOrderProfits.length > 0) {
     lines.push('PER-ORDER PROFITABILITY LEDGER');
     lines.push('Order ID,Date,Customer Name,Channel,Sale Price (INR),Delivery Fee (INR),Materials Cost (INR),Packing Cost (INR),Shipping Cost (INR),Commission (INR),Net Order Profit (INR),Margin (%)');
-    summary.perOrderProfits.forEach((po: any) => {
+    summary.perOrderProfits.forEach((po) => {
       lines.push([
         escapeCsvCell(po.orderId),
         escapeCsvCell(po.date),

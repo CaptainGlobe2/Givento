@@ -31,8 +31,10 @@ import {
   ExpenseCategory,
   PriceType,
   OrderStatusHistory,
+  SalesSummary,
+  ProfitSummary,
 } from '../../types';
-import { WrappingSheet, BouquetItem } from '../../types/bouquet';
+import { WrappingSheet, BouquetItem, BouquetGroup } from '../../types/bouquet';
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -119,9 +121,9 @@ export default function AdminDashboard() {
   const [custOptions, setCustOptions] = useState<CustomizationOption[]>([]);
   const [custStudioFilter, setCustStudioFilter] = useState<'all' | 'bouquet' | 'resin' | 'frame' | 'hamper'>('all');
   const [settings, setSettings] = useState<SiteSettings | null>(null);
-  const [analytics, setAnalytics] = useState<any>(null);
+  const [analytics, setAnalytics] = useState<SalesSummary | null>(null);
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [profitSummary, setProfitSummary] = useState<any>(null);
+  const [profitSummary, setProfitSummary] = useState<ProfitSummary | null>(null);
 
   // New Decoration Modal State
   const [isNewDecOpen, setIsNewDecOpen] = useState(false);
@@ -355,18 +357,6 @@ export default function AdminDashboard() {
   const [dashTrendPeriod, setDashTrendPeriod] = useState<'today' | 'week' | 'month'>('today');
   const [dashCategoryPeriod, setDashCategoryPeriod] = useState<'this_week' | 'this_month' | 'all'>('this_week');
 
-  // Check auth
-  useEffect(() => {
-    const auth = sessionStorage.getItem('givento_admin_auth');
-    if (!auth) {
-      router.push('/admin/login');
-    } else {
-      setIsAuthenticated(true);
-      setNewExpenseDate(new Date().toISOString().split('T')[0]);
-      loadAllData();
-    }
-  }, [router]);
-
   const loadAllData = async () => {
     const [p, r, o, c, req, sh, bi, s, an, sub, tx, bSizes, decs, aiConvs, exps, prof, cOpts] = await Promise.all([
       db.getProducts(),
@@ -409,8 +399,34 @@ export default function AdminDashboard() {
     setCustOptions(cOpts);
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('givento_admin_auth');
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/admin/auth/session', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : { authenticated: false }))
+      .then((data) => {
+        if (cancelled) return;
+        if (!data?.authenticated) {
+          router.push('/admin/login');
+          return;
+        }
+        setIsAuthenticated(true);
+        setNewExpenseDate(new Date().toISOString().split('T')[0]);
+        loadAllData();
+      })
+      .catch(() => {
+        if (!cancelled) router.push('/admin/login');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/auth/logout', { method: 'POST' });
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
     router.push('/admin/login');
   };
 
@@ -427,7 +443,7 @@ export default function AdminDashboard() {
     loadAllData();
   };
 
-  const handleUpdateProductBouquet = async (id: string, field: 'bouquetPrice' | 'bouquetGroup', val: any) => {
+  const handleUpdateProductBouquet = async (id: string, field: 'bouquetPrice' | 'bouquetGroup', val: number | BouquetGroup) => {
     await db.updateProduct(id, { [field]: val });
     loadAllData();
   };
@@ -1033,9 +1049,11 @@ export default function AdminDashboard() {
     setManualItems(updated);
   };
 
-  const handleUpdateManualItemField = (idx: number, field: string, val: any) => {
+  const handleUpdateManualItemField = (idx: number, field: 'productId' | 'productName' | 'quantity' | 'price' | 'notes', val: string | number) => {
     const updated = [...manualItems];
-    (updated[idx] as any)[field] = val;
+    const item = { ...updated[idx] };
+    if (field === 'quantity' || field === 'price') { item[field] = Number(val); } else { item[field] = String(val); }
+    updated[idx] = item;
     setManualItems(updated);
   };
 
@@ -1178,7 +1196,7 @@ export default function AdminDashboard() {
   };
 
   const handleToggleAiRecommendable = async (pId: string, current: boolean) => {
-    await db.updateProduct(pId, { isAiRecommendable: !current } as any);
+    await db.updateProduct(pId, { isAiRecommendable: !current });
     loadAllData();
   };
 
@@ -2374,7 +2392,7 @@ export default function AdminDashboard() {
                 ].map((ch) => (
                   <button
                     key={ch.key}
-                    onClick={() => setOrderChannelFilter(ch.key as any)}
+                    onClick={() => setOrderChannelFilter(ch.key as 'all' | OrderChannel)}
                     className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${orderChannelFilter === ch.key
                       ? 'bg-[#7a1c3b] text-white shadow-xs'
                       : 'bg-[#faf7f2] hover:bg-[#f5f5f4] text-[#44403c] border border-[#EFE8E1]'
@@ -2400,7 +2418,7 @@ export default function AdminDashboard() {
                 ].map((st) => (
                   <button
                     key={st.key}
-                    onClick={() => setOrderStatusFilter(st.key as any)}
+                    onClick={() => setOrderStatusFilter(st.key as 'all' | OrderStatus)}
                     className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${orderStatusFilter === st.key
                       ? 'bg-[#7a1c3b] text-white shadow-xs'
                       : 'bg-[#faf7f2] hover:bg-[#f5f5f4] text-[#44403c] border border-[#EFE8E1]'
@@ -2489,7 +2507,7 @@ export default function AdminDashboard() {
                           {/* Status Pill & Quick Changer Dropdown */}
                           <select
                             value={order.status}
-                            onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value as any)}
+                            onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value as OrderStatus)}
                             className="px-2 py-1 text-xs font-semibold border border-[#EFE8E1] rounded-lg bg-[#faf7f2] hover:bg-white text-[#1c1917] transition"
                           >
                             <option value="Pending WhatsApp Confirmation">Pending WhatsApp</option>
@@ -2816,7 +2834,7 @@ export default function AdminDashboard() {
                 <div className="sm:col-span-3">
                   <select
                     value={productStockFilter}
-                    onChange={(e) => setProductStockFilter(e.target.value as any)}
+                    onChange={(e) => setProductStockFilter(e.target.value as 'all' | 'in_stock' | 'low_stock' | 'out_of_stock')}
                     className="w-full px-3 py-2 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs font-medium focus:outline-none focus:ring-1 focus:ring-[#7a1c3b] focus:bg-white"
                   >
                     <option value="all">All Stock Statuses</option>
@@ -2959,7 +2977,7 @@ export default function AdminDashboard() {
                               <label className="block text-[10px] text-[#78716c] font-semibold">Bouquet Group</label>
                               <select
                                 value={p.bouquetGroup ?? 'more'}
-                                onChange={(e) => handleUpdateProductBouquet(p.id, 'bouquetGroup', e.target.value)}
+                                onChange={(e) => handleUpdateProductBouquet(p.id, 'bouquetGroup', e.target.value as BouquetGroup)}
                                 className="w-full px-2 py-1 border border-[#EFE8E1] rounded text-xs bg-white"
                               >
                                 <option value="choc">Chocolates</option>
@@ -3265,7 +3283,7 @@ export default function AdminDashboard() {
 
                   <select
                     value={inventoryTypeFilter}
-                    onChange={(e) => setInventoryTypeFilter(e.target.value as any)}
+                    onChange={(e) => setInventoryTypeFilter(e.target.value as 'all' | 'product' | 'wrapping_sheet' | 'decoration')}
                     className="px-2.5 py-1.5 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs focus:outline-none"
                   >
                     <option value="all">All Item Types</option>
@@ -3276,7 +3294,7 @@ export default function AdminDashboard() {
 
                   <select
                     value={inventoryStatusFilter}
-                    onChange={(e) => setInventoryStatusFilter(e.target.value as any)}
+                    onChange={(e) => setInventoryStatusFilter(e.target.value as 'all' | 'low_stock' | 'out_of_stock')}
                     className="px-2.5 py-1.5 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs focus:outline-none"
                   >
                     <option value="all">All Stock Levels</option>
@@ -3732,7 +3750,7 @@ export default function AdminDashboard() {
                 <button
                   key={f.id}
                   type="button"
-                  onClick={() => setCustStudioFilter(f.id as any)}
+                  onClick={() => setCustStudioFilter(f.id as 'all' | 'bouquet' | 'resin' | 'frame' | 'hamper')}
                   className={`px-3 py-1 rounded-full font-medium transition cursor-pointer ${custStudioFilter === f.id
                     ? 'bg-[#7a1c3b] text-white font-bold shadow-xs'
                     : 'bg-white border border-[#EFE8E1] text-[#44403c] hover:bg-[#faf7f2]'
@@ -4221,7 +4239,7 @@ export default function AdminDashboard() {
                   {(profitSummary?.topProducts || []).length === 0 ? (
                     <p className="text-xs text-[#78716c] italic">No product sales in selected period.</p>
                   ) : (
-                    (profitSummary?.topProducts || []).map((tp: any, idx: number) => (
+                    (profitSummary?.topProducts || []).map((tp, idx: number) => (
                       <div
                         key={tp.productId}
                         className="flex items-center justify-between text-xs p-2 rounded-lg bg-[#faf7f2] border border-[#EFE8E1]"
@@ -4250,7 +4268,7 @@ export default function AdminDashboard() {
                       Popular Wrapping Sheets
                     </span>
                     <div className="space-y-1.5">
-                      {(profitSummary?.topSheets || []).slice(0, 3).map((ts: any) => (
+                      {(profitSummary?.topSheets || []).slice(0, 3).map((ts) => (
                         <div key={ts.name} className="flex justify-between text-[11px]">
                           <span className="text-[#44403c] truncate">{ts.name}</span>
                           <span className="font-bold text-[#1c1917] tabular-nums">{ts.usesCount} bouquets</span>
@@ -4264,7 +4282,7 @@ export default function AdminDashboard() {
                       Top Add-ons &amp; Embellishments
                     </span>
                     <div className="space-y-1.5">
-                      {(profitSummary?.topAddons || []).slice(0, 3).map((ta: any) => (
+                      {(profitSummary?.topAddons || []).slice(0, 3).map((ta) => (
                         <div key={ta.name} className="flex justify-between text-[11px]">
                           <span className="text-[#44403c] truncate">{ta.name}</span>
                           <span className="font-bold text-[#1c1917] tabular-nums">{ta.count}</span>
@@ -4337,7 +4355,7 @@ export default function AdminDashboard() {
                         className="px-2.5 py-1 rounded-lg bg-[#faf7f2] border border-[#EFE8E1] flex items-center gap-1.5"
                       >
                         <span className="capitalize text-[#44403c]">{cat.replace(/_/g, ' ')}:</span>
-                        <span className="font-bold text-rose-700 tabular-nums">₹{amt as any}</span>
+                        <span className="font-bold text-rose-700 tabular-nums">₹{amt}</span>
                       </div>
                     ))}
                   </div>
@@ -4382,7 +4400,7 @@ export default function AdminDashboard() {
                         </td>
                       </tr>
                     ) : (
-                      (profitSummary?.perOrderProfits || []).map((po: any) => (
+                      (profitSummary?.perOrderProfits || []).map((po) => (
                         <tr key={po.orderId} className="hover:bg-[#fffdfa] transition">
                           <td className="py-2 px-3">
                             <span className="font-mono font-bold text-[#7a1c3b] block">{po.orderId}</span>
@@ -4485,8 +4503,8 @@ export default function AdminDashboard() {
                         expenseFilterCategory === 'all'
                           ? true
                           : e.category === expenseFilterCategory ||
-                          (expenseFilterCategory === 'marketing_ads' && (e.category === 'marketing' as any)) ||
-                          (expenseFilterCategory === 'shipping_courier' && (e.category === 'courier_dispatch' as any))
+                          (expenseFilterCategory === 'marketing_ads' && (e.category === 'marketing')) ||
+                          (expenseFilterCategory === 'shipping_courier' && (e.category === 'courier_dispatch'))
                       )
                       .length === 0 ? (
                       <tr>
@@ -4500,8 +4518,8 @@ export default function AdminDashboard() {
                           expenseFilterCategory === 'all'
                             ? true
                             : e.category === expenseFilterCategory ||
-                            (expenseFilterCategory === 'marketing_ads' && (e.category === 'marketing' as any)) ||
-                            (expenseFilterCategory === 'shipping_courier' && (e.category === 'courier_dispatch' as any))
+                            (expenseFilterCategory === 'marketing_ads' && (e.category === 'marketing')) ||
+                            (expenseFilterCategory === 'shipping_courier' && (e.category === 'courier_dispatch'))
                         )
                         .map((exp) => (
                           <tr key={exp.id} className="hover:bg-[#fffdfa] transition">
@@ -4519,12 +4537,12 @@ export default function AdminDashboard() {
                                   Packaging
                                 </span>
                               )}
-                              {(exp.category === 'marketing_ads' || (exp.category as any) === 'marketing') && (
+                              {(exp.category === 'marketing_ads' || exp.category === 'marketing') && (
                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-50 text-purple-800 border border-purple-200">
                                   Marketing &amp; Ads
                                 </span>
                               )}
-                              {(exp.category === 'shipping_courier' || (exp.category as any) === 'courier_dispatch') && (
+                              {(exp.category === 'shipping_courier' || exp.category === 'courier_dispatch') && (
                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-800 border border-sky-200">
                                   Shipping/Courier
                                 </span>
@@ -4539,7 +4557,7 @@ export default function AdminDashboard() {
                                   Expo Stall
                                 </span>
                               )}
-                              {(exp.category === 'miscellaneous' || (exp.category as any) === 'rent_utilities' || (exp.category as any) === 'other') && (
+                              {(exp.category === 'miscellaneous' || exp.category === 'rent_utilities' || exp.category === 'other') && (
                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-50 text-gray-700 border border-gray-200">
                                   Miscellaneous
                                 </span>
@@ -4648,7 +4666,7 @@ export default function AdminDashboard() {
                   <label className="block font-semibold text-[#1c1917]">Pricing Mode:</label>
                   <select
                     value={newProductPriceType}
-                    onChange={(e) => setNewProductPriceType(e.target.value as any)}
+                    onChange={(e) => setNewProductPriceType(e.target.value as PriceType)}
                     className="w-full px-3 py-2 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#7a1c3b] focus:bg-white"
                   >
                     <option value="fixed">Fixed Price (₹)</option>
@@ -4738,7 +4756,7 @@ export default function AdminDashboard() {
                       <label className="block text-[10px] text-[#78716c] font-semibold">Bouquet Group</label>
                       <select
                         value={newProductBouquetGroup}
-                        onChange={(e) => setNewProductBouquetGroup(e.target.value as any)}
+                        onChange={(e) => setNewProductBouquetGroup(e.target.value as BouquetGroup)}
                         className="w-full px-2 py-1 border border-[#EFE8E1] rounded text-xs bg-white"
                       >
                         <option value="choc">Chocolates</option>
@@ -4838,7 +4856,7 @@ export default function AdminDashboard() {
                   <label className="block font-semibold text-[#1c1917]">Pricing Mode:</label>
                   <select
                     value={editProductPriceType}
-                    onChange={(e) => setEditProductPriceType(e.target.value as any)}
+                    onChange={(e) => setEditProductPriceType(e.target.value as PriceType)}
                     className="w-full px-3 py-2 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#7a1c3b] focus:bg-white"
                   >
                     <option value="fixed">Fixed Price (₹)</option>
@@ -4926,7 +4944,7 @@ export default function AdminDashboard() {
                       <label className="block text-[10px] text-[#78716c] font-semibold">Bouquet Group</label>
                       <select
                         value={editProductBouquetGroup}
-                        onChange={(e) => setEditProductBouquetGroup(e.target.value as any)}
+                        onChange={(e) => setEditProductBouquetGroup(e.target.value as BouquetGroup)}
                         className="w-full px-2 py-1 border border-[#EFE8E1] rounded text-xs bg-white"
                       >
                         <option value="choc">Chocolates</option>
@@ -5263,7 +5281,7 @@ export default function AdminDashboard() {
                 <label className="block font-semibold text-[#1c1917]">Audit Reason:</label>
                 <select
                   value={adjustReason}
-                  onChange={(e) => setAdjustReason(e.target.value as any)}
+                  onChange={(e) => setAdjustReason(e.target.value as InventoryTransaction['reason'])}
                   className="w-full px-3 py-2 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#7a1c3b] focus:bg-white"
                 >
                   <option value="stock_in">Stock In / Supplier Restock (+)</option>
@@ -5597,7 +5615,7 @@ export default function AdminDashboard() {
                 <div className="flex gap-2">
                   <select
                     value={detailPaymentStatus}
-                    onChange={(e) => setDetailPaymentStatus(e.target.value as any)}
+                    onChange={(e) => setDetailPaymentStatus(e.target.value as OrderPaymentStatus)}
                     className="flex-1 px-3 py-1.5 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs"
                   >
                     <option value="Unpaid">Unpaid</option>
@@ -6024,7 +6042,7 @@ export default function AdminDashboard() {
                   <label className="block font-semibold text-[#1c1917]">Order Channel:</label>
                   <select
                     value={manualChannel}
-                    onChange={(e) => setManualChannel(e.target.value as any)}
+                    onChange={(e) => setManualChannel(e.target.value as OrderChannel)}
                     className="w-full px-3 py-2 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs"
                   >
                     <option value="whatsapp">💬 WhatsApp Direct Chat</option>
@@ -6039,7 +6057,7 @@ export default function AdminDashboard() {
                   <label className="block font-semibold text-[#1c1917]">Payment Status:</label>
                   <select
                     value={manualPaymentStatus}
-                    onChange={(e) => setManualPaymentStatus(e.target.value as any)}
+                    onChange={(e) => setManualPaymentStatus(e.target.value as OrderPaymentStatus)}
                     className="w-full px-3 py-2 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs"
                   >
                     <option value="Fully Paid">Fully Paid</option>
@@ -6412,7 +6430,7 @@ export default function AdminDashboard() {
                   <label className="block font-semibold text-[#1c1917]">Expense Category:</label>
                   <select
                     value={newExpenseCategory}
-                    onChange={(e) => setNewExpenseCategory(e.target.value as any)}
+                    onChange={(e) => setNewExpenseCategory(e.target.value as ExpenseCategory)}
                     className="w-full px-3 py-2 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs"
                   >
                     <option value="raw_materials">Raw Materials (Paper, Flowers, Resin, Charms)</option>
@@ -6559,7 +6577,7 @@ export default function AdminDashboard() {
                   <label className="block font-semibold text-[#1c1917]">Studio Type:</label>
                   <select
                     value={newOptionTypeId}
-                    onChange={(e) => setNewOptionTypeId(e.target.value as any)}
+                    onChange={(e) => setNewOptionTypeId(e.target.value as 'resin' | 'frame' | 'hamper')}
                     className="w-full px-3 py-2 bg-[#faf7f2] border border-[#EFE8E1] rounded-lg text-xs"
                   >
                     <option value="resin">Resin Keepsakes</option>

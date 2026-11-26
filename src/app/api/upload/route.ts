@@ -100,8 +100,8 @@ export async function POST(request: Request) {
         fileName: uniqueFileName,
         storage: 'local',
       });
-    } catch (fsErr) {
-      // 3. Fallback to Data URL if filesystem write is unavailable
+    } catch {
+      // Fallback to Data URL if filesystem write is unavailable
       const base64Data = buffer.toString('base64');
       const dataUrl = `data:${file.type};base64,${base64Data}`;
       return NextResponse.json({
@@ -111,10 +111,11 @@ export async function POST(request: Request) {
         storage: 'data_url',
       });
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Server failed to process image upload.';
     console.error('API Upload error:', err);
     return NextResponse.json(
-      { error: err?.message || 'Server failed to process image upload.' },
+      { error: msg },
       { status: 500 }
     );
   }

@@ -56,7 +56,7 @@ export interface AdminOrderItem {
   image?: string;
   variants?: Record<string, string>;
   personalisation?: Record<string, string>;
-  customizationDetails?: any;
+  customizationDetails?: Record<string, unknown>;
 }
 
 export interface AdminOrder {
@@ -511,9 +511,9 @@ let localExpenses: Expense[] = [...INITIAL_EXPENSES];
 let localInventoryTx: InventoryTransaction[] = [...INITIAL_INVENTORY_TRANSACTIONS];
 let localCustomizationTypes: CustomizationType[] = [...INITIAL_CUSTOMIZATION_TYPES];
 let localCustomizationOptions: CustomizationOption[] = [...INITIAL_CUSTOMIZATION_OPTIONS];
-let localStatusHistory: OrderStatusHistory[] = [];
-let localAiConversations: AiConversation[] = [];
-let localAiMessages: AiMessage[] = [];
+const localStatusHistory: OrderStatusHistory[] = [];
+const localAiConversations: AiConversation[] = [];
+const localAiMessages: AiMessage[] = [];
 let localSettings: SiteSettings = {
   festivalBanner: {
     enabled: true,
@@ -818,7 +818,7 @@ export const db = {
     const allOrders = await this.getOrders();
 
     // 1. Check allOrders list
-    let found = allOrders.find((o) => {
+    const found = allOrders.find((o) => {
       const oid = o.id.toUpperCase();
       return (
         oid === clean ||
@@ -1406,15 +1406,15 @@ export const db = {
   async getWrappingSheets(): Promise<WrappingSheet[]> {
     if (isSupabaseConfigured && supabase) {
       const { data, error } = await supabase.from('wrapping_sheets').select('*').order('created_at', { ascending: false });
-      if (!error && data && data.length > 0) return data.map((d: any) => ({
-        id: d.id,
-        name: d.name,
+      if (!error && data && data.length > 0) return data.map((d: Record<string, unknown>) => ({
+        id: String(d.id),
+        name: String(d.name),
         price: Number(d.price),
         stock: Number(d.stock),
-        base: d.base_color,
-        trim: d.trim_color,
+        base: String(d.base_color),
+        trim: String(d.trim_color),
         dots: !!d.has_dots,
-        image: d.image_url,
+        image: typeof d.image_url === 'string' ? d.image_url : undefined,
         active: !!d.is_active,
       }));
     }
@@ -1463,7 +1463,7 @@ export const db = {
       persistAll();
     }
     if (isSupabaseConfigured && supabase) {
-      const payload: any = {};
+      const payload: Record<string, unknown> = {};
       if (updates.name !== undefined) payload.name = updates.name;
       if (updates.price !== undefined) payload.price = updates.price;
       if (updates.stock !== undefined) payload.stock = updates.stock;
@@ -1805,8 +1805,8 @@ export const db = {
     };
 
     const validOrders = localOrders
-      .filter((o: any) => o.status !== 'Cancelled')
-      .filter((o: any) => isDateInRange(o.createdAt));
+      .filter((o) => o.status !== 'Cancelled')
+      .filter((o) => isDateInRange(o.createdAt));
 
     const grossRevenue = validOrders.reduce((sum, o) => sum + (o.total || 0), 0);
     const totalDiscounts = validOrders.reduce((sum, o) => sum + (o.discount || 0), 0);
@@ -1927,7 +1927,8 @@ export const db = {
     };
     validOrders.forEach((o) => {
       (o.items || []).forEach((it) => {
-        const sName = it.customizationDetails?.sheetName || it.variants?.sheet;
+        const rawSheet = it.customizationDetails?.sheetName ?? it.variants?.sheet;
+        const sName = typeof rawSheet === 'string' ? rawSheet : undefined;
         if (sName) {
           sheetCounts[sName] = (sheetCounts[sName] || 0) + 1;
         }

@@ -43,40 +43,47 @@ export function BasketProvider({ children }: { children: React.ReactNode }) {
   const [sendAsGift, setSendAsGift] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load saved basket from localStorage on client
-  useEffect(() => {
+  const persistBasketItems = (nextItems: BasketItem[]) => {
+    if (typeof window === 'undefined') return;
     try {
-      const saved = localStorage.getItem('givento_basket');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          setItems(parsed);
-        }
-      }
-      const savedGift = localStorage.getItem('givento_gift_prefs');
-      if (savedGift) {
-        const parsed = JSON.parse(savedGift);
-        setGiftWrap(!!parsed.giftWrap);
-        setGiftNote(parsed.giftNote || '');
-        setSendAsGift(!!parsed.sendAsGift);
-      }
+      localStorage.setItem('givento_basket', JSON.stringify(nextItems));
     } catch {
       // ignore storage error
-    } finally {
-      setIsLoaded(true);
     }
+  };
+
+  // Load saved basket from localStorage asynchronously on client mount
+  useEffect(() => {
+    let active = true;
+    Promise.resolve().then(() => {
+      if (!active) return;
+      try {
+        const saved = localStorage.getItem('givento_basket');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            setItems(parsed);
+          }
+        }
+        const savedGift = localStorage.getItem('givento_gift_prefs');
+        if (savedGift) {
+          const parsed = JSON.parse(savedGift);
+          setGiftWrap(!!parsed.giftWrap);
+          setGiftNote(parsed.giftNote || '');
+          setSendAsGift(!!parsed.sendAsGift);
+        }
+      } catch {
+        // ignore storage error
+      } finally {
+        setIsLoaded(true);
+      }
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
-  // Persist basket to localStorage only AFTER initial client load
-  useEffect(() => {
-    if (!isLoaded) return;
-    try {
-      localStorage.setItem('givento_basket', JSON.stringify(items));
-    } catch {
-      // ignore storage error
-    }
-  }, [items, isLoaded]);
-
+  // Sync gift prefs after initial client load
   useEffect(() => {
     if (!isLoaded) return;
     try {
@@ -101,24 +108,29 @@ export function BasketProvider({ children }: { children: React.ReactNode }) {
         (i) =>
           i.product.id === product.id &&
           JSON.stringify(i.selectedVariants || {}) === JSON.stringify(selectedVariants || {}) &&
-          JSON.stringify(i.personalisationData || {}) === JSON.stringify(personalisationData || {})
+          JSON.stringify(i.personalisationData || {}) === JSON.stringify(personalisationData || {}) &&
+          (i.photoUrl || '') === (photoUrl || '')
       );
 
+      let next: BasketItem[];
       if (existingIndex > -1) {
-        const next = [...prev];
-        next[existingIndex].quantity += quantity;
-        return next;
+        next = prev.map((item, idx) =>
+          idx === existingIndex ? { ...item, quantity: item.quantity + quantity } : item
+        );
+      } else {
+        const newItem: BasketItem = {
+          id: `${product.id}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          product,
+          quantity,
+          selectedVariants,
+          personalisationData,
+          ...(photoUrl ? { photoUrl } : {}),
+        };
+        next = [...prev, newItem];
       }
 
-      const newItem: BasketItem = {
-        id: `${product.id}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-        product,
-        quantity,
-        selectedVariants,
-        personalisationData,
-      };
-
-      return [...prev, newItem];
+      persistBasketItems(next);
+      return next;
     });
   };
 
@@ -128,40 +140,47 @@ export function BasketProvider({ children }: { children: React.ReactNode }) {
         (i) => i.isCustomBouquet && i.customBouquet?.key === bouquet.key
       );
 
+      let next: BasketItem[];
       if (existingIndex > -1) {
-        const next = [...prev];
-        next[existingIndex].quantity += 1;
-        return next;
+        next = prev.map((item, idx) =>
+          idx === existingIndex ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      } else {
+        const customProduct: Product = {
+          id: `bouquet-${bouquet.key}`,
+          slug: 'custom-bouquet',
+          name: `Your Own Bouquet (${bouquet.sheetName} sheet)`,
+          realmId: 'bloom-glade',
+          realmName: 'Bloom Glade',
+          priceType: 'fixed',
+          price: bouquet.totalPrice,
+          shortDescription: bouquet.description,
+          description: bouquet.description,
+          images: ['/images/sunflower-bouquet.svg'],
+          inStock: true,
+        };
+
+        const newItem: BasketItem = {
+          id: `cb-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          product: customProduct,
+          quantity: 1,
+          isCustomBouquet: true,
+          customBouquet: bouquet,
+        };
+        next = [...prev, newItem];
       }
 
-      const customProduct: Product = {
-        id: `bouquet-${bouquet.key}`,
-        slug: 'custom-bouquet',
-        name: `Your Own Bouquet (${bouquet.sheetName} sheet)`,
-        realmId: 'bloom-glade',
-        realmName: 'Bloom Glade',
-        priceType: 'fixed',
-        price: bouquet.totalPrice,
-        shortDescription: bouquet.description,
-        description: bouquet.description,
-        images: ['/images/sunflower-bouquet.svg'],
-        inStock: true,
-      };
-
-      const newItem: BasketItem = {
-        id: `cb-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-        product: customProduct,
-        quantity: 1,
-        isCustomBouquet: true,
-        customBouquet: bouquet,
-      };
-
-      return [...prev, newItem];
+      persistBasketItems(next);
+      return next;
     });
   };
 
   const removeFromBasket = (itemId: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== itemId));
+    setItems((prev) => {
+      const next = prev.filter((i) => i.id !== itemId);
+      persistBasketItems(next);
+      return next;
+    });
   };
 
   const updateQuantity = (itemId: string, quantity: number) => {
@@ -169,12 +188,15 @@ export function BasketProvider({ children }: { children: React.ReactNode }) {
       removeFromBasket(itemId);
       return;
     }
-    setItems((prev) =>
-      prev.map((i) => (i.id === itemId ? { ...i, quantity } : i))
-    );
+    setItems((prev) => {
+      const next = prev.map((i) => (i.id === itemId ? { ...i, quantity } : i));
+      persistBasketItems(next);
+      return next;
+    });
   };
 
   const clearBasket = () => {
+    persistBasketItems([]);
     setItems([]);
   };
 
@@ -241,6 +263,9 @@ export function BasketProvider({ children }: { children: React.ReactNode }) {
         Object.entries(item.personalisationData).forEach(([k, v]) => {
           if (v) text += `     - ${k}: ${v}\n`;
         });
+      }
+      if (item.photoUrl) {
+        text += `   • Reference Photo: ${item.photoUrl}\n`;
       }
       text += `\n`;
     });

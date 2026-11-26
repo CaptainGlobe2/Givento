@@ -17,32 +17,36 @@ const WishlistContext = createContext<WishlistContextType | undefined>(undefined
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [wishlist, setWishlist] = useState<Product[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+
+  const persistWishlist = (next: Product[]) => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem('givento_wishlist', JSON.stringify(next));
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('givento_wishlist');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          setWishlist(parsed);
+    let active = true;
+    Promise.resolve().then(() => {
+      if (!active) return;
+      try {
+        const saved = localStorage.getItem('givento_wishlist');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            setWishlist(parsed);
+          }
         }
+      } catch {
+        // ignore
       }
-    } catch {
-      // ignore
-    } finally {
-      setIsLoaded(true);
-    }
+    });
+    return () => {
+      active = false;
+    };
   }, []);
-
-  useEffect(() => {
-    if (!isLoaded) return;
-    try {
-      localStorage.setItem('givento_wishlist', JSON.stringify(wishlist));
-    } catch {
-      // ignore
-    }
-  }, [wishlist, isLoaded]);
 
   const isInWishlist = (productId: string) => {
     return wishlist.some((p) => p.id === productId);
@@ -51,25 +55,31 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const toggleWishlist = (product: Product) => {
     setWishlist((prev) => {
       const exists = prev.some((p) => p.id === product.id);
-      if (exists) {
-        return prev.filter((p) => p.id !== product.id);
-      }
-      return [...prev, product];
+      const next = exists ? prev.filter((p) => p.id !== product.id) : [...prev, product];
+      persistWishlist(next);
+      return next;
     });
   };
 
   const addToWishlist = (product: Product) => {
     setWishlist((prev) => {
       if (prev.some((p) => p.id === product.id)) return prev;
-      return [...prev, product];
+      const next = [...prev, product];
+      persistWishlist(next);
+      return next;
     });
   };
 
   const removeFromWishlist = (productId: string) => {
-    setWishlist((prev) => prev.filter((p) => p.id !== productId));
+    setWishlist((prev) => {
+      const next = prev.filter((p) => p.id !== productId);
+      persistWishlist(next);
+      return next;
+    });
   };
 
   const clearWishlist = () => {
+    persistWishlist([]);
     setWishlist([]);
   };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, Sparkles } from 'lucide-react';
 
@@ -10,13 +11,15 @@ interface WelcomeModalProps {
 }
 
 export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleCustomOpen = () => setIsOpen(true);
     window.addEventListener('open-welcome-modal', handleCustomOpen);
 
-    if (forceOpen !== undefined) {
+    // Auto-open onboarding dialog only on the Storefront Home page so direct links (product, cart, category) are never obscured
+    if (forceOpen !== undefined || pathname !== '/') {
       return () => {
         window.removeEventListener('open-welcome-modal', handleCustomOpen);
       };
@@ -41,7 +44,7 @@ export default function WelcomeModal({ forceOpen, onClose }: WelcomeModalProps) 
     return () => {
       window.removeEventListener('open-welcome-modal', handleCustomOpen);
     };
-  }, [forceOpen]);
+  }, [forceOpen, pathname]);
 
   const effectiveOpen = forceOpen !== undefined ? forceOpen : isOpen;
 

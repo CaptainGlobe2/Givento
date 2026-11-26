@@ -3,49 +3,60 @@ import crypto from 'crypto';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, isMock } = body;
+    const body = (await request.json()) as {
+      razorpay_order_id?: unknown;
+      razorpay_payment_id?: unknown;
+      razorpay_signature?: unknown;
+    };
 
-    // Handle mock verification
-    if (isMock || razorpay_order_id?.startsWith('order_mock_')) {
-      return NextResponse.json({
-        success: true,
-        verified: true,
-        paymentId: razorpay_payment_id || `pay_mock_${Date.now()}`,
-        message: 'Mock payment verified successfully',
-      });
+    const orderId = typeof body?.razorpay_order_id === 'string' ? body.razorpay_order_id.trim() : '';
+    const paymentId = typeof body?.razorpay_payment_id === 'string' ? body.razorpay_payment_id.trim() : '';
+    const signature = typeof body?.razorpay_signature === 'string' ? body.razorpay_signature.trim() : '';
+
+    if (!orderId || !paymentId || !signature) {
+      return NextResponse.json(
+        { success: false, verified: false, message: 'Missing payment verification fields' },
+        { status: 400 }
+      );
     }
 
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
     if (!keySecret) {
       return NextResponse.json(
-        { success: false, message: 'Razorpay secret key not configured' },
+        { success: false, verified: false, message: 'Razorpay secret key not configured' },
         { status: 500 }
       );
     }
 
-    // Verify HMAC SHA256 signature
-    const hmac = crypto.createHmac('sha256', keySecret);
-    hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
-    const generatedSignature = hmac.digest('hex');
+    const expectedHex = crypto
+      .createHmac('sha256', keySecret)
+      .update(`${orderId}|${paymentId}`)
+      .digest('hex');
 
-    const isMatch = generatedSignature === razorpay_signature;
+    const expectedBuf = Buffer.from(expectedHex, 'hex');
+    const providedBuf = Buffer.from(signature, 'hex');
+
+    const isMatch =
+      providedBuf.length === expectedBuf.length &&
+      expectedBuf.length > 0 &&
+      crypto.timingSafeEqual(expectedBuf, providedBuf);
 
     if (isMatch) {
       return NextResponse.json({
         success: true,
         verified: true,
-        paymentId: razorpay_payment_id,
+        paymentId,
       });
-    } else {
-      return NextResponse.json(
-        { success: false, verified: false, message: 'Invalid payment signature' },
-        { status: 400 }
-      );
     }
-  } catch (error: any) {
+
     return NextResponse.json(
-      { success: false, error: error.message || 'Payment verification failed' },
+      { success: false, verified: false, message: 'Invalid payment signature' },
+      { status: 400 }
+    );
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Payment verification failed';
+    return NextResponse.json(
+      { success: false, verified: false, error: msg },
       { status: 500 }
     );
   }

@@ -142,7 +142,7 @@ export default function CustomerDemographicMap({ orders }: { orders: AdminOrder[
   const { stateStatsMap, rankedStates, rankedCities, maxStateOrders, totalActiveOrders } =
     useMemo(() => {
       const stats: Record<string, StateStat> = {};
-      indiaMap.locations.forEach((loc) => {
+      indiaMap.locations.forEach((loc: { id: string; name: string; path: string }) => {
         stats[loc.id] = {
           id: loc.id,
           name: loc.name,
@@ -282,7 +282,7 @@ export default function CustomerDemographicMap({ orders }: { orders: AdminOrder[
             role="img"
             aria-label="Exact India state-by-state order concentration map"
           >
-            {indiaMap.locations.map((loc) => {
+            {indiaMap.locations.map((loc: { id: string; name: string; path: string }) => {
               const stat = stateStatsMap[loc.id];
               const orderCount = stat?.orders || 0;
               const isFocused = focusedStateId === loc.id;

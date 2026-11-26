@@ -18,7 +18,7 @@ export default function BrandWordmark({
   const isSmall = size === 'sm';
 
   const foilClass = isLight ? 'givento-foil-light' : 'givento-foil-dark';
-  const goldAccent = isLight ? 'text-[#F7D983]' : 'text-[#B98A2E]';
+  const goldFoilClass = isLight ? 'givento-foil-gold-light' : 'givento-foil-gold-dark';
   const goldMain = isLight ? '#F7D983' : '#B98A2E';
   const goldSoft = isLight ? '#FFF4D2' : '#7A1C3B';
 
@@ -28,8 +28,8 @@ export default function BrandWordmark({
 
   return (
     <span
-      className={`group relative inline-flex items-center select-none leading-none active:scale-95 transition-transform duration-200 font-brand ${
-        isSmall ? 'gap-2 text-[22px]' : 'gap-2 sm:gap-2.5 text-[23px] sm:text-[28px]'
+      className={`group relative inline-flex items-baseline select-none leading-none active:scale-95 transition-transform duration-200 font-brand ${
+        isSmall ? 'text-[21px]' : 'text-[22px] sm:text-[27px]'
       } ${className}`}
     >
       {/* Subtle Ambient Candlelight Aura (on burgundy backgrounds) */}
@@ -44,8 +44,8 @@ export default function BrandWordmark({
         />
       )}
 
-      {/* Main Signature Wordmark with Custom Botanical-Ribbon Filigree */}
-      <span className="relative inline-flex items-baseline font-semibold tracking-[0.02em]">
+      {/* Unified Signature Wordmark with Matching-Size .in */}
+      <span className="relative inline-flex items-baseline font-semibold tracking-[0.015em]">
         {/* Architectural G cradled by a bespoke gold filigree crescent */}
         <span className="relative inline-block leading-none mr-[0.5px]">
           <svg
@@ -68,7 +68,7 @@ export default function BrandWordmark({
               strokeWidth="1.25"
               strokeLinecap="round"
             />
-            {/* Tiny jewel pearl accent at crescent tail */}
+            {/* Tiny jewel pearl accent at crescent tips */}
             <circle cx="17.8" cy="3.6" r="1.35" fill={goldMain} />
             <circle cx="16.8" cy="27.5" r="1" fill={goldSoft} opacity="0.85" />
           </svg>
@@ -127,81 +127,52 @@ export default function BrandWordmark({
 
         {/* Upright sculpted middle into silky italic cadence */}
         <span className={foilClass}>ven</span>
-        <span className={`italic font-semibold pr-[2.5px] ${foilClass}`}>to</span>
-      </span>
+        <span className={`italic font-semibold pr-[1px] ${foilClass}`}>to</span>
 
-      {/* Diamond-Beaded Center Hairline Divider */}
-      <span
-        aria-hidden="true"
-        className="relative inline-flex flex-col items-center justify-center shrink-0 h-5"
-      >
-        <span
-          className={`w-[1px] flex-1 bg-gradient-to-b ${
-            isLight ? 'from-transparent to-[#F7D983]/75' : 'from-transparent to-[#B98A2E]/70'
-          }`}
-        />
-        <span
-          className="w-[4px] h-[4px] rotate-45 my-[1.5px] transition-transform duration-300 group-hover:rotate-[135deg]"
-          style={{ backgroundColor: goldMain }}
-        />
-        <span
-          className={`w-[1px] flex-1 bg-gradient-to-t ${
-            isLight ? 'from-transparent to-[#F7D983]/75' : 'from-transparent to-[#B98A2E]/70'
-          }`}
-        />
-      </span>
+        {/* Matching-Size Champagne Gold .in with Subtle Silk Bow Below */}
+        <span className="relative inline-flex items-baseline leading-none ml-[1px]">
+          <span
+            className={`font-semibold italic pr-[2px] ${goldFoilClass}`}
+            style={{ WebkitTextFillColor: undefined }}
+          >
+            .in
+          </span>
 
-      {/* Asymmetric Stacked .in Domain Stamp + Hand-Tied Gift Ribbon Bow */}
-      <span className="relative inline-flex flex-col items-center justify-center leading-none gap-[2.5px]">
-        <span
-          className={`italic font-semibold tracking-[0.06em] ${
-            isSmall ? 'text-[11px]' : 'text-[11px] sm:text-[13px]'
-          } ${goldAccent}`}
-        >
-          .in
+          <svg
+            viewBox="0 0 28 11"
+            fill="none"
+            aria-hidden="true"
+            className="absolute left-1/2 -translate-x-1/2 -bottom-[0.26em] w-[0.95em] h-[0.36em] overflow-visible givento-ribbon-breathe transition-transform duration-300 group-hover:scale-110 pointer-events-none"
+          >
+            <defs>
+              <linearGradient id={ribbonGradId} x1="0" y1="5" x2="28" y2="5" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor={goldMain} stopOpacity="0.65" />
+                <stop offset="50%" stopColor={goldSoft} stopOpacity="1" />
+                <stop offset="100%" stopColor={goldMain} stopOpacity="0.65" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M14 5.5C11 1.5 5 1.8 5.2 4.8C5.4 7.3 10.6 7 14 5.5Z"
+              stroke={`url(#${ribbonGradId})`}
+              strokeWidth="1.2"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M14 5.5C17 1.5 23 1.8 22.8 4.8C22.6 7.3 17.4 7 14 5.5Z"
+              stroke={`url(#${ribbonGradId})`}
+              strokeWidth="1.2"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M12.5 6.2L9.5 10M15.5 6.2L18.5 10"
+              stroke={goldMain}
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              opacity="0.85"
+            />
+            <circle cx="14" cy="5.5" r="1.45" fill={goldMain} />
+          </svg>
         </span>
-
-      {/* Delicate Sculpted Silk Bow Knot beneath .in */}
-        <svg
-          viewBox="0 0 28 11"
-          fill="none"
-          aria-hidden="true"
-          className={`overflow-visible givento-ribbon-breathe transition-transform duration-300 group-hover:scale-110 ${
-            isSmall ? 'w-5 h-[7px]' : 'w-[22px] sm:w-6 h-[8px]'
-          }`}
-        >
-          <defs>
-            <linearGradient id={ribbonGradId} x1="0" y1="5" x2="28" y2="5" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor={goldMain} stopOpacity="0.65" />
-              <stop offset="50%" stopColor={goldSoft} stopOpacity="1" />
-              <stop offset="100%" stopColor={goldMain} stopOpacity="0.65" />
-            </linearGradient>
-          </defs>
-          {/* Left ribbon loop */}
-          <path
-            d="M14 5.5C11 1.5 5 1.8 5.2 4.8C5.4 7.3 10.6 7 14 5.5Z"
-            stroke={`url(#${ribbonGradId})`}
-            strokeWidth="1.2"
-            strokeLinejoin="round"
-          />
-          {/* Right ribbon loop */}
-          <path
-            d="M14 5.5C17 1.5 23 1.8 22.8 4.8C22.6 7.3 17.4 7 14 5.5Z"
-            stroke={`url(#${ribbonGradId})`}
-            strokeWidth="1.2"
-            strokeLinejoin="round"
-          />
-          {/* Trailing delicate ribbon tails */}
-          <path
-            d="M12.5 6.2L9.5 10M15.5 6.2L18.5 10"
-            stroke={goldMain}
-            strokeWidth="1.1"
-            strokeLinecap="round"
-            opacity="0.85"
-          />
-          {/* Center knot */}
-          <circle cx="14" cy="5.5" r="1.45" fill={goldMain} />
-        </svg>
       </span>
     </span>
   );

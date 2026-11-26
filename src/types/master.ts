@@ -128,3 +128,51 @@ export interface AiMessage {
   recommendedProductIds?: string[];
   createdAt: string;
 }
+
+export interface SalesSummary {
+  totalOrders: number;
+  totalRevenue: number;
+  activeOrders: number;
+  categoryCounts: Record<string, number>;
+}
+
+export interface ProfitOrderEntry {
+  orderId: string;
+  date: string;
+  customerName: string;
+  channel: string;
+  salePrice: number;
+  deliveryFee: number;
+  subtotal: number;
+  materialsCost: number;
+  packingCost: number;
+  shippingCost: number;
+  commission: number;
+  cogs: number;
+  grossProfit: number;
+  grossMarginPercentage: number;
+  orderProfit?: number;
+  marginPercentage?: number;
+}
+
+export interface ProfitSummary {
+  grossRevenue: number;
+  totalDiscounts: number;
+  netSales: number;
+  cogs: number;
+  grossProfit: number;
+  grossMarginPercentage: number;
+  operatingExpenses: number;
+  totalExpenses: number;
+  netProfit: number;
+  profitMargin: number;
+  profitMarginPercentage: number;
+  averageOrderValue: number;
+  totalOrders: number;
+  expensesByCategory: Record<string, number>;
+  revenueByChannel: Record<string, { revenue: number; orderCount: number; percentage: number }>;
+  topProducts: Array<{ productId: string; name: string; unitsSold: number; totalRevenue: number }>;
+  topSheets: Array<{ sheetId: string; name: string; usesCount: number }>;
+  topAddons: Array<{ name: string; count: number }>;
+  perOrderProfits: ProfitOrderEntry[];
+}

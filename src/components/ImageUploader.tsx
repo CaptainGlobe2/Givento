@@ -96,8 +96,8 @@ export default function ImageUploader({
       };
 
       xhr.send(formData);
-    } catch (err: any) {
-      setErrorMessage(err?.message || 'Failed to initiate upload.');
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to initiate upload.');
       setUploadProgress(null);
     }
   };

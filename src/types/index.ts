@@ -64,6 +64,7 @@ export interface Product {
   tiltDeg?: number;
   tapeColor?: 'yellow' | 'mint' | 'rose' | 'gold' | 'sky' | 'peach' | 'lavender';
   storySnippet?: string;
+  isAiRecommendable?: boolean;
   bouquetEnabled?: boolean;
   bouquetPrice?: number;
   bouquetGroup?: 'choc' | 'photo' | 'flower' | 'jewel' | 'more';
@@ -78,6 +79,7 @@ export interface BasketItem {
   quantity: number;
   selectedVariants?: Record<string, string>;
   personalisationData?: Record<string, string>;
+  photoUrl?: string;
   giftWrap?: boolean;
   giftNote?: string;
   isCustomBouquet?: boolean;

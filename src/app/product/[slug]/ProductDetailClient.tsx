@@ -51,7 +51,9 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
     return initial;
   });
   const [personalisationData, setPersonalisationData] = useState<Record<string, string>>({});
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [photoError, setPhotoError] = useState('');
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -108,15 +110,44 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
     setPersonalisationData((prev) => ({ ...prev, [fieldLabel]: value }));
   };
 
-  const handlePhotoUploadSim = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPhotoPreview(url);
+    if (!file) return;
+
+    setPhotoError('');
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      setPhotoError('Please choose a valid JPG, PNG, WEBP, or GIF image.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setPhotoError('Image must be 5 MB or smaller.');
+      return;
+    }
+
+    setUploadingPhoto(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = (await res.json()) as { success?: boolean; url?: string; error?: string };
+      if (!res.ok || !data.url) {
+        setPhotoError(data.error || 'Could not upload photo. Please try again.');
+        return;
+      }
+
+      setPhotoUrl(data.url);
       setPersonalisationData((prev) => ({
         ...prev,
-        'Photo Uploaded': file.name,
+        'Reference Photo': file.name,
       }));
+    } catch {
+      setPhotoError('Network error while uploading image.');
+    } finally {
+      setUploadingPhoto(false);
     }
   };
 
@@ -142,7 +173,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
   // Add to bag → add to cart and navigate to cart page
   const handleAddToBasket = () => {
-    addToBasket(product, quantity, selectedVariants, personalisationData);
+    addToBasket(product, quantity, selectedVariants, personalisationData, photoUrl || undefined);
     setAddedNotice(true);
     router.push('/cart');
   };
@@ -431,22 +462,43 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     </label>
                     <label className="flex items-center justify-center gap-2 p-3 bg-white border border-dashed border-[#EFE8E1] rounded-xl cursor-pointer hover:border-[#7A1C3B] transition text-xs text-[#6A5B60]">
                       <Upload className="w-4 h-4 text-[#7A1C3B]" />
-                      <span>Select image from your device</span>
+                      <span>{uploadingPhoto ? 'Uploading photo...' : 'Select image from your device (max 5MB)'}</span>
                       <input
                         type="file"
-                        accept="image/*"
-                        onChange={handlePhotoUploadSim}
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        disabled={uploadingPhoto}
+                        onChange={handlePhotoUpload}
                         className="hidden"
                       />
                     </label>
-                    {photoPreview && (
-                      <div className="flex items-center gap-2 p-2 bg-white rounded-xl border border-[#EFE8E1]">
-                        <div className="w-12 h-12 relative rounded-lg overflow-hidden">
-                          <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
+                    {photoError && (
+                      <p className="text-[11px] text-[#B3261E] font-medium">{photoError}</p>
+                    )}
+                    {photoUrl && (
+                      <div className="flex items-center justify-between gap-2 p-2 bg-white rounded-xl border border-[#EFE8E1]">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-12 h-12 relative rounded-lg overflow-hidden shrink-0">
+                            <img src={photoUrl} alt="Uploaded preview" className="w-full h-full object-cover" />
+                          </div>
+                          <span className="text-xs text-[#7A1C3B] font-bold truncate">
+                            ✓ Photo uploaded &amp; attached
+                          </span>
                         </div>
-                        <span className="text-xs text-[#7A1C3B] font-bold">
-                          ✓ Photo selected for print
-                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPhotoUrl(null);
+                            setPersonalisationData((prev) => {
+                              const next = { ...prev };
+                              delete next['Reference Photo'];
+                              return next;
+                            });
+                          }}
+                          className="p-1.5 rounded-lg text-[#8C827A] hover:text-[#B3261E] cursor-pointer"
+                          aria-label="Remove uploaded photo"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                     )}
                   </div>
