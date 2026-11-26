@@ -67,7 +67,13 @@ export async function POST(request: Request) {
     // 3. Validate items & compute server price
     let totalPieces = 0;
     let computedPrice = sheet.price + (chosenSize.baseCharge || 0);
-    const validatedItems = [];
+    const validatedItems: Array<{
+        id: string;
+        name: string;
+        unitPrice: number;
+        quantity: number;
+        subtotal: number;
+      }> = [];
 
     for (const reqItem of items) {
       if (reqItem.quantity <= 0) continue;
@@ -109,7 +115,11 @@ export async function POST(request: Request) {
     }
 
     // 4. Validate decorations
-    const validatedDecorations = [];
+    const validatedDecorations: Array<{
+      id: string;
+      name: string;
+      price: number;
+    }> = [];
     if (Array.isArray(decorationIds) && decorationIds.length > 0) {
       for (const decId of decorationIds) {
         const dec = dbDecorations.find((d) => d.id === decId);

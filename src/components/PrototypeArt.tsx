@@ -2,7 +2,7 @@ import React from 'react';
 
 // Flower generator with specific fill classes or inline colors
 export function renderFlower(x: number, y: number, r: number, fill: string) {
-  const petals = [];
+  const petals: React.ReactElement[] = [];
   for (let i = 0; i < 5; i++) {
     const a = (i * 72 * Math.PI) / 180 - Math.PI / 2;
     const cx = (x + Math.cos(a) * r * 0.95).toFixed(1);

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../../lib/database';
+import type { AdminOrderItem } from '../../../../lib/database';
 
 // Rate limiting map for checkout submissions: key -> timestamps[]
 const checkoutRateLimitMap = new Map<string, number[]>();
@@ -78,7 +79,7 @@ export async function POST(request: Request) {
     // 2. Server re-computes all items, checks stock & creates immutable snapshots
     let calculatedSubtotal = 0;
     let hasPriceOnRequest = false;
-    const validatedOrderItems = [];
+    const validatedOrderItems: AdminOrderItem[] = [];
     const stockDecrements: Array<() => Promise<any>> = [];
 
     for (const item of items) {
