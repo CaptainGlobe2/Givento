@@ -9,13 +9,13 @@ export default function HowToOrder() {
     },
     {
       step: '2',
-      title: 'Send the order',
-      desc: 'Add your name and number, then send the order to us on WhatsApp or Instagram.',
+      title: 'Checkout & Pay',
+      desc: 'Enter delivery details and pay securely via Razorpay (UPI, Cards, or NetBanking).',
     },
     {
       step: '3',
-      title: 'We confirm',
-      desc: 'We check stock, confirm the price and delivery or pickup with you, and start packing.',
+      title: 'We craft & dispatch',
+      desc: 'We verify stock, craft your personalised keepsake, and send live tracking updates.',
     },
   ];
 
@@ -29,7 +29,7 @@ export default function HowToOrder() {
               How to order
             </h2>
             <p className="font-body text-[#6a5b60] text-[0.95rem] mt-1.5 max-w-[60ch]">
-              No account and no online payment needed. We confirm everything with you on chat.
+              Sign in for saved details or check out swiftly with secure Razorpay online payment.
             </p>
           </div>
         </div>

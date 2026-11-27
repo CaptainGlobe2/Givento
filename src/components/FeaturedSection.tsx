@@ -129,13 +129,14 @@ export default function FeaturedSection({
                     Request custom stems, personalized gift boxes, lace ribbons, and photo keepsakes directly with our artisans.
                   </p>
                 </div>
-                <Link
-                  href="/custom-order"
-                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#7a1c3b] hover:text-[#5a1230] group"
+                <button
+                  type="button"
+                  onClick={() => onSelectGroup('bouquets')}
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#7a1c3b] hover:text-[#5a1230] group text-left cursor-pointer"
                 >
-                  <span>Request Custom Bouquet</span>
+                  <span>Explore Custom Bouquets</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </button>
               </div>
 
               {/* Spotlight 2: Nikah Frames */}

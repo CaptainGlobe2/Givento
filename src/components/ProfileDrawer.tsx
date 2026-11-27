@@ -15,7 +15,11 @@ import {
   MapPin,
   ChevronRight,
   Sparkles,
+  LogIn,
+  LogOut,
+  CheckCircle2,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { useBasket } from '../context/BasketContext';
 import { useWishlist } from '../context/WishlistContext';
 
@@ -25,6 +29,7 @@ interface ProfileDrawerProps {
 }
 
 export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
+  const { user, displayName, customerEmail, customerPhone, signOut } = useAuth();
   const { itemCount } = useBasket();
   const { wishlistCount } = useWishlist();
 
@@ -57,27 +62,70 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: 0.04 }}
-              className="p-5 border-b border-[#EFE8E1] flex items-center justify-between bg-[#FAF7F2]"
+              className="p-5 border-b border-[#EFE8E1] bg-[#FAF7F2] space-y-3"
             >
-              <div>
-                <span className="inline-block px-2 py-0.5 rounded-full bg-[#F3ECE2] border border-[#E5DACD] text-[10px] tracking-[0.18em] font-semibold text-[#8C827A] uppercase mb-1">
-                  Givento Studio
-                </span>
-                <h2 className="font-display font-normal text-2xl text-[#1C1917] tracking-tight leading-tight">
-                  Welcome, Guest
-                </h2>
-                <p className="text-xs text-[#78716C] mt-0.5">
-                  Handcrafted in Adirampattinam, Tamil Nadu
-                </p>
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#F3ECE2] border border-[#E5DACD] text-[10px] tracking-[0.18em] font-semibold text-[#8C827A] uppercase mb-1">
+                    {user ? (
+                      <>
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span>Customer Account</span>
+                      </>
+                    ) : (
+                      <span>Givento Studio</span>
+                    )}
+                  </span>
+                  <h2 className="font-display font-normal text-2xl text-[#1C1917] tracking-tight leading-tight truncate">
+                    Welcome, {displayName}
+                  </h2>
+                  <p className="text-xs text-[#78716C] mt-0.5 truncate">
+                    {user
+                      ? `${customerEmail}${customerPhone ? ` · +91 ${customerPhone}` : ''}`
+                      : 'Handcrafted in Adirampattinam, Tamil Nadu'}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-8 h-8 rounded-full bg-white border border-[#EFE8E1] flex items-center justify-center text-[#1C1917] hover:bg-[#FAF7F2] hover:rotate-90 active:scale-90 transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
+                  aria-label="Close profile drawer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-8 h-8 rounded-full bg-white border border-[#EFE8E1] flex items-center justify-center text-[#1C1917] hover:bg-[#FAF7F2] hover:rotate-90 active:scale-90 transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
-                aria-label="Close profile drawer"
-              >
-                <X className="w-4 h-4" />
-              </button>
+
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/login"
+                    onClick={onClose}
+                    className="flex-1 py-2 px-3 rounded-xl bg-white border border-[#EFE8E1] text-xs font-semibold text-[#1C1917] hover:border-[#7A1C3B] text-center transition"
+                  >
+                    My Account
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      signOut();
+                      onClose();
+                    }}
+                    className="py-2 px-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-[#B3261E] hover:bg-rose-100 inline-flex items-center gap-1.5 transition cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={onClose}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-2xs transition"
+                >
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>Customer Sign In / Register</span>
+                </Link>
+              )}
             </motion.div>
 
             {/* Quick Links List */}
@@ -114,14 +162,6 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                   icon: MessageCircle,
                   iconBoxClass: 'bg-[#FDF0F3] text-[#7A1C3B]',
                   external: true,
-                },
-                {
-                  href: '/custom-order',
-                  title: 'Custom Gift Orders',
-                  subtitle: 'Personalised bouquets & frames',
-                  icon: Sparkles,
-                  iconBoxClass: 'bg-[#F3ECE2] text-[#8C827A]',
-                  external: false,
                 },
               ].map((item, idx) => {
                 const IconComp = item.icon;

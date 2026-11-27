@@ -53,7 +53,7 @@ export default function Hero() {
           </div>
           <div className="flex gap-2.5 items-start text-[0.86rem] font-semibold text-[#231a1d] leading-[1.35]">
             <Check className="w-5 h-5 flex-none text-[#c5a059] mt-0.5" />
-            <span>Order on WhatsApp or Instagram, no account needed</span>
+            <span>Secure online checkout via Razorpay (UPI, Cards &amp; NetBanking)</span>
           </div>
           <div className="flex gap-2.5 items-start text-[0.86rem] font-semibold text-[#231a1d] leading-[1.35]">
             <Check className="w-5 h-5 flex-none text-[#c5a059] mt-0.5" />

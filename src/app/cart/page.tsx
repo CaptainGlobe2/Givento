@@ -13,7 +13,6 @@ import {
   ArrowRight,
   Trash2,
   Heart,
-  ShoppingBag,
   Gift,
   CheckCircle2,
   Sparkles,
@@ -26,7 +25,6 @@ import {
   Truck,
   Lock,
   Check,
-  MessageCircle,
   CreditCard,
 } from 'lucide-react';
 
@@ -249,135 +247,22 @@ export default function CartPage() {
   }, [appliedCoupon, subtotal]);
   const finalTotal = Math.max(0, subtotal + packagingFee + deliveryCharge - couponDiscount);
 
-  // Save cart order via authoritative server checkout route (with client history sync)
-  const handleCartOrderSubmit = async (customerData: {
-    name: string;
-    phone: string;
-    address: string;
-    city: string;
-    pincode: string;
-    instructions: string;
-  }) => {
-    try {
-      const res = await fetch('/api/order/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customer: {
-            name: customerData.name,
-            phone: customerData.phone,
-            address: customerData.address,
-            city: customerData.city,
-            pincode: customerData.pincode,
-          },
-          giftWrap,
-          giftNote,
-          couponCode: appliedCoupon?.code,
-          channel: 'website',
-          items: items.map((it) => ({
-            productId: it.product.id,
-            product: it.product,
-            quantity: it.quantity,
-            selectedVariants: it.selectedVariants,
-            personalisationData: {
-              ...(it.personalisationData || {}),
-              ...(customerData.instructions ? { 'Special Notes': customerData.instructions } : {}),
-            },
-            photoUrl: it.photoUrl,
-            isCustomBouquet: it.isCustomBouquet,
-            customBouquet: it.customBouquet,
-          })),
-        }),
-      });
-
-      const payload = (await res.json()) as { success?: boolean; order?: import('../../lib/database').AdminOrder };
-      if (res.ok && payload.success && payload.order) {
-        if (typeof window !== 'undefined') {
-          try {
-            const raw = localStorage.getItem('givento_user_orders');
-            const existing = raw ? JSON.parse(raw) : [];
-            const nextList = Array.isArray(existing)
-              ? [payload.order, ...existing.filter((o: { id?: string }) => o.id !== payload.order?.id)]
-              : [payload.order];
-            localStorage.setItem('givento_user_orders', JSON.stringify(nextList));
-          } catch {
-            // ignore storage errors
-          }
-        }
-        clearBasket();
-        return payload.order;
+  // Handle confirmed Razorpay order post-verification
+  const handleRazorpayOrderConfirmed = (savedOrder: import('../../lib/database').AdminOrder) => {
+    if (typeof window !== 'undefined') {
+      try {
+        const raw = localStorage.getItem('givento_user_orders');
+        const existing = raw ? JSON.parse(raw) : [];
+        const nextList = Array.isArray(existing)
+          ? [savedOrder, ...existing.filter((o: { id?: string }) => o.id !== savedOrder.id)]
+          : [savedOrder];
+        localStorage.setItem('givento_user_orders', JSON.stringify(nextList));
+      } catch {
+        // ignore storage errors
       }
-    } catch {
-      // Fallback to local db order creation if API unreachable
     }
-
-    const fallbackOrder = await db.createOrder({
-      customerName: customerData.name,
-      customerPhone: customerData.phone,
-      address: customerData.address,
-      city: customerData.city,
-      pincode: customerData.pincode,
-      status: 'Pending WhatsApp Confirmation',
-      channel: 'website',
-      paymentMethod: 'whatsapp',
-      paymentStatus: 'Pending',
-      subtotal,
-      discount: couponDiscount,
-      giftWrap,
-      giftNote,
-      deliveryFee: deliveryCharge,
-      total: finalTotal,
-      adminNotes: [
-        customerData.instructions ? `Special Instructions: ${customerData.instructions}` : '',
-        appliedCoupon ? `Coupon Applied: ${appliedCoupon.code} (-₹${couponDiscount})` : '',
-      ]
-        .filter(Boolean)
-        .join(' | '),
-      items: items.map((it) => ({
-        productId: it.product.id,
-        productName: it.isCustomBouquet ? 'Custom Bouquet' : it.product.name,
-        quantity: it.quantity,
-        price: it.isCustomBouquet && it.customBouquet ? it.customBouquet.totalPrice : (it.product.price || 0),
-        image:
-          it.product.images?.[0] ||
-          'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=400&q=80',
-        variants: it.selectedVariants,
-        personalisation: {
-          ...(it.personalisationData || {}),
-          ...(it.photoUrl ? { 'Uploaded Photo': it.photoUrl } : {}),
-        },
-      })),
-    });
     clearBasket();
-    return fallbackOrder;
   };
-
-  // WhatsApp message template
-  const waCartTemplate =
-    `Hello Givento Studio! 🌸\n*ORDER from givento.in*\n\n` +
-    items
-      .map((it, idx) => {
-        const itemPrice = it.isCustomBouquet && it.customBouquet
-          ? it.customBouquet.totalPrice
-          : (it.product.price || 0);
-        let imageNote = '';
-        if (it.product.images && it.product.images.length > 0 && it.product.images[0]) {
-          const raw = it.product.images[0];
-          const full = raw.startsWith('http')
-            ? raw
-            : typeof window !== 'undefined'
-              ? `${window.location.origin}${raw.startsWith('/') ? '' : '/'}${raw}`
-              : `https://givento.in/${raw}`;
-          imageNote = `\n   🖼️ Product Image: ${full}`;
-        }
-        return `${idx + 1}. *${it.isCustomBouquet ? 'Custom Bouquet' : it.product.name}* (x${it.quantity}) — ₹${itemPrice * it.quantity}${imageNote}`;
-      })
-      .join('\n') +
-    `\n\nSubtotal: ₹${subtotal}\n` +
-    (giftWrap ? `Gift Wrap: Yes (Card: "${giftNote}")\n` : '') +
-    (appliedCoupon ? `Coupon (${appliedCoupon.code}): -₹${couponDiscount}\n` : '') +
-    `Delivery: ${isFreeDelivery ? 'FREE' : '₹50'}\n` +
-    `*Grand Total: ₹${finalTotal}*`;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] font-sans selection:bg-[#F6E9EE] selection:text-[#7A1C3B] pb-28">
@@ -924,19 +809,19 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* PRIMARY UNMISSABLE ORDER CONFIRM BUTTON RIGHT IN SUMMARY */}
+            {/* PRIMARY UNMISSABLE RAZORPAY PAYMENT CTA */}
             <button
               type="button"
               onClick={() => setOrderModalOpen(true)}
               className="w-full mt-2 py-4 px-6 rounded-2xl bg-[#7A1C3B] hover:bg-[#5A1230] text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-[#7A1C3B]/20 hover:shadow-xl active:scale-[0.98] transition-all cursor-pointer"
             >
-              <ShoppingBag className="w-5 h-5 text-white" />
-              <span>Confirm Order · ₹{finalTotal.toLocaleString('en-IN')}</span>
+              <CreditCard className="w-5 h-5 text-white" />
+              <span>Pay with Razorpay · ₹{finalTotal.toLocaleString('en-IN')}</span>
               <ArrowRight className="w-5 h-5 ml-1" />
             </button>
 
             <p className="text-[11px] text-center text-[#8C827A] pt-1">
-              🔒 Direct Studio Order · Direct WhatsApp Confirmation
+              🔒 100% Secured by Razorpay · UPI, Cards, NetBanking &amp; Wallets
             </p>
           </section>
         )}
@@ -984,13 +869,27 @@ export default function CartPage() {
         </section>
       </main>
 
-      {/* Order Info Modal */}
+      {/* Order Info & Razorpay Checkout Modal */}
       <OrderInfoModal
         isOpen={orderModalOpen}
         onClose={() => setOrderModalOpen(false)}
-        waMessageTemplate={waCartTemplate}
-        submitLabel="Confirm & Place Order"
-        onCompleteOrder={handleCartOrderSubmit}
+        totalAmount={finalTotal}
+        checkoutContext={{
+          giftWrap,
+          giftNote,
+          couponCode: appliedCoupon?.code,
+          items: items.map((it) => ({
+            productId: it.product.id,
+            product: { id: it.product.id, slug: it.product.slug },
+            quantity: it.quantity,
+            selectedVariants: it.selectedVariants,
+            personalisationData: it.personalisationData,
+            photoUrl: it.photoUrl,
+            isCustomBouquet: it.isCustomBouquet,
+            customBouquet: it.customBouquet,
+          })),
+        }}
+        onOrderConfirmed={handleRazorpayOrderConfirmed}
       />
     </div>
   );

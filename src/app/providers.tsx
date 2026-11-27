@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { MotionConfig } from 'framer-motion';
+import { AuthProvider } from '../context/AuthContext';
 import { BasketProvider } from '../context/BasketContext';
 import { WishlistProvider } from '../context/WishlistContext';
 import ProfileDrawer from '../components/ProfileDrawer';
@@ -13,17 +14,19 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <BasketProvider>
-        <WishlistProvider>
-          {children}
-          <ProfileDrawer
-            isOpen={isProfileOpen}
-            onClose={() => setIsProfileOpen(false)}
-          />
-          <BottomNav onOpenProfile={() => setIsProfileOpen(true)} />
-          <WelcomeModal />
-        </WishlistProvider>
-      </BasketProvider>
+      <AuthProvider>
+        <BasketProvider>
+          <WishlistProvider>
+            {children}
+            <ProfileDrawer
+              isOpen={isProfileOpen}
+              onClose={() => setIsProfileOpen(false)}
+            />
+            <BottomNav onOpenProfile={() => setIsProfileOpen(true)} />
+            <WelcomeModal />
+          </WishlistProvider>
+        </BasketProvider>
+      </AuthProvider>
     </MotionConfig>
   );
 }

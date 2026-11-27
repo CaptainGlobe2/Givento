@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
+import Razorpay from 'razorpay';
 import { db } from '../../../../lib/database';
-import type { AdminOrderItem } from '../../../../lib/database';
+import {
+  computeAuthoritativeCheckout,
+  type CheckoutCustomerInput,
+  type CheckoutItemInput,
+} from '../../../../lib/checkoutPricing';
 
-// Rate limiting map for checkout submissions: key -> timestamps[]
 const checkoutRateLimitMap = new Map<string, number[]>();
 
 function checkCheckoutRateLimit(key: string, limit = 10, windowMs = 60000): boolean {
@@ -18,9 +23,44 @@ function checkCheckoutRateLimit(key: string, limit = 10, windowMs = 60000): bool
   return true;
 }
 
+function verifyRazorpaySignature(orderId: string, paymentId: string, signature: string, secret: string): boolean {
+  const expectedHex = crypto
+    .createHmac('sha256', secret)
+    .update(`${orderId}|${paymentId}`)
+    .digest('hex');
+
+  const expectedBuf = Buffer.from(expectedHex, 'hex');
+  const providedBuf = Buffer.from(signature, 'hex');
+
+  return (
+    providedBuf.length === expectedBuf.length &&
+    expectedBuf.length > 0 &&
+    crypto.timingSafeEqual(expectedBuf, providedBuf)
+  );
+}
+
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as {
+      customer?: CheckoutCustomerInput;
+      deliveryMode?: string;
+      shippingRegion?: string;
+      giftWrap?: boolean;
+      giftNote?: string;
+      sendAsGift?: boolean;
+      recipientName?: string;
+      recipientPhone?: string;
+      couponCode?: string;
+      items?: CheckoutItemInput[];
+      channel?: 'website' | 'whatsapp' | 'instagram' | 'walkin_expo' | 'phone' | 'in_person';
+      paymentMethod?: 'whatsapp' | 'razorpay';
+      razorpayPayment?: {
+        razorpay_order_id?: string;
+        razorpay_payment_id?: string;
+        razorpay_signature?: string;
+      };
+    };
+
     const {
       customer,
       deliveryMode,
@@ -33,6 +73,8 @@ export async function POST(request: Request) {
       couponCode,
       items,
       channel = 'website',
+      paymentMethod = 'whatsapp',
+      razorpayPayment,
     } = body;
 
     const clientKey = customer?.phone?.trim() || 'anon-client';
@@ -43,13 +85,6 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json(
-        { success: false, error: 'Your bag is empty. Please add items to order.' },
-        { status: 400 }
-      );
-    }
-
     if (!customer?.name?.trim() || !customer?.phone?.trim()) {
       return NextResponse.json(
         { success: false, error: 'Please provide customer name and WhatsApp number.' },
@@ -57,287 +92,99 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Fetch live database state for server validation
-    const [
-      dbProducts,
-      dbSheets,
-      dbBouquetItems,
-      dbBouquetSizes,
-      dbDecorations,
-      dbShippingRules,
-      dbCoupons,
-    ] = await Promise.all([
-      db.getProducts(),
-      db.getWrappingSheets(),
-      db.getBouquetItems(),
-      db.getBouquetSizes(),
-      db.getDecorations(),
-      db.getShippingRules(),
-      db.getCoupons(),
-    ]);
+    const checkoutOutcome = await computeAuthoritativeCheckout({
+      customer,
+      deliveryMode,
+      shippingRegion: requestedRegion,
+      giftWrap,
+      couponCode,
+      items,
+    });
 
-    // 2. Server re-computes all items, checks stock & creates immutable snapshots
-    const FINISHING_TOUCHES_PRICES: Record<string, { name: string; price: number }> = {
-      'addon-pouch': { name: 'Velvet Jewellery Pouch', price: 49 },
-      'addon-polaroid': { name: 'Mini Polaroid Memory Print', price: 39 },
-      'addon-clip': { name: 'Crochet Flower Hair Clip', price: 79 },
-      'addon-charm': { name: 'Resin Gold Flake Charm', price: 99 },
-    };
+    if (!checkoutOutcome.ok) {
+      return NextResponse.json(
+        { success: false, error: checkoutOutcome.error },
+        { status: checkoutOutcome.status }
+      );
+    }
 
-    let calculatedSubtotal = 0;
-    let hasPriceOnRequest = false;
-    const validatedOrderItems: AdminOrderItem[] = [];
-    const stockDecrements: Array<() => Promise<unknown>> = [];
+    const {
+      validatedOrderItems,
+      stockDecrements,
+      calculatedSubtotal,
+      discountAmount,
+      appliedCouponCode,
+      deliveryFee,
+      deliveryRule,
+      isPickup,
+      grandTotal,
+      hasPriceOnRequest,
+    } = checkoutOutcome.data;
 
-    for (const item of items) {
-      const q = Math.max(1, Number(item.quantity) || 1);
+    let verifiedPaymentId = '';
+    let verifiedRzpOrderId = '';
+    const isRazorpayOrder = paymentMethod === 'razorpay';
 
-      if (item.isCustomBouquet && item.customBouquet) {
-        const b = item.customBouquet;
-        // Verify sheet
-        const sheet = dbSheets.find((s) => s.id === b.sheetId);
-        if (!sheet || sheet.stock <= 0) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: `The wrapping sheet "${b.sheetName || 'selected'}" is currently sold out. Please choose an in-stock sheet.`,
-            },
-            { status: 400 }
-          );
-        }
+    if (isRazorpayOrder) {
+      const rzpOrderId = razorpayPayment?.razorpay_order_id?.trim() || '';
+      const rzpPaymentId = razorpayPayment?.razorpay_payment_id?.trim() || '';
+      const rzpSignature = razorpayPayment?.razorpay_signature?.trim() || '';
 
-        // Verify size
-        const size = dbBouquetSizes.find((s) => s.id === b.selectedSizeId) || dbBouquetSizes[0];
-        const sizeBase = size?.baseCharge || 0;
-
-        // Verify items
-        let bouquetItemsTotal = 0;
-        let bouquetPieces = 0;
-        const bouquetItemSummary: string[] = [];
-
-        for (const bIt of b.items || []) {
-          const matchedBItem = dbBouquetItems.find((x) => x.id === bIt.id);
-          const reqQty = (Number(bIt.quantity) || 1) * q;
-          if (matchedBItem) {
-            if (matchedBItem.stock < reqQty) {
-              return NextResponse.json(
-                {
-                  success: false,
-                  error: `Bouquet item "${matchedBItem.name}" only has ${matchedBItem.stock} available in studio stock (you need ${reqQty}).`,
-                },
-                { status: 400 }
-              );
-            }
-            bouquetItemsTotal += matchedBItem.price * (Number(bIt.quantity) || 1);
-            bouquetPieces += Number(bIt.quantity) || 1;
-            bouquetItemSummary.push(`${bIt.quantity}x ${matchedBItem.name}`);
-          }
-        }
-
-        // Verify piece limit
-        const maxPieces = size?.maxPieces || 12;
-        if (bouquetPieces > maxPieces) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: `Bouquet size "${size?.name || 'Selected'}" allows up to ${maxPieces} pieces (currently has ${bouquetPieces}).`,
-            },
-            { status: 400 }
-          );
-        }
-
-        // Verify decorations
-        let decsTotal = 0;
-        const decNames: string[] = [];
-        for (const d of b.decorations || []) {
-          const matchedDec = dbDecorations.find((x) => x.id === d.id);
-          if (matchedDec) {
-            decsTotal += matchedDec.price;
-            decNames.push(matchedDec.name);
-          }
-        }
-
-        // Authoritative custom bouquet unit price
-        const unitBouquetPrice = sheet.price + sizeBase + bouquetItemsTotal + decsTotal;
-        const lineTotal = unitBouquetPrice * q;
-        calculatedSubtotal += lineTotal;
-
-        validatedOrderItems.push({
-          productName: `Your Own Bouquet (${sheet.name})`,
-          quantity: q,
-          price: unitBouquetPrice,
-          personalisation: {
-            'Wrapping Sheet': sheet.name,
-            'Size Tier': size?.name || 'Classic',
-            'Items': bouquetItemSummary.join(', '),
-            ...(decNames.length > 0 ? { 'Decorations': decNames.join(', ') } : {}),
-            ...(b.cardMessage ? { 'Card Message': b.cardMessage } : {}),
-            ...(b.hasPhotos ? { 'Photo Prints': 'Customer sending photos via WhatsApp' } : {}),
-          },
-        });
-
-        // Queue stock decrement
-        stockDecrements.push(async () => {
-          await db.decrementBouquetStock(
-            sheet.id,
-            ((b.items || []) as Array<{ id: string; quantity?: number }>).map((x) => ({
-              id: x.id,
-              quantity: (Number(x.quantity) || 1) * q,
-            }))
-          );
-        });
-      } else {
-        const rawPid = String(item.productId || item.product?.id || '');
-        const addonMeta = FINISHING_TOUCHES_PRICES[rawPid];
-        if (addonMeta) {
-          calculatedSubtotal += addonMeta.price * q;
-          validatedOrderItems.push({
-            productId: rawPid,
-            productName: addonMeta.name,
-            quantity: q,
-            price: addonMeta.price,
-            variants: item.selectedVariants || item.variants,
-            personalisation: item.personalisationData || item.personalisation,
-          });
-          continue;
-        }
-
-        // Standard Product
-        const p = dbProducts.find((x) => x.id === item.productId || x.id === item.product?.id || x.slug === item.product?.slug);
-        if (!p) {
-          return NextResponse.json(
-            { success: false, error: 'One of the items in your bag is no longer available in the catalogue.' },
-            { status: 400 }
-          );
-        }
-
-        const currentStock = p.stockQuantity ?? (p.inStock ? 15 : 0);
-        if (currentStock < q) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: `"${p.name}" only has ${currentStock} units left in stock (you requested ${q}). Please reduce the quantity.`,
-            },
-            { status: 400 }
-          );
-        }
-
-        // Authoritative price calculation
-        let unitPrice = 0;
-        if (p.priceType === 'on_request' || p.price == null) {
-          hasPriceOnRequest = true;
-          unitPrice = 0;
-        } else if (p.priceType === 'from') {
-          unitPrice = p.priceFrom || p.price || 0;
-          hasPriceOnRequest = true; // Still needs final WhatsApp price confirmation
-        } else {
-          unitPrice = p.price || 0;
-        }
-
-        const lineTotal = unitPrice * q;
-        calculatedSubtotal += lineTotal;
-
-        const mergedPersonalisation = {
-          ...(item.personalisationData || item.personalisation || {}),
-          ...(item.photoUrl ? { 'Uploaded Photo': String(item.photoUrl) } : {}),
-        };
-
-        validatedOrderItems.push({
-          productId: p.id,
-          productName: p.name,
-          quantity: q,
-          price: unitPrice,
-          image: p.images?.[0],
-          variants: item.selectedVariants || item.variants,
-          personalisation: Object.keys(mergedPersonalisation).length > 0 ? mergedPersonalisation : undefined,
-        });
-
-        // Queue stock decrement
-        stockDecrements.push(async () => {
-          await db.decrementProductStock(p.id, q);
-        });
+      if (!rzpOrderId || !rzpPaymentId || !rzpSignature) {
+        return NextResponse.json(
+          { success: false, error: 'Missing verified Razorpay payment details.' },
+          { status: 400 }
+        );
       }
-    }
 
-    // 3. Server re-computes coupon discount
-    let discountAmount = 0;
-    let appliedCouponCode: string | undefined = undefined;
-
-    if (couponCode) {
-      const code = String(couponCode).trim().toUpperCase();
-      const matchedCoupon = dbCoupons.find((c) => c.code.toUpperCase() === code && c.isActive);
-
-      if (matchedCoupon && calculatedSubtotal >= matchedCoupon.minOrder) {
-        if (matchedCoupon.discountType === 'percentage') {
-          discountAmount = Math.round(calculatedSubtotal * (matchedCoupon.discountValue / 100));
-        } else {
-          discountAmount = matchedCoupon.discountValue;
-        }
-        appliedCouponCode = matchedCoupon.code;
+      const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+      const keySecret = process.env.RAZORPAY_KEY_SECRET;
+      if (!keyId || !keySecret || keyId.includes('yourkey') || keySecret.includes('your_secret')) {
+        return NextResponse.json(
+          { success: false, error: 'Razorpay payment verification is not configured on this server.' },
+          { status: 503 }
+        );
       }
-    }
 
-    // 4. Server re-computes regional shipping rule
-    const isPickup =
-      deliveryMode === 'Pickup in Adirampattinam' ||
-      requestedRegion === 'pickup' ||
-      (customer.address && customer.address.toLowerCase().includes('pickup'));
-
-    let selectedRule = dbShippingRules.find((r) => r.region === 'pickup');
-
-    if (!isPickup) {
-      if (requestedRegion) {
-        selectedRule = dbShippingRules.find((r) => r.region === requestedRegion);
-      } else {
-        const addrText = `${customer.address || ''} ${customer.city || ''} ${customer.state || ''}`.toLowerCase();
-        if (addrText.includes('adiram') || addrText.includes('adirampattinam') || (customer.pincode === '614701')) {
-          selectedRule = dbShippingRules.find((r) => r.region === 'local_adiram');
-        } else if (addrText.includes('tamil nadu') || addrText.includes('tamilnadu') || addrText.includes(' tn')) {
-          selectedRule = dbShippingRules.find((r) => r.region === 'tamil_nadu');
-        } else {
-          selectedRule = dbShippingRules.find((r) => r.region === 'interstate');
-        }
+      if (!verifyRazorpaySignature(rzpOrderId, rzpPaymentId, rzpSignature, keySecret)) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid Razorpay payment signature.' },
+          { status: 400 }
+        );
       }
+
+      const razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret });
+      const rzpOrder = await razorpay.orders.fetch(rzpOrderId);
+      const expectedPaise = Math.round(grandTotal * 100);
+      if (Number(rzpOrder.amount) !== expectedPaise || rzpOrder.currency !== 'INR') {
+        return NextResponse.json(
+          { success: false, error: 'Paid Razorpay amount does not match the order total.' },
+          { status: 400 }
+        );
+      }
+
+      verifiedPaymentId = rzpPaymentId;
+      verifiedRzpOrderId = rzpOrderId;
     }
 
-    if (!selectedRule) {
-      selectedRule = dbShippingRules[0] || {
-        id: 'ship-default',
-        name: 'Standard Delivery',
-        region: 'tamil_nadu',
-        baseCharge: 50,
-        freeThreshold: 899,
-        estimatedDays: '1-3 days',
-        isActive: true,
-        sortOrder: 1,
-      };
-    }
-
-    const isFreeShipping =
-      isPickup ||
-      selectedRule.baseCharge === 0 ||
-      (selectedRule.freeThreshold > 0 && calculatedSubtotal >= selectedRule.freeThreshold);
-
-    const deliveryFee = isFreeShipping ? 0 : selectedRule.baseCharge;
-    const giftWrapFee = giftWrap ? 49 : 0;
-    const grandTotal = Math.max(0, calculatedSubtotal - discountAmount + deliveryFee + giftWrapFee);
-
-    // 5. Generate unique order ID & Save Order
     const orderId = `GVN-${Math.floor(100000 + Math.random() * 900000)}`;
+    const initialStatus = isRazorpayOrder ? 'Received' : 'Pending WhatsApp Confirmation';
 
     const savedOrder = await db.createOrder({
       id: orderId,
       customerName: customer.name.trim(),
       customerPhone: customer.phone.trim(),
       customerEmail: customer.email?.trim() || undefined,
-      address: isPickup ? 'Local Studio Pickup / Adirampattinam' : (customer.address?.trim() || 'Address to confirm'),
-      city: isPickup ? 'Adirampattinam' : (customer.city?.trim() || 'Adirampattinam'),
-      state: isPickup ? 'Tamil Nadu' : (customer.state?.trim() || 'Tamil Nadu'),
-      pincode: isPickup ? '614701' : (customer.pincode?.trim() || '614701'),
-      status: 'Pending WhatsApp Confirmation',
+      address: isPickup
+        ? 'Local Studio Pickup / Adirampattinam'
+        : customer.address?.trim() || 'Address to confirm',
+      city: isPickup ? 'Adirampattinam' : customer.city?.trim() || 'Adirampattinam',
+      state: isPickup ? 'Tamil Nadu' : customer.state?.trim() || 'Tamil Nadu',
+      pincode: isPickup ? '614701' : customer.pincode?.trim() || '614701',
+      status: initialStatus,
       channel,
-      paymentMethod: 'whatsapp',
-      paymentStatus: 'Pending',
+      paymentMethod: isRazorpayOrder ? 'razorpay' : 'whatsapp',
+      paymentStatus: isRazorpayOrder ? 'Fully Paid' : 'Pending',
       subtotal: calculatedSubtotal,
       discount: discountAmount,
       giftWrap: !!giftWrap,
@@ -346,13 +193,15 @@ export async function POST(request: Request) {
       recipientName: recipientName?.trim() || undefined,
       recipientPhone: recipientPhone?.trim() || undefined,
       deliveryFee,
-      deliveryRule: selectedRule.name,
+      deliveryRule,
       total: grandTotal,
+      adminNotes: isRazorpayOrder
+        ? `Paid Online via Razorpay | Order: ${verifiedRzpOrderId} | Payment: ${verifiedPaymentId}`
+        : undefined,
       items: validatedOrderItems,
       createdAt: new Date().toISOString(),
     });
 
-    // 6. Execute stock decrements
     for (const dec of stockDecrements) {
       try {
         await dec();
@@ -361,8 +210,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // 7. Format order summary text for WhatsApp and Instagram
-    const waPhone = '919344013255'; // Givento business WhatsApp number
+    const waPhone = '919344013255';
     let orderMsg = `Hello Givento! 🌸\n`;
     orderMsg += `I just placed Order *#${orderId}* on givento.in!\n\n`;
     orderMsg += `*Customer:* ${customer.name.trim()} (${customer.phone.trim()})\n`;
@@ -396,12 +244,18 @@ export async function POST(request: Request) {
       orderMsg += `🏷️ *Coupon:* ${appliedCouponCode} (-₹${discountAmount})\n`;
     }
 
-    orderMsg += `\n🚚 *Delivery:* ${selectedRule.name} (${deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`})\n`;
+    orderMsg += `\n🚚 *Delivery:* ${deliveryRule} (${deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`})\n`;
     orderMsg += `*Total Amount:* ₹${grandTotal.toLocaleString('en-IN')}${
       hasPriceOnRequest ? ' (final amount to confirm on WhatsApp)' : ''
-    }\n\n`;
-    orderMsg += `*Order Tracking:* https://givento.in/track?orderId=${orderId}\n\n`;
-    orderMsg += `Please confirm my order & share UPI payment details! Thank you ✨`;
+    }\n`;
+    if (isRazorpayOrder) {
+      orderMsg += `✅ *Payment Status:* Paid Online via Razorpay (${verifiedPaymentId})\n\n`;
+      orderMsg += `*Order Tracking:* https://givento.in/track?orderId=${orderId}\n\n`;
+      orderMsg += `Payment completed! Looking forward to my handcrafted parcel ✨`;
+    } else {
+      orderMsg += `\n*Order Tracking:* https://givento.in/track?orderId=${orderId}\n\n`;
+      orderMsg += `Please confirm my order & share UPI payment details! Thank you ✨`;
+    }
 
     const whatsappUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(orderMsg)}`;
 
@@ -409,16 +263,17 @@ export async function POST(request: Request) {
       success: true,
       orderId,
       order: savedOrder,
-      status: 'Pending WhatsApp Confirmation',
+      status: initialStatus,
       subtotal: calculatedSubtotal,
       discount: discountAmount,
       deliveryFee,
-      deliveryRule: selectedRule.name,
+      deliveryRule,
       total: grandTotal,
       hasPriceOnRequest,
       whatsappUrl,
       orderText: orderMsg,
       trackingUrl: `/order/${orderId}`,
+      razorpayPaymentId: verifiedPaymentId || undefined,
     });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Server error processing order checkout.';

@@ -19,6 +19,7 @@ import {
   Truck,
   MessageCircle,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { useBasket } from '../context/BasketContext';
 import { useWishlist } from '../context/WishlistContext';
 import { Category } from '../types';
@@ -44,6 +45,7 @@ export default function Navbar({
   onOpenProfile,
   showSearch,
 }: NavbarProps) {
+  const { user } = useAuth();
   const { itemCount } = useBasket();
   const { wishlistCount } = useWishlist();
   const router = useRouter();
@@ -161,9 +163,15 @@ export default function Navbar({
                     : { rotate: 0, scale: 1, backgroundColor: 'rgba(255,255,255,0)' }
                 }
                 transition={{ type: 'spring', stiffness: 420, damping: 24 }}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer"
               >
                 <User className="w-5 h-5 stroke-[2]" />
+                {user && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-[#7A1C3B]"
+                  />
+                )}
               </motion.button>
             </div>
           </div>
@@ -306,6 +314,18 @@ export default function Navbar({
               </span>
 
               <Link
+                href="/login"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-[#7A1C3B]" />
+                  {user ? 'My Account' : 'Customer Sign In / Register'}
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
+              </Link>
+
+              <Link
                 href="/track"
                 onClick={() => setIsMenuOpen(false)}
                 className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
@@ -325,18 +345,6 @@ export default function Navbar({
                 <span className="flex items-center gap-2">
                   <Heart className="w-4 h-4 text-[#7A1C3B]" />
                   My Wishlist
-                </span>
-                <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
-              </Link>
-
-              <Link
-                href="/custom-order"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-[#231a1d] hover:bg-[#FAF7F2] transition-colors"
-              >
-                <span className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#7A1C3B]" />
-                  Custom Bulk Orders
                 </span>
                 <ChevronRight className="w-4 h-4 text-[#9c8b91]" />
               </Link>

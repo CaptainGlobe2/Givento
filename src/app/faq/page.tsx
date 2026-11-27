@@ -28,12 +28,12 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     category: 'orders',
     q: 'How does ordering work on Givento?',
-    a: 'We keep things simple and personal. You can browse our collection, add items to your bag, and submit your delivery details. We confirm stock and dispatch schedule with you directly on WhatsApp before packing. No upfront online payment gateway friction.',
+    a: 'Browse our collections, add items to your bag, and pay securely at cart checkout with Razorpay. You can also sign in at /login to autofill details and track your parcel anytime.',
   },
   {
     category: 'orders',
     q: 'How do I pay for my order?',
-    a: 'Once we verify your items and custom details on WhatsApp (+91 93440 13255), we send our studio UPI QR code or bank transfer details. You pay directly with Google Pay, PhonePe, or Paytm once you are completely satisfied with the order preview.',
+    a: 'Cart checkout supports instant online payments via Razorpay (UPI, Google Pay, PhonePe, Credit/Debit Cards, and NetBanking). For custom studio queries on WhatsApp (+91 93440 13255), our team confirms previews directly.',
   },
   {
     category: 'custom',
